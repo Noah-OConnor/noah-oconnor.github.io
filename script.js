@@ -1,23 +1,78 @@
-<!-- script.js -->
-<script>
-  document.querySelectorAll(".thumbnail").forEach(thumb => {
-    thumb.addEventListener("click", () => {
-      const type = thumb.dataset.type;
-      const src = thumb.dataset.src;
-      const mainImage = document.getElementById("main-image");
-      const mainVideo = document.getElementById("main-video");
+// Generate the All Projects thumbnails dynamically
+const allProjects = [
+  {
+    name: "Crimson Knight",
+    team: "17",
+    timeline: "Jan–Aug 2025",
+    roles: "Technical Designer",
+    image: "media/thumbnail1.jpg"
+  },
+  {
+    name: "Relict",
+    team: "15",
+    timeline: "Sep 2023 – May 2024",
+    roles: "Code Lead",
+    image: "media/thumbnail2.jpg"
+  },
+  {
+    name: "Bone Brigade Lite",
+    team: "2",
+    timeline: "May 2025",
+    roles: "Systems Design",
+    image: "media/thumbnail3.jpg"
+  },
+  {
+    name: "Terraria Roguelike",
+    team: "1",
+    timeline: "Dec 2024",
+    roles: "Solo Developer",
+    image: "media/thumbnail4.jpg"
+  },
+  {
+    name: "Meaty Meteor Madness",
+    team: "2",
+    timeline: "Fall 2024",
+    roles: "Programmer",
+    image: "media/thumbnail5.jpg"
+  },
+  {
+    name: "Kitty Casino",
+    team: "7",
+    timeline: "2023",
+    roles: "Producer",
+    image: "media/KittyCasinoThumb.jpg"
+  },
+  {
+    name: "Project Lutr",
+    team: "1",
+    timeline: "Ongoing",
+    roles: "Solo Developer",
+    image: "media/thumbnail7.jpg"
+  },
+  {
+    name: "Bloxels",
+    team: "2",
+    timeline: "Mar–May 2025",
+    roles: "Systems Programmer",
+    image: "media/thumbnail8.jpg"
+  }
+];
 
-      if (type === "image") {
-        mainVideo.style.display = "none";
-        mainVideo.pause();
-        mainImage.style.display = "block";
-        mainImage.src = src;
-      } else if (type === "video") {
-        mainImage.style.display = "none";
-        mainVideo.style.display = "block";
-        mainVideo.src = src;
-        mainVideo.play();
-      }
-    });
-  });
-</script>
+const projectGrid = document.getElementById("projectGrid");
+
+allProjects.forEach(project => {
+  const wrapper = document.createElement("div");
+  wrapper.className = "project-thumb-wrapper";
+
+  wrapper.innerHTML = `
+    <img class="project-thumb" src="${project.image}" alt="${project.name}" />
+    <div class="project-hover-info">
+      <h3>${project.name}</h3>
+      <p>Team Size: ${project.team}</p>
+      <p>Timeline: ${project.timeline}</p>
+      <p>Roles: ${project.roles}</p>
+    </div>
+  `;
+
+  projectGrid.appendChild(wrapper);
+});

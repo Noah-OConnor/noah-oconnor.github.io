@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
+  <header class="sticky-header">
     <h1>Noah O'Connor</h1>
     <p>Technical Designer | Gameplay & Systems</p>
     <nav>
@@ -18,35 +18,65 @@
     </nav>
   </header>
 
-  <section id="home">
-    <div id="main-media">
-      <img id="main-image" src="media/thumbnail1.jpg" alt="Main Media" />
-      <video id="main-video" controls style="display:none;">
-        <source src="media/video1.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
-    <div id="thumbnails">
-      <img class="thumbnail" data-type="image" data-src="media/thumbnail1.jpg" src="media/thumbnail1.jpg" alt="Thumb 1" />
-      <img class="thumbnail" data-type="video" data-src="media/video1.mp4" src="media/thumbnail2.jpg" alt="Thumb 2" />
-    </div>
-  </section>
+  <main class="content-wrapper">
+    <section class="banner">
+      <img src="media/SiteBanner.jpg" alt="Featured Project Image" class="full-width-banner" />
+    </section>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <!-- Add project cards here -->
-  </section>
+    <section id="featured-projects">
+      <h2 class="section-header">Featured Projects</h2>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <p>I'm a technical designer with a focus on combat systems, GAS architecture, and multiplayer scripting in Unreal and Unity.</p>
-  </section>
+      <!-- First Featured Project -->
+      <div class="project-row">
+        <img src="media/CKBanner.jpg" alt="Featured Project Image" class="project-image left-image" />
+        <div class="project-info right-text">
+          <h3>Project Name</h3>
+          <p>Team Size: X</p>
+          <p>Timeline: Jan – Dec 20XX</p>
+          <p>Roles: Technical Designer, Systems Designer</p>
+        </div>
+      </div>
+      <div class="project-contributions">
+        <h4>Key Contributions</h4>
+        <ul>
+          <li>Placeholder contribution bullet point 1</li>
+          <li>Placeholder contribution bullet point 2</li>
+          <li>Placeholder contribution bullet point 3</li>
+          <li>Placeholder contribution bullet point 4</li>
+          <li>Placeholder contribution bullet point 5</li>
+        </ul>
+      </div>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: noahoconnor02@gmail.com</p>
-    <p>LinkedIn: <a href="https://www.linkedin.com/in/noahoconnor" target="_blank">linkedin.com/in/noahoconnor</a></p>
-  </section>
+      <!-- Second Featured Project -->
+      <div class="project-row">
+        <div class="project-info left-text">
+          <h3>Project Name</h3>
+          <p>Team Size: X</p>
+          <p>Timeline: Jan – Dec 20XX</p>
+          <p>Roles: Technical Designer, Systems Designer</p>
+        </div>
+        <img src="media/RelictBanner.jpg" alt="Featured Project Image" class="project-image right-image" />
+      </div>
+      <div class="project-contributions">
+        <h4>Key Contributions</h4>
+        <ul>
+          <li>Placeholder contribution bullet point 1</li>
+          <li>Placeholder contribution bullet point 2</li>
+          <li>Placeholder contribution bullet point 3</li>
+          <li>Placeholder contribution bullet point 4</li>
+          <li>Placeholder contribution bullet point 5</li>
+        </ul>
+      </div>
+    </section>
+        
+    <section id="all-projects">
+      <h2 class="section-header">All Projects</h2>
+      <div class="project-grid" id="projectGrid">
+        <!-- Thumbnails will be injected here -->
+      </div>
+    </section>
+
+  </main>
 
   <script src="script.js"></script>
 </body>
