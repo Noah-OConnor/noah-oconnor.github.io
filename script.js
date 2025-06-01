@@ -1,78 +1,75 @@
-// Generate the All Projects thumbnails dynamically
-const allProjects = [
-  {
-    name: "Crimson Knight",
-    team: "17",
-    timeline: "Jan – Aug 2025",
-    roles: "Technical Designer",
-    image: "media/thumbnail1.jpg"
-  },
-  {
-    name: "Relict",
-    team: "15",
-    timeline: "Sep 2023 – May 2024",
-    roles: "Code Lead",
-    image: "media/RelictThumb.jpg"
-  },
-  {
-    name: "Bone Brigade Lite",
-    team: "2",
-    timeline: "May 2025",
-    roles: "Systems Design",
-    image: "media/thumbnail3.jpg"
-  },
-  {
-    name: "Terraria Roguelike",
-    team: "1",
-    timeline: "Dec 2024",
-    roles: "Solo Developer",
-    image: "media/thumbnail4.jpg"
-  },
-  {
-    name: "Meaty Meteor Madness",
-    team: "2",
-    timeline: "Fall 2024",
-    roles: "Programmer",
-    image: "media/MeatyMeteorMadnessThumb.jpg"
-  },
-  {
-    name: "Kitty Casino",
-    team: "7",
-    timeline: "2023",
-    roles: "Producer",
-    image: "media/KittyCasinoThumb.jpg"
-  },
-  {
-    name: "Project Lutr",
-    team: "1",
-    timeline: "Ongoing",
-    roles: "Solo Developer",
-    image: "media/thumbnail7.jpg"
-  },
-  {
-    name: "Bloxels",
-    team: "2",
-    timeline: "Mar – May 2025",
-    roles: "Systems Programmer",
-    image: "media/thumbnail8.jpg"
-  }
-];
+document.addEventListener("DOMContentLoaded", function () {
+  Papa.parse("PortfolioProjectData.csv", {
+    download: true,
+    header: true,
+    complete: function(results) {
+      const projects = results.data;
 
-const projectGrid = document.getElementById("projectGrid");
+      // === FEATURED PROJECTS ===
+      const featuredSection = document.getElementById("featured-projects");
+      const allProjectsSection = document.getElementById("all-projects");
+      const featuredProjects = projects.filter(p => p.status === "featured" || p.featured === true);
+      const shownProjects = projects.filter(p => p.status === "shown" || p.status === "featured" || p.shown === true);
 
-allProjects.forEach(project => {
-  const wrapper = document.createElement("div");
-  wrapper.className = "project-thumb-wrapper";
+      featuredSection.innerHTML = '<h2 class="section-header">Featured Projects</h2>';
 
-  wrapper.innerHTML = `
-    <img class="project-thumb" src="${project.image}" alt="${project.name}" />
-    <div class="project-hover-info">
-      <h3>${project.name}</h3>
-      <p>Team Size: ${project.team}</p>
-      <p>Timeline: ${project.timeline}</p>
-      <p>Roles: ${project.roles}</p>
-    </div>
-  `;
+      featuredProjects.forEach((project, index) => {
+        const reverse = index % 2 !== 0;
+        const image = `<img src="${project.banners}" alt="${project.title}" class="project-image ${reverse ? 'right-image' : 'left-image'}" />`;
+        const info = `
+          <div class="project-info ${reverse ? 'left-text' : 'right-text'}">
+            <h3>${project.title}</h3>
+            <p>Engine: ${project.engine}</p>
+            <p>Language(s): ${project.languages}</p>
+            <p>Genre: ${project.genre}</p>
+            <p>Team Size: ${project.developers}</p>
+            <p>Timeline: ${project.timeline}</p>
+            <p>Roles: ${project.roles}</p>
+          </div>`;
 
-  projectGrid.appendChild(wrapper);
+        const contributions = `
+          <div class="project-contributions">
+            <h4>Key Contributions</h4>
+            <ul>
+              <li>${project.contribution_1}</li>
+              <li>${project.contribution_2}</li>
+              <li>${project.contribution_3}</li>
+              <li>${project.contribution_4}</li>
+              <li>${project.contribution_5}</li>
+            </ul>
+          </div>`;
+
+        featuredSection.innerHTML += `
+          <div class="project-row">
+            ${reverse ? info + image : image + info}
+          </div>
+          ${contributions}
+        `;
+      });
+
+      if (shownProjects.length > featuredProjects.length)
+      {
+        allProjectsSection.innerHTML = '<h2 class="section-header">All Projects</h2>';
+
+        // === ALL PROJECTS GRID ===
+        const projectGrid = document.getElementById("projectGrid");
+        shownProjects.forEach(project => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "project-thumb-wrapper";
+
+          wrapper.innerHTML = `
+            <img class="project-thumb" src="${project.thumbs.split('|')[0]}" alt="${project.title}" />
+            <div class="project-hover-info">
+              <h3>${project.title}</h3>
+              <p>Team Size: ${project.developers}</p>
+              <p>Timeline: ${project.timeline}</p>
+              <p>Roles: ${project.roles}</p>
+            </div>
+          `;
+
+          projectGrid.appendChild(wrapper);
+        });
+      }
+    }
+  });
 });

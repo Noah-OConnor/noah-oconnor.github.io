@@ -8,69 +8,20 @@
 </head>
 <body>
   <header class="sticky-header">
-    <h1>Noah O'Connor</h1>
-    <p>Technical Designer | Gameplay & Systems</p>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#projects">Projects</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div id="header">
+      <!-- JS will inject header here -->
+      </div>
   </header>
-
   <main class="content-wrapper">
-    <section class="banner">
+    <section id = "home", class="banner">
       <img src="media/SiteBanner.jpg" alt="Featured Project Image" class="full-width-banner" />
     </section>
 
     <section id="featured-projects">
-      <h2 class="section-header">Featured Projects</h2>
-
-      <!-- First Featured Project -->
-      <div class="project-row">
-        <img src="media/CKBanner.jpg" alt="Featured Project Image" class="project-image left-image" />
-        <div class="project-info right-text">
-          <h3>Project Name</h3>
-          <p>Team Size: X</p>
-          <p>Timeline: Jan – Dec 20XX</p>
-          <p>Roles: Technical Designer, Systems Designer</p>
-        </div>
-      </div>
-      <div class="project-contributions">
-        <h4>Key Contributions</h4>
-        <ul>
-          <li>Placeholder contribution bullet point 1</li>
-          <li>Placeholder contribution bullet point 2</li>
-          <li>Placeholder contribution bullet point 3</li>
-          <li>Placeholder contribution bullet point 4</li>
-          <li>Placeholder contribution bullet point 5</li>
-        </ul>
-      </div>
-
-      <!-- Second Featured Project -->
-      <div class="project-row">
-        <div class="project-info left-text">
-          <h3>Project Name</h3>
-          <p>Team Size: X</p>
-          <p>Timeline: Jan – Dec 20XX</p>
-          <p>Roles: Technical Designer, Systems Designer</p>
-        </div>
-        <img src="media/RelictBanner.jpg" alt="Featured Project Image" class="project-image right-image" />
-      </div>
-      <div class="project-contributions">
-        <h4>Key Contributions</h4>
-        <ul>
-          <li>Placeholder contribution bullet point 1</li>
-          <li>Placeholder contribution bullet point 2</li>
-          <li>Placeholder contribution bullet point 3</li>
-          <li>Placeholder contribution bullet point 4</li>
-          <li>Placeholder contribution bullet point 5</li>
-        </ul>
-      </div>
+      <!-- JS will inject content here -->
     </section>
-        
+
     <section id="all-projects">
-      <h2 class="section-header">All Projects</h2>
       <div class="project-grid" id="projectGrid">
         <!-- Thumbnails will be injected here -->
       </div>
@@ -79,24 +30,29 @@
     <section id="about">
       <h2 class="section-header">About Me</h2>
       <div class="about-text">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Cras scelerisque arcu at velit tincidunt, ac laoreet neque sodales. Morbi vel metus id nibh convallis euismod.</p>
-        <p>Vivamus in convallis tellus. Duis id diam vel est iaculis euismod. Integer dapibus lorem a libero ultrices, nec ultricies felis placerat. Ut tincidunt rutrum nunc, ut pretium lorem porttitor in.</p>
+        <p>Hi, I'm Noah, a passionate game programmer and designer with a strong focus on technical design and gameplay systems.</p>
+        <p>My journey into game development began back in middle school when I took a Java Minecraft modding course. That early experience ignited a love not just for playing games, but for creating them.</p>
+        <p>I'm currently finishing my Masters of Science in Interactive Media on the Tech Design Track at the Florida Interactive Entertainment Academy (FIEA), and I'm excited to bring my skills into professional projects.</p>
+        <p>I love tackling technical challenges, refining player experiences, and bringing game mechanics to life. My background combines a strong foundation in programming with hands-on design experience across multiple genres and styles.</p>
+        <p>Some of my favorite games include Terraria, Borderlands 2, Destiny, League of Legends, and Minecraft. More recently, I've been diving into games like Half-Life and Monster Hunter Wilds, which continue to inspire my creativity and passion for innovative game design.</p>
+        <p>On this site, you’ll find a collection of my work from solo projects to large team collaborations highlighting my growth as a technical designer.</p>
+        <p>Thanks for stopping by, and I hope you enjoy exploring my projects!</p>
       </div>
     </section>
 
-    <section id="contact">
-      <h2 class="section-header">Contact Me</h2>
-      <form action="https://formspree.io/f/xblyrbpg" method="POST" class="contact-form">
-        <input type="text" name="name" placeholder="Your name" required />
-        <input type="email" name="email" placeholder="Your email" required />
-        <textarea name="message" placeholder="Your message" rows="5" required></textarea>
-        <button type="submit">Send</button>
-      </form>
-    </section>
-
+    <div id="footer"></div>
 
   </main>
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("header").innerHTML = html);
 
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("footer").innerHTML = html);
+  </script>
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </body>
 </html>
