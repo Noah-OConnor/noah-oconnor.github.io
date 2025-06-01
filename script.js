@@ -3,7 +3,7 @@ const allProjects = [
   {
     name: "Crimson Knight",
     team: "17",
-    timeline: "Jan–Aug 2025",
+    timeline: "Jan – Aug 2025",
     roles: "Technical Designer",
     image: "media/thumbnail1.jpg"
   },
@@ -12,7 +12,7 @@ const allProjects = [
     team: "15",
     timeline: "Sep 2023 – May 2024",
     roles: "Code Lead",
-    image: "media/thumbnail2.jpg"
+    image: "media/RelictThumb.jpg"
   },
   {
     name: "Bone Brigade Lite",
@@ -33,7 +33,7 @@ const allProjects = [
     team: "2",
     timeline: "Fall 2024",
     roles: "Programmer",
-    image: "media/thumbnail5.jpg"
+    image: "media/MeatyMeteorMadnessThumb.jpg"
   },
   {
     name: "Kitty Casino",
@@ -52,7 +52,7 @@ const allProjects = [
   {
     name: "Bloxels",
     team: "2",
-    timeline: "Mar–May 2025",
+    timeline: "Mar – May 2025",
     roles: "Systems Programmer",
     image: "media/thumbnail8.jpg"
   }
