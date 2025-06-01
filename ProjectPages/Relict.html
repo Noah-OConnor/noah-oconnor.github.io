@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relict | Game Portfolio</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="sticky-header">
+    <div id="header"></div>
+  </header>
+
+  <main class="content-wrapper">
+
+    <h1 class="section-header">Relict: Battle the Arcana, Reclaim the Earth</h1>
+
+    <section>
+      <h2 class="section-header">Core Information</h2>
+      <p><span class="subtitle">My Roles:</span> Vision Holder, Code Lead, System Administrator</p>
+      <p><span class="subtitle">Softwares:</span> Unity, C#, GitHub, ClickUp, Google Suite</p>
+      <p><span class="subtitle">Timeline:</span> Sept 2023 – May 2024 (8 months)</p>
+      <p><span class="subtitle">Team Size:</span> 15 core developers, 4 programmers</p>
+    </section>
+
+    <section>
+      <h2 class="section-header">Game Overview</h2>
+      <p><strong>Relict</strong> is a third-person roguelike shooter inspired by <em>Risk of Rain 2</em> and <em>Hades</em>. Players harness tarot-based powers to combat swarms of enemies in procedurally structured arenas. The loop centers around fast-paced third-person combat, loot-driven power progression, and escalating difficulty. Players choose between powerful "Major Arcana" abilities and stat-boosting "Minor Arcana" to build synergistic loadouts while navigating hostile environments filled with elemental hazards and cosmic foes. The narrative explores divine reclamation and the cost of power in a post-human world, conveyed through card flavor text, boss encounters, and UI storytelling.</p>
+    </section>
+
+    <section>
+      <h2 class="section-header">Key Contributions</h2>
+      <ul class="project-contributions">
+        <li>Led a 4-person code team to implement scalable, designer-friendly gameplay systems in Unity using C# and FSM architecture</li>
+        <li>Designed and built the tarot card power-up system, including dynamic buffs, cooldowns, and ability slot mechanics</li>
+        <li>Developed custom input manager supporting full controller rebinding and navigation across UI menus and gameplay</li>
+        <li>Implemented modular third-person character controller with persistent stats, rechargeable ammo, and responsive combat feel</li>
+        <li>Created AI framework using a refactorable Finite State Machine, reused across standard enemies and bosses</li>
+        <li>Managed GitHub repo and weekly builds across 9 sprints, resolving merge conflicts, input bugs, and persistent inventory issues</li>
+        <li>Delivered feature-complete roguelike with full controller support, gameplay loop, and VFX/UX polish over 8 months</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="section-header">Deep Dive: Design Vision & Development Challenges</h2>
+      <p>Relict was my most ambitious project to date—one I pitched, directed, and developed from the ground up. As Vision Holder and Code Lead, I wanted to create a roguelike that fused satisfying third-person shooter gameplay with a tarot-inspired upgrade system that felt both thematic and flexible. The design challenge was balancing complexity and readability: we had to convey powerful player builds, real-time ability changes, and enemy variety without overwhelming the player.</p>
+      <p>I built a full stat-and-ability framework that allowed tarot cards to apply modifiers dynamically—altering everything from cooldown rates to projectile behaviors. One of my proudest systems was our FSM-based AI framework. It started as a basic slime enemy, then scaled into minibosses with teleportation, hazards, and complex attack sequences—all inheriting from the same parent class. Managing scope across design, narrative, and code was tough, especially as our team faced skill gaps and tight deadlines, but weekly builds and rapid iteration helped us stay aligned. The result: a modular roguelike prototype that delivered a full gameplay loop and reflected our unique vision.</p>
+    </section>
+
+    <div id="footer"></div>
+  </main>
+
+  <script>
+    fetch("../header.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("header").innerHTML = html);
+
+    fetch("../footer.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("footer").innerHTML = html);
+  </script>
+</body>
+</html>

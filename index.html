@@ -7,11 +7,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="sticky-header">
-    <div id="header">
-      <!-- JS will inject header here -->
-      </div>
-  </header>
+  <header class="sticky-header"><div id="header"><!-- JS will inject header here --></div></header>
   <main class="content-wrapper">
     <section id = "home", class="banner">
       <img src="media/SiteBanner.jpg" alt="Featured Project Image" class="full-width-banner" />
@@ -51,6 +47,21 @@
     fetch("footer.html")
       .then(res => res.text())
       .then(html => document.getElementById("footer").innerHTML = html);
+  </script>
+  <script>
+    // Re-scroll to anchor after content has loaded
+    window.addEventListener("load", () => {
+      const hash = window.location.hash;
+      if (hash) {
+        // Delay just enough for dynamic content to appear
+        setTimeout(() => {
+          const target = document.querySelector(hash);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100); // Adjust delay if needed
+      }
+    });
   </script>
   <script src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
