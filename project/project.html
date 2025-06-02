@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Page</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <header class="sticky-header">
+    <div id="header"></div>
+  </header>
+  <main class="content-wrapper">
+    <section class="project-section">
+      <h2 class="project-section-header">Loading...</h2>
+      <div class="project-flex-row">
+        <div class="media-viewer">
+          <div class="main-media-window aspect-16x9">
+            <img id="main-media" alt="Main media" style="display:block;">
+            <iframe id="main-video" frameborder="0" allowfullscreen style="display:none;"></iframe>
+          </div>
+          <div class="thumbnail-nav-container">
+            <button class="scroll-btn left-btn">&#10094;</button>
+            <div class="media-thumbnails">
+              <div class="thumbnail-scroll" id="thumbnail-scroll"></div>
+            </div>
+            <button class="scroll-btn right-btn">&#10095;</button>
+          </div>
+        </div>
+        <div class="project-info-pane">
+          <img class="project-cover-art" src="" alt="Cover Art" />
+          <p class="project-description"></p>
+          <section class="project-links"></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-contributions">
+      <h2 class="section-header">Key Contributions</h2>
+      <ul></ul>
+    </section>
+
+    <section class="dynamic-sections"></section>
+    <div id="footer"></div>
+  </main>
+
+  <script>
+    function getProjectSlug() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("name") || "default";
+    }
+
+    function scrollToThumbnail(index, thumbnails) {
+      const thumb = thumbnails[index];
+      if (thumb) {
+        thumb.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+    }
+
+    function createThumbnail(type, thumbSrc, mediaSrc, alt = "") {
+      const img = document.createElement("img");
+      img.className = "thumbnail";
+      img.dataset.type = type;
+      img.dataset.src = mediaSrc;
+      img.src = thumbSrc;
+      img.alt = alt;
+      return img;
+    }
+
+    function createLink(label, url) {
+      const a = document.createElement("a");
+      a.href = url;
+      a.textContent = label;
+      a.className = "link-button";
+      a.target = "_blank";
+      return a;
+    }
+
+    function loadProjectPage(csvPath) {
+      Papa.parse(csvPath, {
+        download: true,
+        header: true,
+        complete: function(results) {
+          const rows = results.data;
+
+          if (rows.length === 0) return;
+
+          const baseRow = rows[0];
+          document.querySelector(".project-section-header").textContent = baseRow["project-name"] || "Project Title";
+          document.querySelector(".project-description").textContent = baseRow["project-description"] || "";
+          document.querySelector(".project-cover-art").src = baseRow["cover-media"] || "";
+          
+          document.title = baseRow["project-name"] + " | Portfolio";
+
+          const infoPane = document.querySelector(".project-info-pane");
+          const linkContainer = infoPane.querySelector(".project-links");
+
+          rows.forEach(row => {
+            if (row["project-info-type"] && row["project-info-value"]) {
+              const p = document.createElement("p");
+              p.innerHTML = `<strong>${row["project-info-type"]}:</strong> ${row["project-info-value"]}`;
+              infoPane.insertBefore(p, linkContainer);
+            }
+          });
+
+          rows.forEach(row => {
+            if (row["project-link-name"] && row["project-link"]) {
+              linkContainer.appendChild(createLink(row["project-link-name"], row["project-link"]));
+            }
+          });
+
+          const thumbContainer = document.getElementById("thumbnail-scroll");
+          const thumbnails = [];
+          rows.forEach(row => {
+            if (row["media-src"] && row["media-data-src"] && row["media-data-type"]) {
+              const thumb = createThumbnail(row["media-data-type"], row["media-src"], row["media-data-src"], row["media-alt-text"] || "");
+              thumbContainer.appendChild(thumb);
+              thumbnails.push(thumb);
+            }
+          });
+
+          const ul = document.querySelector(".project-contributions ul");
+          rows.forEach(row => {
+            if (row["project-contributions"]) {
+              const li = document.createElement("li");
+              li.textContent = row["project-contributions"];
+              ul.appendChild(li);
+            }
+          });
+
+          const sectionContainer = document.querySelector(".dynamic-sections");
+          rows.forEach(row => {
+            if (row["project-section"] && row["project-section-text"]) {
+              const slug = row["project-section"]
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, ""); // trim hyphens from start/end
+
+              const section = document.createElement("section");
+              section.className = "project-generic-content";
+              section.id = slug;
+              section.innerHTML = `
+                <h2 class="section-header">${row["project-section"]}</h2>
+                <p>${row["project-section-text"]}</p>
+              `;
+              sectionContainer.appendChild(section);
+            }
+          });
+
+          let currentIndex = 0;
+          const mainImage = document.getElementById("main-media");
+          const mainVideo = document.getElementById("main-video");
+
+          function showThumbnail(index) {
+            const thumb = thumbnails[index];
+            const type = thumb.dataset.type;
+            const src = thumb.dataset.src;
+
+            mainImage.style.display = "none";
+            mainVideo.style.display = "none";
+            mainImage.src = "";
+            mainVideo.src = "";
+
+            thumbnails.forEach(t => t.classList.remove("active-thumbnail"));
+            thumb.classList.add("active-thumbnail");
+
+            if (type === "image") {
+              mainImage.src = src;
+              mainImage.style.display = "block";
+            } else if (type === "video") {
+              mainVideo.src = src;
+              mainVideo.style.display = "block";
+            }
+
+            scrollToThumbnail(index, thumbnails);
+          }
+
+          document.querySelector(".left-btn").addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+            showThumbnail(currentIndex);
+          });
+
+          document.querySelector(".right-btn").addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % thumbnails.length;
+            showThumbnail(currentIndex);
+          });
+
+          thumbnails.forEach((thumb, index) => {
+            thumb.addEventListener("click", () => {
+              currentIndex = index;
+              showThumbnail(index);
+            });
+          });
+
+          if (thumbnails.length > 0) showThumbnail(0);
+        }
+      });
+      const hash = window.location.hash;
+      if (hash) {
+        setTimeout(() => {
+          const target = document.querySelector(hash);
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100); // delay gives time for dynamic content to be inserted
+      }
+
+    }
+
+    const slug = getProjectSlug();
+    loadProjectPage(`/data/${slug}.csv`);
+    
+    fetch("/header.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("header").innerHTML = html);
+
+    fetch("/footer.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("footer").innerHTML = html);
+  </script>
+</body>
+</html>
