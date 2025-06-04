@@ -43,8 +43,9 @@ function createFeaturedProject(meta, details, index, allRows) {
   const info = document.createElement("div");
   info.className = "project-info";
 
-  const title = document.createElement("h3");
-  title.textContent = meta.title;
+  const title = document.createElement("h2");
+  title.textContent = details["project-name"];
+  title.style.textDecoration = "underline";
   info.appendChild(title);
 
   // Build project info fields
