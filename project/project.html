@@ -131,23 +131,87 @@
           });
 
           const sectionContainer = document.querySelector(".dynamic-sections");
-          rows.forEach(row => {
-            if (row["project-section"] && row["project-section-text"]) {
-              const slug = row["project-section"]
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, ""); // trim hyphens from start/end
 
-              const section = document.createElement("section");
-              section.className = "project-generic-content";
-              section.id = slug;
-              section.innerHTML = `
-                <h2 class="section-header">${row["project-section"]}</h2>
-                <p>${row["project-section-text"]}</p>
-              `;
-              sectionContainer.appendChild(section);
+          rows.forEach(row => {
+            const sectionTitle = row["project-section"];
+            if (!sectionTitle) return;
+
+            const slug = sectionTitle
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/^-+|-+$/g, "");
+
+            const section = document.createElement("section");
+            section.className = "project-generic-content";
+            section.id = slug;
+
+            // Section Header
+            const header = document.createElement("h2");
+            header.className = "section-header";
+            header.textContent = sectionTitle;
+            section.appendChild(header);
+
+            // Text Content Blocks
+            for (let i = 1; i <= 3; i++) {
+              const text = row[`project-section-content-${i}`];
+              if (text) {
+                const paragraph = document.createElement("p");
+                paragraph.textContent = text;
+                section.appendChild(paragraph);
+              }
             }
+
+            // Media Grid
+            const mediaGrid = document.createElement("div");
+            mediaGrid.className = "media-grid";
+            let hasMedia = false;
+
+            for (let i = 1; i <= 3; i++) {
+              const mediaSrc = row[`project-section-media-${i}`];
+              const caption = row[`project-section-media-caption-${i}`];
+
+              if (mediaSrc) {
+                hasMedia = true;
+
+                const mediaItem = document.createElement("div");
+                mediaItem.className = "media-item";
+
+                const isVideo = mediaSrc.endsWith(".mp4") || mediaSrc.includes("youtube.com");
+
+                if (isVideo) {
+                  const video = document.createElement("video");
+                  video.src = mediaSrc;
+                  video.muted = true;
+                  video.loop = true;
+                  video.playsInline = true;
+                  video.setAttribute("autoplay", ""); // Ensures mobile compatibility
+                  video.setAttribute("controls", ""); // Optional: keep/remove controls
+                  mediaItem.appendChild(video);
+                } else {
+                  const img = document.createElement("img");
+                  img.src = mediaSrc;
+                  img.alt = caption || "";
+                  mediaItem.appendChild(img);
+                }
+
+                if (caption) {
+                  const cap = document.createElement("p");
+                  cap.className = "media-caption";
+                  cap.textContent = caption;
+                  mediaItem.appendChild(cap);
+                }
+
+                mediaGrid.appendChild(mediaItem);
+              }
+            }
+
+            if (hasMedia) {
+              section.appendChild(mediaGrid);
+            }
+
+            sectionContainer.appendChild(section);
           });
+
 
           let currentIndex = 0;
           const mainImage = document.getElementById("main-media");
