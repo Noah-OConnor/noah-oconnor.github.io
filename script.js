@@ -94,12 +94,15 @@ function createFeaturedProject(meta, details, index, allRows) {
     }
   });
 
-  for (let i = 0; i < contributions.length; i += 3) {
-    const row = document.createElement("p");
-    const slice = contributions.slice(i, i + 3);
-    row.innerHTML = slice.map(link => link.outerHTML).join(" | ");
-    contributionSection.appendChild(row);
-  }
+  const contributionContainer = document.createElement("div");
+  contributionContainer.className = "contribution-links";
+
+  contributions.forEach((link, index) => {
+    contributionContainer.appendChild(link);
+  });
+
+  contributionSection.appendChild(contributionContainer);
+
 
   document.getElementById("featured-projects").appendChild(contributionSection);
 }

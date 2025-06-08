@@ -177,6 +177,7 @@
                 mediaItem.className = "media-item";
 
                 const isVideo = mediaSrc.endsWith(".mp4") || mediaSrc.includes("youtube.com");
+                const isBlueprint = mediaSrc.includes("blueprint");
 
                 if (isVideo) {
                   const video = document.createElement("video");
@@ -187,6 +188,15 @@
                   video.setAttribute("autoplay", ""); // Ensures mobile compatibility
                   video.setAttribute("controls", ""); // Optional: keep/remove controls
                   mediaItem.appendChild(video);
+                } else if (isBlueprint) {
+                  const iframe = document.createElement("iframe");
+                  iframe.src = mediaSrc;
+                  iframe.allowFullscreen = true;
+                  iframe.scrolling = "no";
+                  iframe.style.width = "100%";
+                  iframe.style.height = "500px";
+                  iframe.style.border = "none";
+                  mediaItem.appendChild(iframe);
                 } else {
                   const img = document.createElement("img");
                   img.src = mediaSrc;
@@ -283,6 +293,37 @@
     fetch("/footer.html")
       .then(res => res.text())
       .then(html => document.getElementById("footer").innerHTML = html);
+
+    document.addEventListener("click", function(e) {
+      const target = e.target;
+
+      // Check if it's an image (but not a thumbnail)
+      if (target.tagName === "IMG" && !target.classList.contains("thumbnail")) {
+        const overlay = document.getElementById("image-overlay");
+        const overlayImg = document.getElementById("image-overlay-img");
+        overlayImg.src = target.src;
+        overlay.style.display = "flex";
+      }
+
+      // Close if clicking close button or backdrop
+      if (
+        target.classList.contains("image-overlay") ||
+        target.classList.contains("image-overlay-backdrop") ||
+        target.classList.contains("image-overlay-close")
+      ) {
+        document.getElementById("image-overlay").style.display = "none";
+      }
+    });
+
   </script>
+
+  <div id="image-overlay" class="image-overlay" style="display: none;">
+    <div class="image-overlay-backdrop"></div>
+    <div class="image-overlay-content">
+      <span class="image-overlay-close">&times;</span>
+      <img id="image-overlay-img" src="" alt="Full view" />
+    </div>
+  </div>
+
 </body>
 </html>
