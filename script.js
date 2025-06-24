@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   Papa.parse("data/PortfolioProjectData.csv", {
     download: true,
     header: true,
-    complete: function(results) {
+    complete: async function(results) {
       const featured = results.data.filter(p => p.status === "featured");
       const featuredSection = document.getElementById("featured-projects");
 
@@ -13,17 +13,27 @@ document.addEventListener("DOMContentLoaded", function () {
       header.textContent = "Featured Projects";
       featuredSection.appendChild(header);
 
-      featured.forEach((meta, index) => {
-        if (!meta.data) return;
+      // Load and parse all featured project data in order
+      const allDetails = await Promise.all(
+        featured.map(meta =>
+          new Promise(resolve => {
+            if (!meta.data) return resolve(null);
+            Papa.parse(meta.data, {
+              download: true,
+              header: true,
+              complete: function(detailResult) {
+                resolve({ meta, details: detailResult.data[0], allRows: detailResult.data });
+              }
+            });
+          })
+        )
+      );
 
-        Papa.parse(meta.data, {
-          download: true,
-          header: true,
-          complete: function(detailResult) {
-            const details = detailResult.data[0];
-            createFeaturedProject(meta, details, index, detailResult.data);
-          }
-        });
+      // Render in original CSV order
+      allDetails.forEach((entry, index) => {
+        if (entry) {
+          createFeaturedProject(entry.meta, entry.details, index, entry.allRows);
+        }
       });
     }
   });

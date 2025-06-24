@@ -1,3 +1,5 @@
 slug,data,overview,status,banner,thumbs,project_page
-crimson-knight,/data/crimson-knight.csv,A third-person boss fight Souls-like built in Unreal Engine 5.,featured,media/CrimsonKnight16x9.jpg,media/CrimsonKnight1x1.jpg,/project.html?name=crimson-knight
-relict,/data/relict.csv,A third-person roguelike shooter inspired by Risk of Rain 2 and Hades.,featured,media/Relict16x9.jpg,media/Relict1x1.jpg,/project.html?name=relict
+crimson-knight,/data/crimson-knight.csv,A third-person boss fight Souls-like built in Unreal Engine 5.,featured,media/CrimsonKnight16x9.jpg,,/project.html?name=crimson-knight
+relict,/data/relict.csv,A third-person roguelike shooter inspired by Risk of Rain 2 and Hades.,featured,media/Relict16x9.jpg,,/project.html?name=relict
+lutr,/data/lutr.csv,A first-person co-op looter shooter inspired by Destiny and Borderlands.,featured,media/lutr16x9.jpg,,/project.html?name=lutr
+bloxels,/data/bloxels.csv,An open world sandbox game inspired by Terraria and Minecraft.,featured,media/bloxels16x9.jpg,,/project.html?name=bloxels
