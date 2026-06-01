@@ -36,7 +36,35 @@ const projects = defineCollection({
                 ])
             )
             .default([]),
-
+        
+        sections: z
+            .array(
+                z.object({
+                    title: z.string(),
+                    items: z.array(
+                        z.discriminatedUnion("type", [
+                            z.object({
+                                type: z.literal("text"),
+                                body: z.string(),
+                            }),
+                            z.object({
+                                type: z.literal("image"),
+                                src: z.string(),
+                                alt: z.string().optional(),
+                                caption: z.string().optional(),
+                            }),
+                            z.object({
+                                type: z.literal("gif"),
+                                src: z.string(),
+                                alt: z.string().optional(),
+                                caption: z.string().optional(),
+                            }),
+                        ])
+                    ),
+                })
+            )
+            .default([]),
+        
         links: z.array(
             z.object({
                 label: z.string(),

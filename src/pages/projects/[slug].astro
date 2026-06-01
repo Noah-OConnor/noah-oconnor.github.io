@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import Layout from "../../components/Layout.astro";
 import ProjectShowcaseCarousel from "../../components/ProjectShowcaseCarousel.astro";
+import ProjectContentSections from "../../components/ProjectContentSections.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -20,8 +21,6 @@ const { Content } = await render(project);
     <main class="page project-page">
         <ProjectShowcaseCarousel project={project} />
 
-        <article class="project-writeup">
-            <Content />
-        </article>
+        <ProjectContentSections sections={project.data.sections} />
     </main>
 </Layout>
