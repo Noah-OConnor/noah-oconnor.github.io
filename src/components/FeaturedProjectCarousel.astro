@@ -1,0 +1,177 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Project = CollectionEntry<"projects">;
+
+interface Props {
+    projects: Project[];
+}
+
+const { projects = [] } = Astro.props as Props;
+---
+
+{projects.length > 0 && (
+<section class="featured-carousel" aria-label="Featured projects">
+    <div class="featured-carousel__header">
+        <h2>Featured Projects</h2>
+    </div>
+
+    <div class="featured-carousel__viewport" data-featured-carousel>
+        {projects.map((project, index) => {
+            const coverImage = project.data.coverImage || project.data.heroImage;
+            const screenshots = project.data.screenshots.slice(0, 4);
+
+            const tags = [
+                project.data.engine,
+                project.data.language,
+                project.data.perspective,
+                project.data.genre,
+                project.data.role,
+            ].filter(Boolean);
+
+            return (
+                    <article
+                            class={`featured-slide ${index === 0 ? "is-active" : ""}`}
+                            data-slide
+                            aria-hidden={index === 0 ? "false" : "true"}
+                    >
+                        <a class="featured-slide__link" href={`/projects/${project.data.slug}/`}>
+                            <div class="featured-slide__cover">
+                                <img src={coverImage} alt={`${project.data.title} cover image`} />
+                            </div>
+
+                            <div class="featured-slide__details">
+                                <h3>{project.data.title}</h3>
+
+                                <div class="featured-slide__screenshots">
+                                    {screenshots.map((screenshot) => (
+                                            <img src={screenshot} alt="" loading="lazy" />
+                                    ))}
+                                </div>
+
+                                <p class="featured-slide__description">
+                                    {project.data.description}
+                                </p>
+
+                                <div class="featured-slide__tags" aria-label="Project tags">
+                                    {tags.map((tag) => (
+                                            <span>{tag}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+            );
+        })}
+
+        {projects.length > 1 && (
+                <>
+                    <button class="featured-carousel__button featured-carousel__button--prev" type="button" data-carousel-prev aria-label="Previous featured project">
+                        ‹
+                    </button>
+
+                    <button class="featured-carousel__button featured-carousel__button--next" type="button" data-carousel-next aria-label="Next featured project">
+                        ›
+                    </button>
+
+                    <div class="featured-carousel__dots" aria-label="Featured project navigation">
+                        {projects.map((project, index) => (
+                                <button
+                                        type="button"
+                                        class={index === 0 ? "is-active" : ""}
+                                        data-carousel-dot={index}
+                                        aria-label={`Show ${project.data.title}`}
+                                />
+                        ))}
+                    </div>
+                </>
+        )}
+    </div>
+</section>
+
+<script>
+    const carousel = document.querySelector<HTMLElement>("[data-featured-carousel]");
+
+    if (carousel) {
+        const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-slide]"));
+        const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
+        const prevButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-prev]");
+        const nextButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
+
+        let currentIndex = 0;
+        let isPaused = false;
+        let intervalId: number | undefined;
+
+        function showSlide(nextIndex: number) {
+            if (slides.length === 0) return;
+
+            currentIndex = (nextIndex + slides.length) % slides.length;
+
+            slides.forEach((slide: HTMLElement, index: number) => {
+                const isActive = index === currentIndex;
+                slide.classList.toggle("is-active", isActive);
+                slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+            });
+
+            dots.forEach((dot: HTMLButtonElement, index: number) => {
+                dot.classList.toggle("is-active", index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        function stopAutoplay() {
+            if (intervalId !== undefined) {
+                window.clearInterval(intervalId);
+                intervalId = undefined;
+            }
+        }
+
+        function startAutoplay() {
+            if (slides.length <= 1) return;
+
+            stopAutoplay();
+
+            intervalId = window.setInterval(() => {
+                if (!isPaused) {
+                    nextSlide();
+                }
+            }, 6000);
+        }
+
+        carousel.addEventListener("mouseenter", () => {
+            isPaused = true;
+        });
+
+        carousel.addEventListener("mouseleave", () => {
+            isPaused = false;
+        });
+
+        carousel.addEventListener("focusin", () => {
+            isPaused = true;
+        });
+
+        carousel.addEventListener("focusout", () => {
+            isPaused = false;
+        });
+
+        prevButton?.addEventListener("click", previousSlide);
+        nextButton?.addEventListener("click", nextSlide);
+
+        dots.forEach((dot: HTMLButtonElement, index: number) => {
+            dot.addEventListener("click", () => {
+                showSlide(index);
+            });
+        });
+
+        showSlide(0);
+        startAutoplay();
+    }
+</script>
+    )}

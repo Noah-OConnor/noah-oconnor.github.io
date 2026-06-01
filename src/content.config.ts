@@ -8,12 +8,20 @@ const projects = defineCollection({
         slug: z.string(),
         title: z.string(),
         description: z.string(),
+
         engine: z.string(),
+        language: z.string().optional(),
+        perspective: z.string().optional(),
+        genre: z.string().optional(),
         role: z.string(),
         status: z.string(),
+
         thumbnail: z.string(),
         heroImage: z.string(),
+        coverImage: z.string().optional(),
+
         screenshots: z.array(z.string()).default([]),
+
         links: z
             .object({
                 github: z.string().optional(),

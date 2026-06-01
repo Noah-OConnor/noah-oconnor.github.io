@@ -1,8 +1,18 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../components/Layout.astro";
+import FeaturedProjectCarousel from "../components/FeaturedProjectCarousel.astro";
 
 const projects = await getCollection("projects");
+
+const featuredProjectSlugs = [
+    "example-project",
+    "crimson-knight",
+];
+
+const featuredProjects = featuredProjectSlugs
+    .map((slug) => projects.find((project) => project.data.slug === slug))
+    .filter((project) => project !== undefined);
 ---
 
 <Layout title="Game Dev Portfolio">
@@ -12,13 +22,15 @@ const projects = await getCollection("projects");
             <p>Game developer focused on gameplay systems, level design, and interactive worlds.</p>
         </section>
 
+        <FeaturedProjectCarousel projects={featuredProjects} />
+
         <section>
             <h2>Projects</h2>
 
             <div class="project-grid">
                 {projects.map((project) => (
-                        <a class="game-card" href={`/projects/${project.data.slug}/`}>
-                            <img src={project.data.thumbnail} alt="cant see this" />
+                        <a class="game-card" href={`/projects/${project.slug}/`}>
+                            <img src={project.data.thumbnail} alt={`${project.data.title} thumbnail`} />
 
                             <div class="game-card-content">
                                 <h3>{project.data.title}</h3>
