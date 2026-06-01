@@ -1,6 +1,7 @@
 ---
-import {getCollection, render} from "astro:content";
+import { getCollection, render } from "astro:content";
 import Layout from "../../components/Layout.astro";
+import ProjectShowcaseCarousel from "../../components/ProjectShowcaseCarousel.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -17,35 +18,7 @@ const { Content } = await render(project);
 
 <Layout title={project.data.title}>
     <main class="page project-page">
-        <p><a href="/">← Back to projects</a></p>
-
-        <section class="project-hero">
-            <img src={project.data.heroImage} alt="" />
-            <div>
-                <h1>{project.data.title}</h1>
-                <p>{project.data.description}</p>
-                <p>
-                    <strong>Engine:</strong> {project.data.engine}
-                    <br />
-                    <strong>Role:</strong> {project.data.role}
-                    <br />
-                    <strong>Status:</strong> {project.data.status}
-                </p>
-            </div>
-        </section>
-
-        <section class="project-links">
-            {project.data.links?.github && <a href={project.data.links.github}>GitHub</a>}
-            {project.data.links?.itch && <a href={project.data.links.itch}>itch.io</a>}
-            {project.data.links?.steam && <a href={project.data.links.steam}>Steam</a>}
-            {project.data.links?.trailer && <a href={project.data.links.trailer}>Trailer</a>}
-        </section>
-
-        <section class="screenshot-grid">
-            {project.data.screenshots.map((screenshot) => (
-                    <img src={screenshot} alt="" />
-            ))}
-        </section>
+        <ProjectShowcaseCarousel project={project} />
 
         <article class="project-writeup">
             <Content />

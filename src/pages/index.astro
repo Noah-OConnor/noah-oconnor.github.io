@@ -6,8 +6,9 @@ import FeaturedProjectCarousel from "../components/FeaturedProjectCarousel.astro
 const projects = await getCollection("projects");
 
 const featuredProjectSlugs = [
-    "example-project",
     "crimson-knight",
+    "relict",
+    "lutr",
 ];
 
 const featuredProjects = featuredProjectSlugs
@@ -29,8 +30,8 @@ const featuredProjects = featuredProjectSlugs
 
             <div class="project-grid">
                 {projects.map((project) => (
-                        <a class="game-card" href={`/projects/${project.slug}/`}>
-                            <img src={project.data.thumbnail} alt={`${project.data.title} thumbnail`} />
+                        <a class="game-card" href={`/projects/${project.data.slug}/`}>
+                            <img src={project.data.coverImage} alt={`${project.data.title} thumbnail`} />
 
                             <div class="game-card-content">
                                 <h3>{project.data.title}</h3>

@@ -16,20 +16,33 @@ const projects = defineCollection({
         role: z.string(),
         status: z.string(),
 
-        thumbnail: z.string(),
-        heroImage: z.string(),
-        coverImage: z.string().optional(),
+        coverImage: z.string(),
+        
+        media: z
+            .array(
+                z.discriminatedUnion("type", [
+                    z.object({
+                        type: z.literal("image"),
+                        src: z.string(),
+                        thumbnail: z.string().optional(),
+                        alt: z.string().optional(),
+                    }),
+                    z.object({
+                        type: z.literal("video"),
+                        src: z.string(),
+                        thumbnail: z.string(),
+                        title: z.string().optional(),
+                    }),
+                ])
+            )
+            .default([]),
 
-        screenshots: z.array(z.string()).default([]),
-
-        links: z
-            .object({
-                github: z.string().optional(),
-                itch: z.string().optional(),
-                steam: z.string().optional(),
-                trailer: z.string().optional(),
+        links: z.array(
+            z.object({
+                label: z.string(),
+                url: z.string(),
             })
-            .optional(),
+        ).optional()
     }),
 });
 

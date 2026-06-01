@@ -1,0 +1,287 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Project = CollectionEntry<"projects">;
+type ProjectMedia = Project["data"]["media"][number];
+
+interface Props {
+    project: Project;
+}
+
+const { project } = Astro.props as Props;
+
+const fallbackMedia: ProjectMedia[] = [
+    {
+        type: "image",
+        src: project.data.coverImage,
+        thumbnail: project.data.coverImage,
+        alt: `${project.data.title} cover image`,
+    },
+];
+
+const media: ProjectMedia[] =
+    project.data.media.length > 0 ? project.data.media : fallbackMedia;
+
+const tags = [
+    project.data.engine,
+    project.data.language,
+    project.data.perspective,
+    project.data.genre,
+    project.data.role,
+].filter((tag): tag is string => Boolean(tag));
+---
+
+<section class="project-showcase" data-project-showcase>
+    <div class="project-showcase__header">
+        <p class="project-showcase__breadcrumb">
+            <a href="/">All Projects</a>
+            <span>›</span>
+            <span>{project.data.genre ?? "Game Project"}</span>
+            <span>›</span>
+            <strong>{project.data.title}</strong>
+        </p>
+
+        <h1>{project.data.title}</h1>
+    </div>
+
+    <div class="project-showcase__layout">
+        <div class="project-showcase__media-column">
+            <div class="project-showcase__stage">
+                {media.map((item: ProjectMedia, index: number) => (
+                        <div
+                                class={`project-showcase__slide ${index === 0 ? "is-active" : ""}`}
+                                data-project-slide
+                                aria-hidden={index === 0 ? "false" : "true"}
+                        >
+                            {item.type === "image" ? (
+                                    <img src={item.src} alt={item.alt ?? ""} />
+                            ) : (
+                                    <iframe
+                                            src={item.src}
+                                            title={item.title ?? `${project.data.title} video`}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            allowfullscreen
+                                    />
+                            )}
+                        </div>
+                ))}
+
+                {media.length > 1 && (
+                        <>
+                            <button
+                                    class="project-showcase__stage-button project-showcase__stage-button--prev"
+                                    type="button"
+                                    data-project-prev
+                                    aria-label="Previous media"
+                            >
+                                ‹
+                            </button>
+
+                            <button
+                                    class="project-showcase__stage-button project-showcase__stage-button--next"
+                                    type="button"
+                                    data-project-next
+                                    aria-label="Next media"
+                            >
+                                ›
+                            </button>
+                        </>
+                )}
+            </div>
+
+            {media.length > 0 && (
+                    <div class="project-showcase__thumbs" aria-label="Project media thumbnails">
+                        {media.map((item: ProjectMedia, index: number) => {
+                            const thumbSrc = item.thumbnail ?? item.src;
+
+                            return (
+                                    <button
+                                            class={`project-showcase__thumb ${index === 0 ? "is-active" : ""}`}
+                                            type="button"
+                                            data-project-thumb={index}
+                                            aria-label={`Show media ${index + 1}`}
+                                    >
+                                        <img src={thumbSrc} alt="" loading="lazy" />
+
+                                        {item.type === "video" && (
+                                                <span class="project-showcase__play-icon" aria-hidden="true">
+                        ▶
+                    </span>
+                                        )}
+                                    </button>
+                            );
+                        })}
+                    </div>
+            )}
+        </div>
+
+        <aside class="project-showcase__info">
+            <img
+                    class="project-showcase__capsule"
+                    src={project.data.coverImage}
+                    alt={`${project.data.title} cover image`}
+            />
+
+            <p class="project-showcase__description">
+                {project.data.description}
+            </p>
+
+            <dl class="project-showcase__facts">
+                <div>
+                    <dt>Engine</dt>
+                    <dd>{project.data.engine}</dd>
+                </div>
+
+                {project.data.language && (
+                        <div>
+                            <dt>Language</dt>
+                            <dd>{project.data.language}</dd>
+                        </div>
+                )}
+
+                {project.data.perspective && (
+                        <div>
+                            <dt>Perspective</dt>
+                            <dd>{project.data.perspective}</dd>
+                        </div>
+                )}
+
+                {project.data.genre && (
+                        <div>
+                            <dt>Genre</dt>
+                            <dd>{project.data.genre}</dd>
+                        </div>
+                )}
+
+                <div>
+                    <dt>Role</dt>
+                    <dd>{project.data.role}</dd>
+                </div>
+
+                <div>
+                    <dt>Status</dt>
+                    <dd>{project.data.status}</dd>
+                </div>
+            </dl>
+
+            <div class="project-showcase__tags" aria-label="Project tags">
+                {tags.map((tag: string) => (
+                        <span>{tag}</span>
+                ))}
+            </div>
+
+            
+        </aside>
+    </div>
+</section>
+
+<script>
+    const showcase = document.querySelector<HTMLElement>("[data-project-showcase]");
+
+    if (showcase) {
+        const slides = Array.from(showcase.querySelectorAll<HTMLElement>("[data-project-slide]"));
+        const thumbsContainer = showcase.querySelector<HTMLElement>(".project-showcase__thumbs");
+        const thumbs = Array.from(showcase.querySelectorAll<HTMLButtonElement>("[data-project-thumb]"));
+        const prevButton = showcase.querySelector<HTMLButtonElement>("[data-project-prev]");
+        const nextButton = showcase.querySelector<HTMLButtonElement>("[data-project-next]");
+        
+        let currentIndex = 0;
+        let isPaused = false;
+        let intervalId: number | undefined;
+
+        function scrollActiveThumbnailIntoView(behavior: ScrollBehavior = "smooth") {
+            if (!thumbsContainer) return;
+
+            const activeThumb = thumbs[currentIndex];
+            const firstThumb = thumbs[0];
+
+            if (!activeThumb || !firstThumb) return;
+
+            const thumbsContainerStyles = window.getComputedStyle(thumbsContainer);
+            const columnGap = Number.parseFloat(thumbsContainerStyles.columnGap) || 6;
+
+            const thumbWidth = activeThumb.getBoundingClientRect().width;
+            const thumbStep = thumbWidth + columnGap;
+
+            const targetScrollLeft = (currentIndex - 1) * thumbStep;
+
+            thumbsContainer.scrollTo({
+                left: Math.max(0, targetScrollLeft),
+                behavior,
+            });
+        }
+
+        function showSlide(nextIndex: number, behavior: ScrollBehavior = "smooth") {
+            if (slides.length === 0) return;
+
+            currentIndex = (nextIndex + slides.length) % slides.length;
+
+            slides.forEach((slide: HTMLElement, index: number) => {
+                const isActive = index === currentIndex;
+                slide.classList.toggle("is-active", isActive);
+                slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+            });
+
+            thumbs.forEach((thumb: HTMLButtonElement, index: number) => {
+                thumb.classList.toggle("is-active", index === currentIndex);
+            });
+
+            scrollActiveThumbnailIntoView(behavior);
+        }
+
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        function stopAutoplay() {
+            if (intervalId !== undefined) {
+                window.clearInterval(intervalId);
+                intervalId = undefined;
+            }
+        }
+
+        function startAutoplay() {
+            if (slides.length <= 1) return;
+
+            stopAutoplay();
+
+            intervalId = window.setInterval(() => {
+                if (!isPaused) {
+                    nextSlide();
+                }
+            }, 7000);
+        }
+
+        showcase.addEventListener("mouseenter", () => {
+            isPaused = true;
+        });
+
+        showcase.addEventListener("mouseleave", () => {
+            isPaused = false;
+        });
+
+        showcase.addEventListener("focusin", () => {
+            isPaused = true;
+        });
+
+        showcase.addEventListener("focusout", () => {
+            isPaused = false;
+        });
+
+        prevButton?.addEventListener("click", previousSlide);
+        nextButton?.addEventListener("click", nextSlide);
+
+        thumbs.forEach((thumb: HTMLButtonElement, index: number) => {
+            thumb.addEventListener("click", () => {
+                showSlide(index);
+            });
+        });
+
+        showSlide(0, "auto");        
+        startAutoplay();
+    }
+</script>

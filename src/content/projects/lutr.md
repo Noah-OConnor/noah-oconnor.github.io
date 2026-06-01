@@ -1,15 +1,11 @@
 ---
-slug: "example-project"
-title: "Example Project"
+slug: "lutr"
+title: "Lutr"
 description: "A short description of my game project."
 engine: "Unity"
-role: "Gameplay Programmer / Designer"
-status: "Prototype"
-coverImage: "/images/projects/example-project/CrimsonKnight16x9.jpg"
-links: 
-- label: "GitHub Repository"
-  url: "https://github.com/yourname/example-project"
-
+role: "Gameplay Programmer / Technical Designer"
+status: "Complete"
+coverImage: "/images/projects/lutr/Lutr16x9.jpg"
 ---
 
 This is the main writeup for the project.

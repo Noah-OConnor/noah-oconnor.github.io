@@ -18,8 +18,8 @@ const { projects = [] } = Astro.props as Props;
 
     <div class="featured-carousel__viewport" data-featured-carousel>
         {projects.map((project, index) => {
-            const coverImage = project.data.coverImage || project.data.heroImage;
-            const screenshots = project.data.screenshots.slice(0, 4);
+            const coverImage = project.data.coverImage || project.data.coverImage;
+            const screenshots = project.data.media.slice(0, 4);
 
             const tags = [
                 project.data.engine,
@@ -45,7 +45,7 @@ const { projects = [] } = Astro.props as Props;
 
                                 <div class="featured-slide__screenshots">
                                     {screenshots.map((screenshot) => (
-                                            <img src={screenshot} alt="" loading="lazy" />
+                                            <img src={screenshot.src} alt="" loading="lazy" />
                                     ))}
                                 </div>
 
