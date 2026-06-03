@@ -54,7 +54,7 @@ const tags = [
                                 aria-hidden={index === 0 ? "false" : "true"}
                         >
                             {item.type === "image" ? (
-                                    <img src={item.src} alt={item.alt ?? ""} />
+                                    <img src={item.imgSrc} alt={item.alt ?? ""} />
                             ) : (
                                     <iframe
                                             src={item.src}
@@ -92,7 +92,7 @@ const tags = [
             {media.length > 0 && (
                     <div class="project-showcase__thumbs" aria-label="Project media thumbnails">
                         {media.map((item: ProjectMedia, index: number) => {
-                            const thumbSrc = item.thumbnail ?? item.src;
+                            const thumbSrc = item.thumbnail ?? item.imgSrc;
 
                             return (
                                     <button

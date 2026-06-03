@@ -23,14 +23,13 @@ const projects = defineCollection({
                 z.discriminatedUnion("type", [
                     z.object({
                         type: z.literal("image"),
-                        src: z.string(),
-                        thumbnail: z.string().optional(),
+                        imgSrc: z.string(),
                         alt: z.string().optional(),
                     }),
                     z.object({
                         type: z.literal("video"),
                         src: z.string(),
-                        thumbnail: z.string(),
+                        imgSrc: z.string(),
                         title: z.string().optional(),
                     }),
                 ])
