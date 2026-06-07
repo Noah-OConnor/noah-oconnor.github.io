@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import SiteHeader from "./SiteHeader.astro";
 
 const { title = "Game Dev Portfolio" } = Astro.props;
 ---
@@ -10,7 +11,10 @@ const { title = "Game Dev Portfolio" } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
 </head>
+
 <body>
+<SiteHeader />
+
 <slot />
 </body>
 </html>

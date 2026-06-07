@@ -1,0 +1,51 @@
+---
+const navTabs = [
+    {
+        label: "Projects",
+        href: "/",
+        activePaths: ["/", "/projects/"],
+    },
+    // Add later:
+    // {
+    //     label: "About",
+    //     href: "/about/",
+    //     activePaths: ["/about/"],
+    // },
+    // {
+    //     label: "Contact",
+    //     href: "/contact/",
+    //     activePaths: ["/contact/"],
+    // },
+];
+
+const siteName = "Noah O'Connor";
+const logoSrc = "/images/site/logo.png";
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+    <div class="site-header__main">
+        <a class="site-header__brand" href="/" aria-label={`${siteName} home`}>
+            <img src={logoSrc} alt="" class="site-header__logo" />
+            <span class="site-header__name">{siteName}</span>
+        </a>
+
+        <nav class="site-header__nav" aria-label="Main navigation">
+            {navTabs.map((tab) => {
+                const isActive = tab.activePaths.some((path) =>
+                    path === "/" ? currentPath === "/" : currentPath.startsWith(path)
+                );
+
+                return (
+                        <a
+                                class={`site-header__nav-link ${isActive ? "is-active" : ""}`}
+                                href={tab.href}
+                        >
+                            {tab.label}
+                        </a>
+                );
+            })}
+        </nav>
+    </div>
+</header>
