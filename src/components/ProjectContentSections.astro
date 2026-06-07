@@ -14,9 +14,9 @@ const { sections = [] } = Astro.props as Props;
 
 {sections.length > 0 && (
 <section class="project-content-sections" aria-label="Project details">
-    {sections.map((section: ProjectSection, sectionIndex: number) => (
+    {sections.map((section: ProjectSection) => (
             <article
-                    class={`project-content-section ${sectionIndex === 0 ? "is-open" : ""}`}
+                    class="project-content-section"
                     data-project-content-section
             >
                 <div class="project-content-section__body" data-project-content-body>
@@ -39,6 +39,25 @@ const { sections = [] } = Astro.props as Props;
                                             )}
                                         </figure>
                                 )}
+
+                                {item.type === "videoFile" && (
+                                        <figure class="project-content-section__media">
+                                            <video
+                                                    aria-label={item.alt ?? ""}
+                                                    autoplay
+                                                    muted
+                                                    loop
+                                                    playsinline
+                                                    preload="auto"
+                                            >
+                                                <source src={item.src} type="video/mp4" />
+                                            </video>
+
+                                            {item.caption && (
+                                                    <figcaption>{item.caption}</figcaption>
+                                            )}
+                                        </figure>
+                                )}
                             </>
                     ))}
                 </div>
@@ -47,11 +66,11 @@ const { sections = [] } = Astro.props as Props;
                         class="project-content-section__toggle"
                         type="button"
                         data-project-content-toggle
-                        aria-expanded={sectionIndex === 0 ? "true" : "false"}
+                        aria-expanded="false"
                 >
-        <span class="project-content-section__toggle-text">
-            {sectionIndex === 0 ? "Show Less" : "Read More"}
-        </span>
+                    <span class="project-content-section__toggle-text">
+                        Read More
+                    </span>
                 </button>
             </article>
     ))}

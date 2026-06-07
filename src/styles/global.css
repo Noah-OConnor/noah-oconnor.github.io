@@ -481,20 +481,26 @@ a:hover {
 
 .project-showcase__stage-button {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 42px;
-    height: 78px;
+    top: 0;
+    bottom: 0;
+    width: 12%;
     border: 0;
-    color: white;
-    font-size: 3rem;
+    padding: 0;
+    color: rgba(255, 255, 255, 0);
+    font-size: clamp(3rem, 6vw, 5rem);
     line-height: 1;
     cursor: pointer;
-    background: rgba(8, 13, 20, 0.45);
+    background: transparent;
+    z-index: 3;
+    transition: color 160ms ease, background 160ms ease;
 }
 
-.project-showcase__stage-button:hover {
-    background: rgba(103, 193, 245, 0.2);
+.project-showcase__stage-button::before {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 160ms ease, color 160ms ease;
 }
 
 .project-showcase__stage-button--prev {
@@ -503,6 +509,38 @@ a:hover {
 
 .project-showcase__stage-button--next {
     right: 0;
+}
+
+.project-showcase__stage-button--prev::before {
+    content: "‹";
+    left: 18px;
+}
+
+.project-showcase__stage-button--next::before {
+    content: "›";
+    right: 18px;
+}
+
+.project-showcase__stage-button:hover::before,
+.project-showcase__stage-button:focus-visible::before {
+    opacity: 1;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.project-showcase__stage-button:hover {
+    background: linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.35),
+            rgba(0, 0, 0, 0)
+    );
+}
+
+.project-showcase__stage-button--next:hover {
+    background: linear-gradient(
+            270deg,
+            rgba(0, 0, 0, 0.35),
+            rgba(0, 0, 0, 0)
+    );
 }
 
 .project-showcase__thumbs {
@@ -562,7 +600,7 @@ a:hover {
 
 .project-showcase__capsule {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 7;
     object-fit: cover;
     display: block;
     margin-bottom: 16px;
@@ -695,9 +733,11 @@ a:hover {
     margin: 0 0 14px;
 }
 
-.project-content-section__media img {
+.project-content-section__media img,
+.project-content-section__media video {
     align-content: center;
     max-height: 360px;
+    max-width: 100%;
     object-fit: cover;
     display: block;
     margin-left: auto;

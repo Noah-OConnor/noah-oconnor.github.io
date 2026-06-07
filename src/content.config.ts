@@ -35,7 +35,7 @@ const projects = defineCollection({
                 ])
             )
             .default([]),
-        
+
         sections: z
             .array(
                 z.object({
@@ -54,6 +54,12 @@ const projects = defineCollection({
                             }),
                             z.object({
                                 type: z.literal("gif"),
+                                src: z.string(),
+                                alt: z.string().optional(),
+                                caption: z.string().optional(),
+                            }),
+                            z.object({
+                                type: z.literal("videoFile"),
                                 src: z.string(),
                                 alt: z.string().optional(),
                                 caption: z.string().optional(),
