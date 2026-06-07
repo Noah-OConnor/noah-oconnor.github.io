@@ -13,8 +13,7 @@ const { project } = Astro.props as Props;
 const fallbackMedia: ProjectMedia[] = [
     {
         type: "image",
-        src: project.data.coverImage,
-        thumbnail: project.data.coverImage,
+        imgSrc: project.data.coverImage,
         alt: `${project.data.title} cover image`,
     },
 ];
@@ -51,13 +50,14 @@ const tags = [
                         <div
                                 class={`project-showcase__slide ${index === 0 ? "is-active" : ""}`}
                                 data-project-slide
+                                data-media-type={item.type}
                                 aria-hidden={index === 0 ? "false" : "true"}
                         >
                             {item.type === "image" ? (
                                     <img src={item.imgSrc} alt={item.alt ?? ""} />
                             ) : (
                                     <iframe
-                                            src={item.src}
+                                            data-video-src={item.src}
                                             title={item.title ?? `${project.data.title} video`}
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen
@@ -92,7 +92,7 @@ const tags = [
             {media.length > 0 && (
                     <div class="project-showcase__thumbs" aria-label="Project media thumbnails">
                         {media.map((item: ProjectMedia, index: number) => {
-                            const thumbSrc = item.thumbnail ?? item.imgSrc;
+                            const thumbSrc = item.imgSrc;
 
                             return (
                                     <button
@@ -188,6 +188,7 @@ const tags = [
         let currentIndex = 0;
         let isPaused = false;
         let intervalId: number | undefined;
+        let isVideoSlideActive = false;
 
         function scrollActiveThumbnailIntoView(behavior: ScrollBehavior = "smooth") {
             if (!thumbsContainer) return;
@@ -210,6 +211,46 @@ const tags = [
                 behavior,
             });
         }
+        
+        function getAutoplayVideoSrc(src: string) {
+            const url = new URL(src, window.location.href);
+
+            url.searchParams.set("autoplay", "1");
+            url.searchParams.set("mute", "1");
+            url.searchParams.set("playsinline", "1");
+
+            return url.toString();
+        }
+
+        function stopInactiveVideos() {
+            slides.forEach((slide: HTMLElement, index: number) => {
+                if (index === currentIndex) return;
+
+                const iframe = slide.querySelector<HTMLIFrameElement>("iframe");
+
+                if (iframe) {
+                    iframe.removeAttribute("src");
+                }
+            });
+        }
+
+        function syncActiveVideo() {
+            const activeSlide = slides[currentIndex];
+            if (!activeSlide) return;
+
+            isVideoSlideActive = activeSlide.dataset.mediaType === "video";
+
+            stopInactiveVideos();
+
+            if (!isVideoSlideActive) return;
+
+            const iframe = activeSlide.querySelector<HTMLIFrameElement>("iframe");
+            const videoSrc = iframe?.dataset.videoSrc;
+
+            if (iframe && videoSrc && !iframe.src) {
+                iframe.src = getAutoplayVideoSrc(videoSrc);
+            }
+        }
 
         function showSlide(nextIndex: number, behavior: ScrollBehavior = "smooth") {
             if (slides.length === 0) return;
@@ -227,6 +268,7 @@ const tags = [
             });
 
             scrollActiveThumbnailIntoView(behavior);
+            syncActiveVideo();
         }
 
         function nextSlide() {
@@ -250,7 +292,7 @@ const tags = [
             stopAutoplay();
 
             intervalId = window.setInterval(() => {
-                if (!isPaused) {
+                if (!isPaused && !isVideoSlideActive) {
                     nextSlide();
                 }
             }, 7000);

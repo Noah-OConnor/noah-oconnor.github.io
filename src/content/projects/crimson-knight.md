@@ -9,7 +9,7 @@ coverImage: "/images/projects/crimson-knight/CrimsonKnight16x9.jpg"
 media:
   - type: "video"
     src: "https://www.youtube.com/embed/RuBQoX2shuc?si=p9GjFjTnTX8PGnOJ"
-    imgSrc: "/images/projects/crimson-knight/CrimsonKnight1x1.jpg"
+    imgSrc: "/images/projects/crimson-knight/CKTrailerThumb.jpg"
   - type: "image"
     imgSrc: "/images/projects/crimson-knight/CrimsonKnight1x1.jpg"
   - type: "image"

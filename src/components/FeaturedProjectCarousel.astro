@@ -8,6 +8,11 @@ interface Props {
 }
 
 const { projects = [] } = Astro.props as Props;
+const projectPreviews = projects.map((project) => ({
+    slug: project.data.slug,
+    coverImage: project.data.coverImage,
+    title: project.data.title,
+}));
 ---
 
 {projects.length > 0 && (
@@ -17,9 +22,43 @@ const { projects = [] } = Astro.props as Props;
     </div>
 
     <div class="featured-carousel__viewport" data-featured-carousel>
+        {projects.length > 1 && (
+                <>
+                    <button
+                            class="featured-carousel__peek featured-carousel__peek--prev"
+                            type="button"
+                            data-carousel-peek-prev
+                            aria-label="Previous featured project"
+                    >
+                        <img
+                                src={projects[projects.length - 1].data.coverImage}
+                                alt=""
+                                data-carousel-peek-prev-img
+                        />
+                        <span class="featured-carousel__peek-arrow" aria-hidden="true">‹</span>
+                    </button>
+
+                    <button
+                            class="featured-carousel__peek featured-carousel__peek--next"
+                            type="button"
+                            data-carousel-peek-next
+                            aria-label="Next featured project"
+                    >
+                        <img
+                                src={projects[1].data.coverImage}
+                                alt=""
+                                data-carousel-peek-next-img
+                        />
+                        <span class="featured-carousel__peek-arrow" aria-hidden="true">›</span>
+                    </button>
+                </>
+        )}
+
         {projects.map((project, index) => {
-            const coverImage = project.data.coverImage || project.data.coverImage;
-            const screenshots = project.data.media.slice(0, 4);
+            const coverImage = project.data.coverImage;
+            const screenshots = project.data.media
+                .filter((item) => item.type === "image")
+                .slice(0, 4);
 
             const tags = [
                 project.data.engine,
@@ -66,14 +105,6 @@ const { projects = [] } = Astro.props as Props;
 
         {projects.length > 1 && (
                 <>
-                    <button class="featured-carousel__button featured-carousel__button--prev" type="button" data-carousel-prev aria-label="Previous featured project">
-                        ‹
-                    </button>
-
-                    <button class="featured-carousel__button featured-carousel__button--next" type="button" data-carousel-next aria-label="Next featured project">
-                        ›
-                    </button>
-
                     <div class="featured-carousel__dots" aria-label="Featured project navigation">
                         {projects.map((project, index) => (
                                 <button
@@ -89,33 +120,67 @@ const { projects = [] } = Astro.props as Props;
     </div>
 </section>
 
-<script>
-    const carousel = document.querySelector<HTMLElement>("[data-featured-carousel]");
+<script define:vars={{ projectPreviews }}>
+    const carousel = document.querySelector("[data-featured-carousel]");
 
     if (carousel) {
-        const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-slide]"));
-        const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]"));
-        const prevButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-prev]");
-        const nextButton = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]");
+        const slides = Array.from(carousel.querySelectorAll("[data-slide]"));
+        const dots = Array.from(carousel.querySelectorAll("[data-carousel-dot]"));
+        
+        const prevButton = carousel.querySelector("[data-carousel-peek-prev]");
+        const nextButton = carousel.querySelector("[data-carousel-peek-next]");
+
+        const prevPeek = carousel.querySelector("[data-carousel-peek-prev]");
+        const nextPeek = carousel.querySelector("[data-carousel-peek-next]");
+        
+        const prevPeekImg = carousel.querySelector("[data-carousel-peek-prev-img]");
+        const nextPeekImg = carousel.querySelector("[data-carousel-peek-next-img]");
 
         let currentIndex = 0;
         let isPaused = false;
-        let intervalId: number | undefined;
+        let intervalId;
 
-        function showSlide(nextIndex: number) {
+        function updatePeekPanels() {
+            if (projectPreviews.length <= 1) return;
+
+            const previousIndex =
+                (currentIndex - 1 + projectPreviews.length) % projectPreviews.length;
+
+            const nextIndex =
+                (currentIndex + 1) % projectPreviews.length;
+
+            const previousProject = projectPreviews[previousIndex];
+            const nextProject = projectPreviews[nextIndex];
+
+            if (prevPeek && prevPeekImg) {
+                prevPeek.setAttribute("aria-label", `Show ${previousProject.title}`);
+                prevPeekImg.src = previousProject.coverImage;
+                prevPeekImg.alt = `${previousProject.title} cover image`;
+            }
+
+            if (nextPeek && nextPeekImg) {
+                nextPeek.setAttribute("aria-label", `Show ${nextProject.title}`);
+                nextPeekImg.src = nextProject.coverImage;
+                nextPeekImg.alt = `${nextProject.title} cover image`;
+            }
+        }
+
+        function showSlide(nextIndex) {
             if (slides.length === 0) return;
 
             currentIndex = (nextIndex + slides.length) % slides.length;
 
-            slides.forEach((slide: HTMLElement, index: number) => {
+            slides.forEach((slide, index) => {
                 const isActive = index === currentIndex;
                 slide.classList.toggle("is-active", isActive);
                 slide.setAttribute("aria-hidden", isActive ? "false" : "true");
             });
 
-            dots.forEach((dot: HTMLButtonElement, index: number) => {
+            dots.forEach((dot, index) => {
                 dot.classList.toggle("is-active", index === currentIndex);
             });
+
+            updatePeekPanels();
         }
 
         function nextSlide() {
@@ -164,7 +229,7 @@ const { projects = [] } = Astro.props as Props;
         prevButton?.addEventListener("click", previousSlide);
         nextButton?.addEventListener("click", nextSlide);
 
-        dots.forEach((dot: HTMLButtonElement, index: number) => {
+        dots.forEach((dot, index) => {
             dot.addEventListener("click", () => {
                 showSlide(index);
             });
