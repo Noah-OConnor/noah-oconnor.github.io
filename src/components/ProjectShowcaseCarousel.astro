@@ -28,6 +28,15 @@ const tags = [
     project.data.genre,
     project.data.role,
 ].filter((tag): tag is string => Boolean(tag));
+
+function getYouTubeApiSrc(src: string) {
+    const url = new URL(src);
+
+    url.searchParams.set("enablejsapi", "1");
+    url.searchParams.set("playsinline", "1");
+
+    return url.toString();
+}
 ---
 
 <section class="project-showcase" data-project-showcase>
@@ -57,8 +66,10 @@ const tags = [
                                     <img src={item.imgSrc} alt={item.alt ?? ""} />
                             ) : (
                                     <iframe
-                                            data-video-src={item.src}
+                                            class="project-showcase__youtube"
+                                            src={getYouTubeApiSrc(item.src)}
                                             title={item.title ?? `${project.data.title} video`}
+                                            data-video-index={index}
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen
                                     />
@@ -175,16 +186,33 @@ const tags = [
     const showcase = document.querySelector<HTMLElement>("[data-project-showcase]");
 
     if (showcase) {
-        const slides = Array.from(showcase.querySelectorAll<HTMLElement>("[data-project-slide]"));
+        const slides = Array.from(
+            showcase.querySelectorAll<HTMLElement>("[data-project-slide]")
+        );
+
         const thumbsContainer = showcase.querySelector<HTMLElement>(".project-showcase__thumbs");
-        const thumbs = Array.from(showcase.querySelectorAll<HTMLButtonElement>("[data-project-thumb]"));
+
+        const thumbs = Array.from(
+            showcase.querySelectorAll<HTMLButtonElement>("[data-project-thumb]")
+        );
+
         const prevButton = showcase.querySelector<HTMLButtonElement>("[data-project-prev]");
         const nextButton = showcase.querySelector<HTMLButtonElement>("[data-project-next]");
-        
+
+        const youtubeIframes = Array.from(
+            showcase.querySelectorAll<HTMLIFrameElement>(".project-showcase__youtube")
+        );
+
+        const youtubePlayers = new Map<number, any>();
+
+        const win = window as Window & {
+            YT?: any;
+            onYouTubeIframeAPIReady?: () => void;
+        };
+
         let currentIndex = 0;
         let isPaused = false;
         let intervalId: number | undefined;
-        let isVideoSlideActive = false;
 
         function scrollActiveThumbnailIntoView(behavior: ScrollBehavior = "smooth") {
             if (!thumbsContainer) return;
@@ -207,45 +235,85 @@ const tags = [
                 behavior,
             });
         }
-        
-        function getAutoplayVideoSrc(src: string) {
-            const url = new URL(src, window.location.href);
 
-            url.searchParams.set("autoplay", "1");
-            url.searchParams.set("mute", "1");
-            url.searchParams.set("playsinline", "1");
-
-            return url.toString();
+        function isCurrentSlideVideo() {
+            const activeSlide = slides[currentIndex];
+            return activeSlide?.dataset.mediaType === "video";
         }
 
-        function stopInactiveVideos() {
-            slides.forEach((slide: HTMLElement, index: number) => {
-                if (index === currentIndex) return;
-
-                const iframe = slide.querySelector<HTMLIFrameElement>("iframe");
-
-                if (iframe) {
-                    iframe.removeAttribute("src");
+        function loadYouTubeApi(): Promise<any> {
+            return new Promise((resolve) => {
+                if (win.YT?.Player) {
+                    resolve(win.YT);
+                    return;
                 }
+
+                const existingScript = document.querySelector(
+                    "script[src='https://www.youtube.com/iframe_api']"
+                );
+
+                if (!existingScript) {
+                    const script = document.createElement("script");
+                    script.src = "https://www.youtube.com/iframe_api";
+                    document.head.appendChild(script);
+                }
+
+                const previousCallback = win.onYouTubeIframeAPIReady;
+
+                win.onYouTubeIframeAPIReady = () => {
+                    if (typeof previousCallback === "function") {
+                        previousCallback();
+                    }
+
+                    resolve(win.YT);
+                };
             });
         }
 
-        function syncActiveVideo() {
-            const activeSlide = slides[currentIndex];
-            if (!activeSlide) return;
+        async function setupYouTubePlayers() {
+            if (youtubeIframes.length === 0) return;
 
-            isVideoSlideActive = activeSlide.dataset.mediaType === "video";
+            const YT = await loadYouTubeApi();
 
-            stopInactiveVideos();
+            youtubeIframes.forEach((iframe: HTMLIFrameElement) => {
+                const videoIndex = Number(iframe.dataset.videoIndex);
 
-            if (!isVideoSlideActive) return;
+                const player = new YT.Player(iframe, {
+                    events: {
+                        onReady: (event: any) => {
+                            event.target.mute();
 
-            const iframe = activeSlide.querySelector<HTMLIFrameElement>("iframe");
-            const videoSrc = iframe?.dataset.videoSrc;
+                            if (videoIndex === currentIndex) {
+                                event.target.playVideo();
+                            }
+                        },
 
-            if (iframe && videoSrc && !iframe.src) {
-                iframe.src = getAutoplayVideoSrc(videoSrc);
-            }
+                        onStateChange: (event: any) => {
+                            if (
+                                event.data === YT.PlayerState.ENDED &&
+                                videoIndex === currentIndex
+                            ) {
+                                nextSlide();
+                            }
+                        },
+                    },
+                });
+
+                youtubePlayers.set(videoIndex, player);
+            });
+        }
+
+        function syncYouTubePlayback() {
+            youtubePlayers.forEach((player: any, index: number) => {
+                if (!player || typeof player.playVideo !== "function") return;
+
+                if (index === currentIndex) {
+                    player.mute();
+                    player.playVideo();
+                } else if (typeof player.pauseVideo === "function") {
+                    player.pauseVideo();
+                }
+            });
         }
 
         function showSlide(nextIndex: number, behavior: ScrollBehavior = "smooth") {
@@ -264,7 +332,7 @@ const tags = [
             });
 
             scrollActiveThumbnailIntoView(behavior);
-            syncActiveVideo();
+            syncYouTubePlayback();
         }
 
         function nextSlide() {
@@ -288,7 +356,7 @@ const tags = [
             stopAutoplay();
 
             intervalId = window.setInterval(() => {
-                if (!isPaused && !isVideoSlideActive) {
+                if (!isPaused && !isCurrentSlideVideo()) {
                     nextSlide();
                 }
             }, 7000);
@@ -319,7 +387,8 @@ const tags = [
             });
         });
 
-        showSlide(0, "auto");        
+        showSlide(0, "auto");
+        setupYouTubePlayers();
         startAutoplay();
     }
 </script>

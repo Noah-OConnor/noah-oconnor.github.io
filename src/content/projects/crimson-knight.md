@@ -10,8 +10,7 @@ status: "Complete"
 coverImage: "/images/projects/crimson-knight/CrimsonKnight16x9.jpg"
 media:
   - type: "video"
-    src: "https://www.youtube.com/embed/RuBQoX2shuc?si=p9GjFjTnTX8PGnOJ"
-    imgSrc: "/images/projects/crimson-knight/CKTrailerThumb.jpg"
+    src: "https://www.youtube.com/embed/RuBQoX2shuc?si=p9GjFjTnTX8PGnOJ&enablejsapi=1&autoplay=1&mute=1&playsinline=1"
   - type: "image"
     imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot1.jpg"
 sections:
