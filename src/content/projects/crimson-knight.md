@@ -1,7 +1,7 @@
 ---
 slug: "crimson-knight"
 title: "Crimson Knight"
-description: "A short description of my game project."
+description: "A third-person boss fight Souls-like built in Unreal Engine 5."
 engine: "Unreal Engine"
 role: "Gameplay Programmer / Technical Designer"
 status: "Complete"
@@ -55,16 +55,3 @@ sections:
         src: "/images/projects/crimson-knight/CrimsonKnight16x9.jpg"
         alt: "Technical system diagram"
 ---
-
-This is the main writeup for the project.
-
-## What I worked on
-
-- Player movement
-- Enemy AI
-- UI implementation
-- Level design
-
-## What I learned
-
-Write a few sentences about the technical or design lessons from the project.
