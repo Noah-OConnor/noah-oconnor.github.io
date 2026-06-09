@@ -12,8 +12,21 @@ media:
   - type: "video"
     src: "https://www.youtube.com/embed/RuBQoX2shuc?si=p9GjFjTnTX8PGnOJ&enablejsapi=1&autoplay=1&mute=1&playsinline=1"
     imgSrc: "/images/projects/crimson-knight/CKTrailerThumb.jpg"
+  - type: "video"
+    src: "https://www.youtube.com/embed/EqWAUMi9_aw?si=O8Mi6e8P7Ykdpzgv&enablejsapi=1&autoplay=1&mute=1&playsinline=1"
+    imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot7.jpg"
   - type: "image"
     imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot1.jpg"
+  - type: "image"
+    imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot2.jpg"
+  - type: "image"
+    imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot3.jpg"
+  - type: "image"
+    imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot4.jpg"
+  - type: "image"
+    imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot5.jpg"
+  - type: "image"
+    imgSrc: "/images/projects/crimson-knight/CrimsonKnightScreenshot6.jpg"
 sections:
   - title: "About This Game"
     items:
@@ -65,6 +78,9 @@ sections:
         chance without explicit prompts or health bars. Achieving the balance between precision and readability was one 
         of the project's most persistent and rewarding challenges."
 
+      - type: "image"
+        src: "/images/projects/crimson-knight/CrimsonKnightScreenshot2.jpg"
+
       - type: "text"
         body: "To reach that goal, I fine-tuned animation cancel windows across all abilities, adjusted blendspace 
         logic for better movement transitions, and prototyped multiple iterations of dodge and roll behavior with 
@@ -78,6 +94,10 @@ sections:
         Attacks land with satisfying timing, transitions feel fluid, and players learn to anticipate threats based on 
         motion and sound rather than meters or popups. This created a tighter, more immersive experience that keeps the 
         player fully engaged in the fight. No health bars or ability cooldowns required."
+        
+      - type: "image"
+        src: "/images/projects/crimson-knight/CrimsonKnightScreenshot6.jpg"
+
 
   - title: "Gameplay Ability System - GAS"
     items:
@@ -87,6 +107,10 @@ sections:
         modular foundation that would allow me to rapidly develop, tune, and iterate on both the Knight's and The 
         Absolute's abilities. I wanted the system to support expressive, animation-driven gameplay while giving me the 
         tools to focus on feel and clarity rather than boilerplate logic or duplicated code."
+        
+      - type: "image"
+        src: "/images/projects/crimson-knight/CrimsonKnightScreenshot5.jpg"
+
 
       - type: "text"
         body: "To get there, I spent time early in pre-production researching GAS architecture and adapting our systems 
@@ -95,6 +119,9 @@ sections:
         notifies, and enhanced input bindings. I converted core movement actions like jump and dodge into GAS abilities, 
         which gave me tighter control over animation syncing and cancel rules. With this setup, I could layer gameplay 
         effects, audio, and visual feedback directly into each ability in a unified, modular way."
+        
+      - type: "image"
+        src: "/images/projects/crimson-knight/CrimsonKnightScreenshot4.jpg"
 
       - type: "text"
         body: "The end result is a flexible, scalable system that has empowered our team to rapidly iterate on new 

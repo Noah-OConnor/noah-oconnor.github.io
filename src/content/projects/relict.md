@@ -32,9 +32,12 @@ media:
 sections:
   - title: "About This Game"
     items:
+      - type: "image"
+        src: "/images/projects/relict/RelictMedia7.jpg"
+        
       - type: "text"
         body: "Relict is a third-person roguelike shooter built in Unity, combining fast-paced combat with a 
-        tarot-inspired power-up system. I served as Vision Holder, Code Lead, and System Administrator—guiding the game 
+        tarot-inspired power-up system. I served as Vision Holder, Code Lead, and System Administrator, guiding the game 
         from pitch to final build while leading a 15-person team through 9 sprints of agile development."
 
   - title: "Systems & Architecture"
@@ -45,6 +48,9 @@ sections:
         stat and ability framework inspired by Risk of Rain 2 and Hades. My goal was to create a persistent, upgradeable 
         loop where players would earn, equip, and combine powers drawn from two tarot categories: Minor Arcana (stat 
         boosts) and Major Arcana (active abilities)."
+        
+      - type: "image"
+        src: "/images/projects/relict/RelictMedia2.jpg"
 
       - type: "text"
         body: "To support this, I implemented stat tracking and ability slot systems in Unity, with dynamic cooldowns, 
@@ -65,11 +71,17 @@ sections:
         Thrall, Ember Wolves, and Ice Golem shared a parent class handling health, knockback, and targeting, while 
         bosses like Justice and The Tower layered on unique attack patterns and hazard interactions."
 
+      - type: "image"
+        src: "/images/projects/relict/RelictMedia4.jpg"
+
       - type: "text"
         body: "I implemented key combat systems including hit detection, knockback, and projectile abilities like Silver 
         Shot. Each attack was tuned for visual clarity and feedback, with SFX and VFX cues that made combat readable 
         even in chaotic arenas. My FSM framework enabled easy addition of new enemy types with distinct behavior trees 
         minimizing boilerplate code while supporting variety"
+
+      - type: "image"
+        src: "/images/projects/relict/RelictMedia6.jpg"
 
       - type: "text"
         body: "Combined with a custom player controller, responsive stat systems, and tarot-driven loadouts, Relict's 
@@ -92,6 +104,9 @@ sections:
         high-contrast visuals, and menu structures that aligned with best practices for visual and cognitive 
         accessibility. Working from the guidelines, I helped implement features like separate volume sliders for music 
         and SFX, input sensitivity settings, and UI feedback that never relied solely on color or sound."
+
+      - type: "image"
+        src: "/images/projects/relict/RelictMedia1.jpg"
 
       - type: "text"
         body: "Together, these features ensured that Relict could be approached by players with a wide range of input 

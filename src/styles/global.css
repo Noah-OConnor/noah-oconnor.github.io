@@ -825,11 +825,9 @@ a:hover {
 }
 
 .site-header__logo {
-    width: 46px;
-    height: 46px;
-    object-fit: cover;
-    border-radius: 999px;
-    background: #0b1018;
+    width: 80px;
+    height: 80px;
+    object-fit: fill;
 }
 
 .site-header__name {
