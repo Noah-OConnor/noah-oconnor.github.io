@@ -247,6 +247,11 @@ a:hover {
     min-height: 360px;
 }
 
+.featured-carousel__viewport,
+.project-showcase__stage {
+    touch-action: pan-y;
+}
+
 .featured-carousel__button {
     position: absolute;
     top: 50%;
@@ -412,6 +417,7 @@ a:hover {
 
 .project-showcase {
     margin: 18px 0 48px;
+    touch-action: pan-y;
 }
 
 .project-showcase__header {

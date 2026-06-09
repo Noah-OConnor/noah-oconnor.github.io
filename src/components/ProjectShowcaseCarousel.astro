@@ -184,7 +184,7 @@ function getYouTubeApiSrc(src: string) {
 
 <script>
     const showcase = document.querySelector<HTMLElement>("[data-project-showcase]");
-
+    
     if (showcase) {
         const slides = Array.from(
             showcase.querySelectorAll<HTMLElement>("[data-project-slide]")
@@ -209,10 +209,15 @@ function getYouTubeApiSrc(src: string) {
             YT?: any;
             onYouTubeIframeAPIReady?: () => void;
         };
-
+        
         let currentIndex = 0;
         let isPaused = false;
         let intervalId: number | undefined;
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
 
         function scrollActiveThumbnailIntoView(behavior: ScrollBehavior = "smooth") {
             if (!thumbsContainer) return;
@@ -362,6 +367,23 @@ function getYouTubeApiSrc(src: string) {
             }, 7000);
         }
 
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            const minimumSwipeDistance = 50;
+            const isMostlyHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+
+            if (!isMostlyHorizontal) return;
+            if (Math.abs(deltaX) < minimumSwipeDistance) return;
+
+            if (deltaX < 0) {
+                nextSlide();
+            } else {
+                previousSlide();
+            }
+        }
+
         showcase.addEventListener("mouseenter", () => {
             isPaused = true;
         });
@@ -377,6 +399,30 @@ function getYouTubeApiSrc(src: string) {
         showcase.addEventListener("focusout", () => {
             isPaused = false;
         });
+
+        showcase.addEventListener(
+            "touchstart",
+            (event) => {
+                const touch = event.changedTouches[0];
+
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+            },
+            { passive: true }
+        );
+
+        showcase.addEventListener(
+            "touchend",
+            (event) => {
+                const touch = event.changedTouches[0];
+
+                touchEndX = touch.clientX;
+                touchEndY = touch.clientY;
+
+                handleSwipe();
+            },
+            { passive: true }
+        );
 
         prevButton?.addEventListener("click", previousSlide);
         nextButton?.addEventListener("click", nextSlide);

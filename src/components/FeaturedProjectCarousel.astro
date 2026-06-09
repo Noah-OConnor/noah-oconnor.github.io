@@ -140,6 +140,11 @@ const projectPreviews = projects.map((project) => ({
         let isPaused = false;
         let intervalId;
 
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        
         function updatePeekPanels() {
             if (projectPreviews.length <= 1) return;
 
@@ -210,6 +215,23 @@ const projectPreviews = projects.map((project) => ({
             }, 6000);
         }
 
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            const minimumSwipeDistance = 50;
+            const isMostlyHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+
+            if (!isMostlyHorizontal) return;
+            if (Math.abs(deltaX) < minimumSwipeDistance) return;
+
+            if (deltaX < 0) {
+                nextSlide();
+            } else {
+                previousSlide();
+            }
+        }
+
         carousel.addEventListener("mouseenter", () => {
             isPaused = true;
         });
@@ -234,6 +256,30 @@ const projectPreviews = projects.map((project) => ({
                 showSlide(index);
             });
         });
+
+        carousel.addEventListener(
+            "touchstart",
+            (event) => {
+                const touch = event.changedTouches[0];
+
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+            },
+            { passive: true }
+        );
+
+        carousel.addEventListener(
+            "touchend",
+            (event) => {
+                const touch = event.changedTouches[0];
+
+                touchEndX = touch.clientX;
+                touchEndY = touch.clientY;
+
+                handleSwipe();
+            },
+            { passive: true }
+        );
 
         showSlide(0);
         startAutoplay();
