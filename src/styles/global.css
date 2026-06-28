@@ -148,6 +148,18 @@ a:hover {
     overflow: hidden;
 }
 
+.featured-slide__status {
+    display: inline-flex;
+    width: fit-content;
+    margin: -8px 0 16px;
+    border-radius: 2px;
+    color: #67c1f5;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
 .featured-slide.is-active {
     display: block;
 }
@@ -185,7 +197,7 @@ a:hover {
 }
 
 .featured-slide__details h3 {
-    margin: 0 0 16px;
+    margin: 0 0 5px;
     color: #ffffff;
     font-size: clamp(1.5rem, 3vw, 2rem);
     line-height: 1.1;

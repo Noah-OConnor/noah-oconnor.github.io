@@ -82,6 +82,10 @@ const projectPreviews = projects.map((project) => ({
                             <div class="featured-slide__details">
                                 <h3>{project.data.title}</h3>
 
+                                <p class="featured-slide__status">
+                                    {project.data.status}
+                                </p>
+
                                 <div class="featured-slide__screenshots">
                                     {screenshots.map((screenshot) => (
                                             <img src={screenshot.imgSrc} alt="no src" loading="lazy" />
