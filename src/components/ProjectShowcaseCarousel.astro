@@ -300,7 +300,7 @@ function getYouTubeApiSrc(src: string) {
                                 event.data === YT.PlayerState.ENDED &&
                                 videoIndex === currentIndex
                             ) {
-                                nextSlide();
+                                 void nextSlide();
                             }
                         },
                     },
@@ -323,10 +323,17 @@ function getYouTubeApiSrc(src: string) {
             });
         }
 
-        function showSlide(nextIndex: number, behavior: ScrollBehavior = "smooth") {
+        async function showSlide(nextIndex: number, behavior: ScrollBehavior = "smooth") {
             if (slides.length === 0) return;
 
-            currentIndex = (nextIndex + slides.length) % slides.length;
+            const previousSlide = slides[currentIndex];
+            const normalizedNextIndex = (nextIndex + slides.length) % slides.length;
+
+            if (previousSlide?.dataset.mediaType === "video") {
+                await exitFullscreenIfNeeded();
+            }
+
+            currentIndex = normalizedNextIndex;
 
             slides.forEach((slide: HTMLElement, index: number) => {
                 const isActive = index === currentIndex;
@@ -343,12 +350,12 @@ function getYouTubeApiSrc(src: string) {
             syncYouTubePlayback();
         }
 
-        function nextSlide() {
-            showSlide(currentIndex + 1);
+        async function nextSlide() {
+            await showSlide(currentIndex + 1);
         }
 
-        function previousSlide() {
-            showSlide(currentIndex - 1);
+        async function previousSlide() {
+            await showSlide(currentIndex - 1);
         }
 
         function stopAutoplay() {
@@ -392,6 +399,16 @@ function getYouTubeApiSrc(src: string) {
             const isVideo = activeSlide?.dataset.mediaType === "video";
 
             stage?.classList.toggle("is-showing-video", isVideo);
+        }
+
+        async function exitFullscreenIfNeeded() {
+            if (document.fullscreenElement && document.exitFullscreen) {
+                try {
+                    await document.exitFullscreen();
+                } catch {
+                    // Some browsers may reject this if fullscreen is already closing.
+                }
+            }
         }
 
         showcase.addEventListener("mouseenter", () => {
