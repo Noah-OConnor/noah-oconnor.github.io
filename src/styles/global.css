@@ -264,6 +264,11 @@ a:hover {
     touch-action: pan-y;
 }
 
+.project-showcase__stage.is-showing-video .project-showcase__stage-button {
+    display: none;
+    pointer-events: none;
+}
+
 .featured-carousel__button {
     position: absolute;
     top: 50%;
@@ -618,7 +623,7 @@ a:hover {
 
 .project-showcase__capsule {
     width: 100%;
-    aspect-ratio: 16 / 7;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
     display: block;
     margin-bottom: 16px;

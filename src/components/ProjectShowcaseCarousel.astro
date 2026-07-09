@@ -190,6 +190,8 @@ function getYouTubeApiSrc(src: string) {
             showcase.querySelectorAll<HTMLElement>("[data-project-slide]")
         );
 
+        const stage = showcase.querySelector<HTMLElement>(".project-showcase__stage");
+
         const thumbsContainer = showcase.querySelector<HTMLElement>(".project-showcase__thumbs");
 
         const thumbs = Array.from(
@@ -337,6 +339,7 @@ function getYouTubeApiSrc(src: string) {
             });
 
             scrollActiveThumbnailIntoView(behavior);
+            updateStageMode();
             syncYouTubePlayback();
         }
 
@@ -382,6 +385,13 @@ function getYouTubeApiSrc(src: string) {
             } else {
                 previousSlide();
             }
+        }
+
+        function updateStageMode() {
+            const activeSlide = slides[currentIndex];
+            const isVideo = activeSlide?.dataset.mediaType === "video";
+
+            stage?.classList.toggle("is-showing-video", isVideo);
         }
 
         showcase.addEventListener("mouseenter", () => {
