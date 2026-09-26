@@ -1,9 +1,10 @@
 ---
 slug: "relict"
 title: "Relict"
-description: "A third-person roguelike shooter inspired by Risk of Rain 2 and Hades."
+description: "Led programming and built reusable enemy AI, player controls, and ability systems for a team-developed roguelike shooter."
 engine: "Unity"
-languages: ["C#"]
+language: "C#"
+specialties: ["Gameplay Systems", "AI", "Technical Leadership", "Technical Design", "Tools & Debugging"]
 genre: "Roguelike Shooter"
 role: "Lead Programmer / System Administrator"
 status: "Complete"

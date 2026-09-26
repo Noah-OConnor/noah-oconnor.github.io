@@ -1,11 +1,12 @@
 ---
 slug: "bloxels"
 title: "Bloxels"
-description: "An open world sandbox game inspired by Terraria and Minecraft."
+description: "Built a C++ voxel world with greedy meshing, asynchronous terrain generation, and custom pathfinding."
 engine: "Unreal Engine"
-languages: ["C++", "Blueprints"]
+language: "C++"
+specialties: ["Procedural Systems", "AI", "Tools & Debugging", "Gameplay Systems"]
 genre: "Voxel Sandbox"
-role: "Solo"
+role: "Gameplay Programmer / Technical Designer"
 status: "Prototype"
 coverImage: "/images/projects/bloxels/bloxels16x9.jpg"
 sections:

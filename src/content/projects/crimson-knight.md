@@ -1,9 +1,10 @@
 ---
 slug: "crimson-knight"
 title: "Crimson Knight"
-description: "A third-person boss fight Souls-like built in Unreal Engine 5."
+description: "Built the Knight's GAS combat abilities, input buffering, and animation systems to deliver responsive, deliberate melee combat."
 engine: "Unreal Engine"
-languages: ["C++", "Blueprints"]
+language: "C++"
+specialties: ["Combat & Character", "Gameplay Systems", "Technical Design", "Tools & Debugging"]
 genre: "Souls-Like"
 role: "Gameplay Programmer / Technical Designer"
 status: "Complete"

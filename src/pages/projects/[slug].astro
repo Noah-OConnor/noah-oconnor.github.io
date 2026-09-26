@@ -19,7 +19,7 @@ const { Content } = await render(project);
 
 <Layout title={project.data.title}>
     <main class="page project-page">
-        <ProjectShowcaseCarousel project={project} />
+        {project.data.slug !== "ue5-gas-multiplayer-shooter" && <ProjectShowcaseCarousel project={project} />}
 
         <ProjectContentSections sections={project.data.sections} />
     </main>

@@ -19,6 +19,7 @@ const projectPreviews = projects.map((project) => ({
 <section class="featured-carousel" aria-label="Featured projects">
     <div class="featured-carousel__header">
         <h2>Featured Projects</h2>
+        <button class="carousel-playback" type="button" data-carousel-playback aria-pressed="false">Pause slideshow</button>
     </div>
 
     <div class="featured-carousel__viewport" data-featured-carousel>
@@ -60,19 +61,14 @@ const projectPreviews = projects.map((project) => ({
                 .filter((item) => item.type === "image")
                 .slice(0, 4);
 
-            const tags = [
-                project.data.engine,
-                project.data.language,
-                project.data.perspective,
-                project.data.genre,
-                project.data.role,
-            ].filter(Boolean);
+            const tags = project.data.specialties.slice(0, 5);
 
             return (
                     <article
                             class={`featured-slide ${index === 0 ? "is-active" : ""}`}
                             data-slide
                             aria-hidden={index === 0 ? "false" : "true"}
+                            inert={index !== 0}
                     >
                         <a class="featured-slide__link" href={`/projects/${project.data.slug}/`}>
                             <div class="featured-slide__cover">
@@ -82,13 +78,15 @@ const projectPreviews = projects.map((project) => ({
                             <div class="featured-slide__details">
                                 <h3>{project.data.title}</h3>
 
-                                <p class="featured-slide__status">
+                                <p class="featured-slide__status" data-status={project.data.status}>
                                     {project.data.status}
                                 </p>
+                                <p class="featured-slide__role">{project.data.role}</p>
+                                <p class="featured-slide__engine">{project.data.engine} · {project.data.language}</p>
 
                                 <div class="featured-slide__screenshots">
                                     {screenshots.map((screenshot) => (
-                                            <img src={screenshot.imgSrc} alt="no src" loading="lazy" />
+                                            <img src={screenshot.imgSrc} alt={screenshot.alt ?? `${project.data.title} gameplay screenshot`} loading="lazy" />
                                     ))}
                                 </div>
 
@@ -142,6 +140,15 @@ const projectPreviews = projects.map((project) => ({
 
         let currentIndex = 0;
         let isPaused = false;
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let userPaused = reducedMotion.matches;
+        const playback = document.querySelector("[data-carousel-playback]");
+        function updatePlayback() {
+            playback.textContent = userPaused ? "Play slideshow" : "Pause slideshow";
+            playback.setAttribute("aria-pressed", String(userPaused));
+        }
+        playback?.addEventListener("click", () => { userPaused = !userPaused; updatePlayback(); });
+        reducedMotion.addEventListener("change", () => { userPaused = reducedMotion.matches; updatePlayback(); });
         let intervalId;
 
         let touchStartX = 0;
@@ -183,10 +190,12 @@ const projectPreviews = projects.map((project) => ({
                 const isActive = index === currentIndex;
                 slide.classList.toggle("is-active", isActive);
                 slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+                slide.inert = !isActive;
             });
 
             dots.forEach((dot, index) => {
                 dot.classList.toggle("is-active", index === currentIndex);
+                dot.setAttribute("aria-pressed", String(index === currentIndex));
             });
 
             updatePeekPanels();
@@ -213,7 +222,7 @@ const projectPreviews = projects.map((project) => ({
             stopAutoplay();
 
             intervalId = window.setInterval(() => {
-                if (!isPaused) {
+                if (!isPaused && !userPaused && !document.hidden) {
                     nextSlide();
                 }
             }, 6000);
@@ -286,6 +295,7 @@ const projectPreviews = projects.map((project) => ({
         );
 
         showSlide(0);
+        updatePlayback();
         startAutoplay();
     }
 </script>

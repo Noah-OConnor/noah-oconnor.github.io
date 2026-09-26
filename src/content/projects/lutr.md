@@ -1,9 +1,11 @@
 ---
 slug: "lutr"
 title: "Lutr"
-description: "A first-person co-op looter shooter inspired by Destiny and Borderlands."
+description: "Building modular weapons, a live Gunsmith editor, and responsive gunplay for a Unity roguelike shooter."
 engine: "Unity"
+language: "C#"
 role: "Gameplay Programmer / Technical Designer"
-status: "Prototype"
+status: "Ongoing"
+specialties: ["Gameplay Systems", "Procedural Systems", "Technical Design", "Tools & Debugging", "Combat & Character"]
 coverImage: "/images/projects/lutr/Lutr16x9.jpg"
 ---

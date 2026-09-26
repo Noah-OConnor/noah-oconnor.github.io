@@ -3,40 +3,104 @@ import { getCollection } from "astro:content";
 import Layout from "../components/Layout.astro";
 import FeaturedProjectCarousel from "../components/FeaturedProjectCarousel.astro";
 
-const projects = await getCollection("projects");
-
-const featuredProjectSlugs = [
-    "crimson-knight",
-    "relict",
-    "kitty-casino"
+const allProjects = await getCollection("projects");
+const order = ["lutr", "crimson-knight", "relict", "bloxels", "ue5-gas-multiplayer-shooter", "kitty-casino"];
+const projects = order.flatMap(slug => allProjects.filter(project => project.data.slug === slug));
+const featuredProjects = projects.slice(0, 4);
+const filters = ["Gameplay Systems", "Combat & Character", "Procedural Systems", "AI", "Multiplayer", "Technical Design", "Tools & Debugging", "Technical Leadership", "Unreal Engine", "Unity", "C++", "C#"];
+const skills = [
+    { label: "Languages", tags: ["C++", "C#"] },
+    { label: "Engines", tags: ["Unreal Engine", "Unity"] },
+    { label: "Gameplay / Systems", tags: ["GAS", "Enhanced Input", "Procedural Generation", "AI", "Multiplayer", "Animation Systems"] },
+    { label: "Production", tags: ["Perforce", "Git", "Jira", "Confluence"] },
 ];
-
-const featuredProjects = featuredProjectSlugs
-    .map((slug) => projects.find((project) => project.data.slug === slug))
-    .filter((project) => project !== undefined);
 ---
 
-<Layout title="Noah O'Connor's Portfolio">
-    <main class="page">
-
-        <FeaturedProjectCarousel projects={featuredProjects} />
-
-        <section>
-            <h2>Projects</h2>
-
-            <div class="project-grid">
-                {projects.map((project) => (
-                        <a class="game-card" href={`/projects/${project.data.slug}/`}>
-                            <img src={project.data.coverImage} alt={`${project.data.title} thumbnail`} />
-
-                            <div class="game-card-content">
-                                <h3>{project.data.title}</h3>
-                                <p>{project.data.description}</p>
-                                <span>{project.data.engine}</span>
-                            </div>
-                        </a>
-                ))}
+<Layout title="Noah O'Connor | Gameplay Programmer & Technical Designer">
+    <main class="page home-page" id="main-content">
+        <section class="home-intro" aria-labelledby="intro-heading">
+            <h1 id="intro-heading">Gameplay Programmer <span>&amp; Technical Designer</span></h1>
+            <p>I build responsive combat, modular gameplay systems, and tools that make iteration easier.</p>
+            <div class="tags" aria-label="Core specialties">
+                {["C++", "C#", "Unreal Engine", "Unity", "Gameplay Systems", "Technical Design"].map(tag => <span>{tag}</span>)}
             </div>
         </section>
+
+        <div id="projects"><FeaturedProjectCarousel projects={featuredProjects} /></div>
+
+        <section class="all-projects" aria-labelledby="all-projects-heading">
+            <div class="section-heading"><h2 id="all-projects-heading">All Projects</h2><span>Browse by specialty</span></div>
+            <div class="project-filters" data-project-filters hidden>
+                <p id="filter-help">Choose one or more tags. Projects match all selected tags.</p>
+                <div class="filter-tags" role="group" aria-label="Filter projects by specialty" aria-describedby="filter-help">
+                    {filters.map(tag => <button type="button" data-filter={tag} aria-pressed="false" aria-controls="project-grid">{tag}</button>)}
+                </div>
+                <div class="filter-summary"><p data-result-count role="status" aria-live="polite">Showing all {projects.length} projects</p><button type="button" data-clear-filters disabled>Clear filters</button></div>
+            </div>
+            <div class="project-grid" id="project-grid">
+                {projects.map(({ data }) => (
+                    <a class="game-card" href={`/projects/${data.slug}/`} data-project-card data-tags={JSON.stringify([...data.specialties, data.engine, data.language].filter(Boolean))}>
+                        <div class="game-card-image">{data.coverImage && <img src={data.coverImage} alt={`${data.title} cover`} loading="lazy" width="640" height="360" />}<span class="project-status" data-status={data.status}>{data.status}</span></div>
+                        <div class="game-card-content">
+                            <h3>{data.title}</h3>
+                            <p class="project-role">{data.role}</p>
+                            <p class="project-summary">{data.description}</p>
+                            <p class="project-engine">{data.engine}<span aria-hidden="true"> · </span>{data.language}</p>
+                            <div class="tags">{data.specialties.slice(0, 4).map(tag => <span>{tag}</span>)}</div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+            <p class="empty-results" data-empty-results hidden>No projects match all of these tags. Remove a tag or clear the filters to browse again.</p>
+        </section>
+
+        <section class="about-section" id="about" aria-labelledby="about-heading">
+            <div class="about-copy">
+                <h2 id="about-heading">About</h2>
+                <p>I'm a gameplay programmer and technical designer working across Unreal Engine and Unity. I connect systems design with hands-on implementation, from responsive character controls and combat to procedural worlds and reusable tools.</p>
+                <p>My work spans solo prototypes and multidisciplinary teams, with experience leading programming, reviewing code, and helping teams turn ambitious ideas into playable games.</p>
+                <h3>Education</h3>
+                <div class="education"><p><strong>Florida Interactive Entertainment Academy</strong><span>Technical Design</span></p><p><strong>UCF Digital Media</strong><span>Game Design</span></p></div>
+            </div>
+            <div class="skills-area" aria-labelledby="skills-heading">
+                <h2 id="skills-heading">Skills</h2>
+                {skills.map(group => <div class="skill-group"><h3>{group.label}</h3><div class="tags">{group.tags.map(tag => <span>{tag}</span>)}</div></div>)}
+            </div>
+        </section>
+
+        <footer class="contact-section" id="contact" aria-labelledby="contact-heading">
+            <div><h2 id="contact-heading">Contact</h2><p>Let's talk gameplay, systems, and making games.</p></div>
+            <a class="store-button" href="https://www.linkedin.com/in/noahoconnor/">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
+            <p class="footer-credit">Noah O'Connor · Gameplay Programmer &amp; Technical Designer</p>
+        </footer>
     </main>
 </Layout>
+
+<script>
+    const controls = document.querySelector<HTMLElement>("[data-project-filters]");
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-filter]"));
+    const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-project-card]"));
+    const clear = document.querySelector<HTMLButtonElement>("[data-clear-filters]");
+    const count = document.querySelector<HTMLElement>("[data-result-count]");
+    const empty = document.querySelector<HTMLElement>("[data-empty-results]");
+    const selected = new Set<string>();
+    function update() {
+        let visible = 0;
+        for (const card of cards) {
+            const tags: string[] = JSON.parse(card.dataset.tags ?? "[]");
+            card.hidden = !Array.from(selected).every(tag => tags.includes(tag));
+            if (!card.hidden) visible++;
+        }
+        buttons.forEach(button => button.setAttribute("aria-pressed", String(selected.has(button.dataset.filter!))));
+        if (clear) clear.disabled = selected.size === 0;
+        if (count) count.textContent = selected.size ? `${visible} of ${cards.length} projects match` : `Showing all ${cards.length} projects`;
+        if (empty) empty.hidden = visible !== 0;
+    }
+    buttons.forEach(button => button.addEventListener("click", () => {
+        const tag = button.dataset.filter!;
+        selected.has(tag) ? selected.delete(tag) : selected.add(tag);
+        update();
+    }));
+    clear?.addEventListener("click", () => { selected.clear(); update(); });
+    if (controls) controls.hidden = false;
+</script>

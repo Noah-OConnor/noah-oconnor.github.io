@@ -2,20 +2,9 @@
 const navTabs = [
     {
         label: "Projects",
-        href: "/",
+        href: "/#projects",
         activePaths: ["/", "/projects/"],
     },
-    // Add later:
-    // {
-    //     label: "About",
-    //     href: "/about/",
-    //     activePaths: ["/about/"],
-    // },
-    // {
-    //     label: "Contact",
-    //     href: "/contact/",
-    //     activePaths: ["/contact/"],
-    // },
 ];
 
 const siteName = "Noah O'Connor";
@@ -46,6 +35,8 @@ const currentPath = Astro.url.pathname;
                         </a>
                 );
             })}
+            <a class="site-header__nav-link" href="/#about">About</a>
+            <a class="site-header__nav-link" href="/#contact">Contact</a>
         </nav>
     </div>
 </header>

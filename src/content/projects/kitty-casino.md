@@ -1,10 +1,11 @@
 ---
 slug: "kitty-casino"
 title: "Kitty Casino"
-description: "A mobile casual casino game that features gambling-inspired mini-games and more!"
+description: "Guided a seven-person team from concept to release, coordinated a seasonal update, and supported testing and bug fixes."
 
 engine: "Unity"
 language: "C#"
+specialties: ["Technical Leadership", "Tools & Debugging"]
 genre: "Casual Casino"
 role: "Producer / Programmer"
 status: "Complete"
