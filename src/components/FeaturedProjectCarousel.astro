@@ -59,7 +59,7 @@ const projectPreviews = projects.map((project) => ({
             const coverImage = project.data.coverImage;
             const screenshots = project.data.media
                 .filter((item) => item.type === "image")
-                .slice(0, 4);
+                .slice(0, 2);
 
             const tags = project.data.specialties.slice(0, 5);
 
