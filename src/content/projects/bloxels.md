@@ -4,6 +4,7 @@ title: "Bloxels"
 description: "Built a C++ voxel world with greedy meshing, asynchronous terrain generation, and custom pathfinding."
 engine: "Unreal Engine"
 language: "C++"
+technologies: ["Git"]
 specialties: ["Procedural Systems", "AI", "Tools & Debugging", "Gameplay Systems"]
 genre: "Voxel Sandbox"
 role: "Gameplay Programmer / Technical Designer"

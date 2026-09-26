@@ -7,7 +7,27 @@ const allProjects = await getCollection("projects");
 const order = ["lutr", "crimson-knight", "relict", "bloxels", "ue5-gas-multiplayer-shooter", "kitty-casino"];
 const projects = order.flatMap(slug => allProjects.filter(project => project.data.slug === slug));
 const featuredProjects = projects.slice(0, 4);
-const filters = ["Gameplay Systems", "Combat & Character", "Procedural Systems", "AI", "Multiplayer", "Technical Design", "Tools & Debugging", "Technical Leadership", "Unreal Engine", "Unity", "C++", "C#"];
+const projectTags = (data: (typeof projects)[number]["data"]) =>
+    [...new Set([...data.specialties, ...data.technologies, data.engine, data.language].filter((tag): tag is string => Boolean(tag)))];
+const availableTags = [...new Set(projects.flatMap(project => projectTags(project.data)))];
+const engines = new Set(projects.map(project => project.data.engine));
+const languages = new Set(projects.map(project => project.data.language));
+const production = new Set(["Perforce", "Git", "Jira", "Confluence"]);
+const filterGroups = [
+    { label: "Engine", tags: availableTags.filter(tag => engines.has(tag)) },
+    { label: "Language", tags: availableTags.filter(tag => languages.has(tag)) },
+    { label: "Skills", tags: availableTags.filter(tag => !engines.has(tag) && !languages.has(tag) && !production.has(tag)) },
+    { label: "Production", tags: availableTags.filter(tag => production.has(tag)) },
+];
+// Keep small categories together rather than rendering a one-tag section.
+const singletons = filterGroups.filter(group => group.tags.length === 1);
+const groupedFilters = filterGroups.filter(group => group.tags.length > 1);
+if (singletons.length) {
+    const destination = groupedFilters.find(group => group.label === "Skills") ?? groupedFilters[0];
+    if (destination) destination.tags.push(...singletons.flatMap(group => group.tags));
+    else groupedFilters.push({ label: "Tags", tags: singletons.flatMap(group => group.tags) });
+}
+const filterForSkill = (tag: string) => tag === "Procedural Generation" ? "Procedural Systems" : tag;
 const skills = [
     { label: "Languages", tags: ["C++", "C#"] },
     { label: "Engines", tags: ["Unreal Engine", "Unity"] },
@@ -22,24 +42,28 @@ const skills = [
             <h1 id="intro-heading">Gameplay Programmer <span>&amp; Technical Designer</span></h1>
             <p>I build responsive combat, modular gameplay systems, and tools that make iteration easier.</p>
             <div class="tags" aria-label="Core specialties">
-                {["C++", "C#", "Unreal Engine", "Unity", "Gameplay Systems", "Technical Design"].map(tag => <span>{tag}</span>)}
+                {["C++", "C#", "Unreal Engine", "Unity", "Gameplay Systems", "Technical Design"].map(tag => <a href="#all-projects" data-filter-link={tag}>{tag}</a>)}
             </div>
         </section>
 
         <div id="projects"><FeaturedProjectCarousel projects={featuredProjects} /></div>
 
-        <section class="all-projects" aria-labelledby="all-projects-heading">
-            <div class="section-heading"><h2 id="all-projects-heading">All Projects</h2><span>Browse by specialty</span></div>
-            <div class="project-filters" data-project-filters hidden>
+        <section class="all-projects" id="all-projects" aria-labelledby="all-projects-heading" tabindex="-1">
+            <div class="section-heading"><h2 id="all-projects-heading">All Projects</h2></div>
+            <div class="project-browser">
+            <aside class="project-filters" data-project-filters aria-label="Project filters" hidden>
+                <h3>Filter projects</h3>
                 <p id="filter-help">Choose one or more tags. Projects match all selected tags.</p>
-                <div class="filter-tags" role="group" aria-label="Filter projects by specialty" aria-describedby="filter-help">
-                    {filters.map(tag => <button type="button" data-filter={tag} aria-pressed="false" aria-controls="project-grid">{tag}</button>)}
-                </div>
+                {groupedFilters.map(group => <fieldset class="filter-group" aria-describedby="filter-help">
+                    <legend>{group.label}</legend>
+                    <div class="filter-tags">{group.tags.map(tag => <button type="button" data-filter={tag} aria-pressed="false" aria-controls="project-grid">{tag}</button>)}</div>
+                </fieldset>)}
                 <div class="filter-summary"><p data-result-count role="status" aria-live="polite">Showing all {projects.length} projects</p><button type="button" data-clear-filters disabled>Clear filters</button></div>
-            </div>
+            </aside>
+            <div class="project-results">
             <div class="project-grid" id="project-grid">
                 {projects.map(({ data }) => (
-                    <a class="game-card" href={`/projects/${data.slug}/`} data-project-card data-tags={JSON.stringify([...data.specialties, data.engine, data.language].filter(Boolean))}>
+                    <a class="game-card" href={`/projects/${data.slug}/`} data-project-card data-tags={JSON.stringify(projectTags(data))}>
                         <div class="game-card-image">{data.coverImage && <img src={data.coverImage} alt={`${data.title} cover`} loading="lazy" width="640" height="360" />}<span class="project-status" data-status={data.status}>{data.status}</span></div>
                         <div class="game-card-content">
                             <h3>{data.title}</h3>
@@ -52,6 +76,8 @@ const skills = [
                 ))}
             </div>
             <p class="empty-results" data-empty-results hidden>No projects match all of these tags. Remove a tag or clear the filters to browse again.</p>
+            </div>
+            </div>
         </section>
 
         <section class="about-section" id="about" aria-labelledby="about-heading">
@@ -60,11 +86,14 @@ const skills = [
                 <p>I'm a gameplay programmer and technical designer working across Unreal Engine and Unity. I connect systems design with hands-on implementation, from responsive character controls and combat to procedural worlds and reusable tools.</p>
                 <p>My work spans solo prototypes and multidisciplinary teams, with experience leading programming, reviewing code, and helping teams turn ambitious ideas into playable games.</p>
                 <h3>Education</h3>
-                <div class="education"><p><strong>Florida Interactive Entertainment Academy</strong><span>Technical Design</span></p><p><strong>UCF Digital Media</strong><span>Game Design</span></p></div>
+                <div class="education">
+                    <p><a href="https://fiea.ucf.edu/curriculum/production-design/#technical-design" target="_blank" rel="noopener noreferrer"><strong>MS in Interactive Entertainment</strong></a><span>University of Central Florida · Florida Interactive Entertainment Academy</span><span>Technical Design Track</span></p>
+                    <p><a href="https://www.ucf.edu/degree/digital-media-ba/game-design-track/" target="_blank" rel="noopener noreferrer"><strong>BA in Digital Media</strong></a><span>University of Central Florida · Games and Interactive Media</span><span>Game Design Track</span></p>
+                </div>
             </div>
             <div class="skills-area" aria-labelledby="skills-heading">
                 <h2 id="skills-heading">Skills</h2>
-                {skills.map(group => <div class="skill-group"><h3>{group.label}</h3><div class="tags">{group.tags.map(tag => <span>{tag}</span>)}</div></div>)}
+                {skills.map(group => <div class="skill-group"><h3>{group.label}</h3><div class="tags">{group.tags.map(tag => <a href="#all-projects" data-filter-link={filterForSkill(tag)}>{tag}</a>)}</div></div>)}
             </div>
         </section>
 
@@ -84,14 +113,22 @@ const skills = [
     const count = document.querySelector<HTMLElement>("[data-result-count]");
     const empty = document.querySelector<HTMLElement>("[data-empty-results]");
     const selected = new Set<string>();
+    const tagsByCard = new Map(cards.map(card => [card, new Set<string>(JSON.parse(card.dataset.tags ?? "[]"))]));
+    const matches = (tags: Set<string>, filters: Iterable<string>) => Array.from(filters).every(tag => tags.has(tag));
     function update() {
         let visible = 0;
         for (const card of cards) {
-            const tags: string[] = JSON.parse(card.dataset.tags ?? "[]");
-            card.hidden = !Array.from(selected).every(tag => tags.includes(tag));
+            card.hidden = !matches(tagsByCard.get(card)!, selected);
             if (!card.hidden) visible++;
         }
-        buttons.forEach(button => button.setAttribute("aria-pressed", String(selected.has(button.dataset.filter!))));
+        buttons.forEach(button => {
+            const tag = button.dataset.filter!;
+            const active = selected.has(tag);
+            const available = Array.from(tagsByCard.values()).some(tags => tags.has(tag) && matches(tags, selected));
+            button.setAttribute("aria-pressed", String(active));
+            button.disabled = !active && !available;
+            button.title = button.disabled ? "No projects match this combination" : "";
+        });
         if (clear) clear.disabled = selected.size === 0;
         if (count) count.textContent = selected.size ? `${visible} of ${cards.length} projects match` : `Showing all ${cards.length} projects`;
         if (empty) empty.hidden = visible !== 0;
@@ -102,5 +139,18 @@ const skills = [
         update();
     }));
     clear?.addEventListener("click", () => { selected.clear(); update(); });
+    document.querySelectorAll<HTMLAnchorElement>("[data-filter-link]").forEach(link => {
+        link.addEventListener("click", event => {
+            if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            selected.clear();
+            selected.add(link.dataset.filterLink!);
+            update();
+            const target = document.getElementById("all-projects");
+            target?.focus({ preventScroll: true });
+            target?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" });
+        });
+    });
+    update();
     if (controls) controls.hidden = false;
 </script>

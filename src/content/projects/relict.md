@@ -4,6 +4,7 @@ title: "Relict"
 description: "Led programming and built reusable enemy AI, player controls, and ability systems for a team-developed roguelike shooter."
 engine: "Unity"
 language: "C#"
+technologies: ["Animation Systems", "Git"]
 specialties: ["Gameplay Systems", "AI", "Technical Leadership", "Technical Design", "Tools & Debugging"]
 genre: "Roguelike Shooter"
 role: "Lead Programmer / System Administrator"

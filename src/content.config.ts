@@ -16,6 +16,7 @@ const projects = defineCollection({
         role: z.string(),
         status: z.string(),
         specialties: z.array(z.string()).default([]),
+        technologies: z.array(z.string()).default([]),
 
         coverImage: z.string(),
         
