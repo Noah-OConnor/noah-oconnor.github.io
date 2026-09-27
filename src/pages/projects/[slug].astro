@@ -9,6 +9,7 @@ import ProjectDetailsSidebar from "../../components/ProjectDetailsSidebar.astro"
 import LutrCaseStudy from "../../components/LutrCaseStudy.astro";
 import RelictCaseStudy from "../../components/RelictCaseStudy.astro";
 import BloxelsCaseStudy from "../../components/BloxelsCaseStudy.astro";
+import KittyCasinoCaseStudy from "../../components/KittyCasinoCaseStudy.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -20,6 +21,8 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
+const caseStudies = { lutr: LutrCaseStudy, relict: RelictCaseStudy, bloxels: BloxelsCaseStudy, "kitty-casino": KittyCasinoCaseStudy };
+const CaseStudy = caseStudies[project.data.slug as keyof typeof caseStudies];
 const backdrop = project.data.backgroundImage || (project.data.slug === "crimson-knight"
     ? "/images/projects/crimson-knight/CrimsonKnightScreenshot1.jpg"
     : project.data.media.find(item => item.type === "image")?.imgSrc || project.data.coverImage);
@@ -31,7 +34,7 @@ const backdrop = project.data.backgroundImage || (project.data.slug === "crimson
 
         {project.data.slug === "crimson-knight" ? <CrimsonKnightCaseStudy /> : (
             <ProjectCaseStudyLayout>
-                {project.data.slug === "lutr" ? <LutrCaseStudy /> : project.data.slug === "relict" ? <RelictCaseStudy /> : project.data.slug === "bloxels" ? <BloxelsCaseStudy /> : <ProjectContentSections sections={project.data.sections} />}
+                {CaseStudy ? <CaseStudy /> : <ProjectContentSections sections={project.data.sections} />}
                 <ProjectDetailsSidebar slot="sidebar" project={project} />
             </ProjectCaseStudyLayout>
         )}

@@ -1,0 +1,56 @@
+---
+import CaseStudyMedia from "./CaseStudyMedia.astro";
+import { kittyCasinoMedia } from "../data/kittyCasinoMedia";
+const base = "/images/projects/kitty-casino/";
+---
+<section class="case-section" aria-labelledby="kitty-about">
+    <h2 id="kitty-about">About / My Role</h2>
+    <h3>About This Game</h3>
+    <p>Kitty Casino is a mobile casual casino game built around five mini-games, a casino hub, Story Mode unlocks, and cat cosmetics. Our seven-person team took it from concept to release and followed it with a Christmas-themed content update.</p>
+    <h3>My Role</h3>
+    <p>As <strong>Producer / Programmer</strong>, I stepped back from being the primary developer and focused on production and technical support. I coordinated the team, delegated tasks, organized meetings, supported presentations, and helped manage scope. I also supported bug testing and fixes as the team brought the features together for release.</p>
+    <figure><img src={`${base}KittyCasinoMedia1.png`} alt="Kitty Casino gameplay interface" loading="lazy" /></figure>
+</section>
+<section class="case-section contribution-block" aria-labelledby="kitty-production">
+    <h2 id="kitty-production">Production &amp; Team Coordination</h2>
+    <p>The central production challenge was keeping several parallel gameplay features moving toward one shipped product. Each mini-game needed its own development attention, but the team also had to deliver the hub, progression, cosmetics, and the transitions that connected them.</p>
+    <h3>Coordinating a seven-person team</h3>
+    <p>I organized meetings, delegated work, and tracked progress so the team could identify what was moving forward and what needed support. Presentations gave us another recurring point to communicate the state of the game and keep the project’s direction clear.</p>
+    <ul>
+        <li>Coordinated work across multiple mini-games and the shared game structure.</li>
+        <li>Delegated tasks and followed progress through team meetings.</li>
+        <li>Helped balance feature scope against team bandwidth and release priorities.</li>
+        <li>Supported presentations and communication of the project’s progress.</li>
+        <li>Combined production responsibilities with testing and programming support.</li>
+    </ul>
+    <h3>Managing scope through integration</h3>
+    <p>I helped keep feature decisions grounded in what the team could complete and bring together. A mini-game was one part of the release: it also needed to fit the unlock flow, work with the rest of the experience, and be tested alongside shared systems.</p>
+    <p>That integration focus continued beyond the original release. Coordinating the Christmas update meant returning to a shipped product, managing additional work across game areas, and helping the team maintain a consistent themed update.</p>
+</section>
+<section class="case-section" aria-labelledby="kitty-scope">
+    <h2 id="kitty-scope">Managing Multi-Game Scope</h2>
+    <div class="tags" aria-label="Kitty Casino mini-games">{["Blackjack", "Poker", "Slots", "Matching", "Bartending"].map(game => <span>{game}</span>)}</div>
+    <p>The five mini-games brought different rules and interactions into the same product. Bartending also provided a way back into play when the player ran out of money, tying it to the broader game flow.</p>
+    <p>My production focus was the coordination between those features: tracking separate work while keeping integration and release readiness visible. The goal was to deliver a connected casino experience rather than finish five isolated prototypes.</p>
+    <figure><img src={`${base}KittyCasinoMedia5.png`} alt="One of Kitty Casino’s mini-game interfaces" loading="lazy" /></figure>
+</section>
+<section class="case-section" aria-labelledby="kitty-progression">
+    <h2 id="kitty-progression">Progression &amp; Game Structure</h2>
+    <p>The casino hub connects the mini-games, while Story Mode provides an unlock flow that gives players a reason to move between them. The cosmetics shop adds another use for winnings, letting players purchase accessories and personalize their cat.</p>
+    <p>I supported this overall structure through production, scope coordination, and testing. The team’s progression and cosmetics work had to fit around the individual mini-games and give the combined experience a clear flow.</p>
+    <figure><img src={`${base}KittyCasinoMedia3.png`} alt="Kitty Casino progression and customization interface" loading="lazy" /></figure>
+</section>
+<section class="case-section" aria-labelledby="kitty-dlc">
+    <h2 id="kitty-dlc">Post-Launch / Christmas DLC</h2>
+    <p>After the original release, I coordinated a Christmas-themed update that reskinned the casino and mini-games with festive assets. This extended the production work into post-launch support, with new scope spread across several existing game areas.</p>
+    <p>The coordination goal was a consistent update across the product. The team needed to bring themed changes together while preserving the game flow that already connected the hub, mini-games, and progression.</p>
+    <figure><img src={`${base}KittyCasinoMedia7.png`} alt="Kitty Casino Christmas-themed update" loading="lazy" /><figcaption>The Christmas update brought themed content to the existing game after release.</figcaption></figure>
+</section>
+<section class="case-section" aria-labelledby="kitty-qa">
+    <h2 id="kitty-qa">QA &amp; Release Support</h2>
+    <p>I supported cross-feature bug testing and fixes throughout development. With mini-games, unlocks, and cosmetics sharing the same experience, checks needed to cover transitions and progression as well as individual features.</p>
+    <p>Regression testing meant revisiting those interactions after changes: checking that mini-games remained usable, unlocks still worked, and the wider game flow held together. My role combined reporting and testing issues with programming support for fixes and final release readiness.</p>
+    <p>Kitty Casino gave me experience carrying a team project through concept, integration, release, and post-launch content, with production and support as my primary contribution.</p>
+    <CaseStudyMedia id="kitty-planning" media={kittyCasinoMedia.planning} />
+    <CaseStudyMedia id="kitty-release" media={kittyCasinoMedia.release} />
+</section>

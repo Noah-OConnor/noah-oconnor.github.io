@@ -14,7 +14,7 @@ const facts = [["Role", role], ["Team Size", project.data.team], ["Timeline", pr
     <section><h2>Project Details</h2><dl class="case-facts">
         {facts.filter(([, value]) => value).map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}
     </dl></section>
-    {technologies.length > 0 && <section><h2>Core Technologies</h2><div class="tags">{technologies.map(tag => <span>{tag}</span>)}</div></section>}
+    {technologies.length > 0 && <section><h2>{project.data.sidebar?.technologiesHeading ?? "Core Technologies"}</h2><div class="tags">{technologies.map(tag => <span>{tag}</span>)}</div></section>}
     {specialties.length > 0 && <section><h2>Specialties</h2><div class="tags">{specialties.map(tag => <span>{tag}</span>)}</div></section>}
     {links?.length > 0 && <section><h2>Links</h2>{links.map(link => <a class="store-button" href={link.url} target="_blank" rel="noopener noreferrer">{link.label} <span aria-hidden="true">↗</span></a>)}</section>}
 </aside>
