@@ -1,0 +1,69 @@
+---
+import CaseStudyMedia from "./CaseStudyMedia.astro";
+import { multiplayerMedia } from "../data/multiplayerMedia";
+---
+<section class="case-section contribution-block" aria-labelledby="mp-contributions">
+    <h2 id="mp-contributions">My Contributions</h2>
+    <p>As the solo Gameplay Programmer, I adapted an existing GAS foundation and used it to explore first-person combat, C++ gameplay architecture, and multiplayer behavior. The central challenge was making gameplay work across client prediction, server execution, and replication.</p>
+    <ul>
+        <li>Forked and adapted Tranek’s GAS Documentation project, repairing code and asset references during migration.</li>
+        <li>Recreated the PlayerCharacter, PlayerController, PlayerState, and GameMode framework classes.</li>
+        <li>Implemented GAS movement and combat abilities, gameplay tags, and stamina effects.</li>
+        <li>Built weapon setup/runtime state, firing and reloading, reserve ammo, and attribute-driven HUD updates.</li>
+        <li>Refactored local gameplay assumptions around multiplayer authority and client prediction.</li>
+        <li>Built target-range, runtime ability, and listen-server testing workflows.</li>
+    </ul>
+</section>
+<section class="case-section" aria-labelledby="mp-about">
+    <h2 id="mp-about">About This Project</h2>
+    <p>This was a solo learning prototype built in Unreal Engine 5.5 during May–June 2025. I used a first-person shooter to investigate UE replication, the Gameplay Ability System, and C++/Blueprint integration. It remained a technical prototype rather than a completed game.</p>
+</section>
+<section class="case-section" aria-labelledby="mp-integration">
+    <h2 id="mp-integration">Adapting an Existing GAS Codebase</h2>
+    <p>I started by forking <a href="https://github.com/tranek/GASDocumentation" target="_blank" rel="noopener noreferrer">Tranek’s GAS Documentation project</a>. Its GAS foundation provided the starting architecture; my work was adapting, understanding, and extending that codebase for this prototype.</p>
+    <p>The migration involved renaming project and API references and updating code and asset paths. Some Gameplay Attribute references became broken or dereferenced during the move, so I rebuilt affected gameplay assets and classes to restore their connections.</p>
+    <p>This made integration part of the learning process: tracing dependencies between C++ types, Blueprint assets, and gameplay data, then checking that the adapted systems still worked together.</p>
+</section>
+<section class="case-section" aria-labelledby="mp-architecture">
+    <h2 id="mp-architecture">GAS Gameplay Architecture</h2>
+    <p>I recreated the <strong>PlayerCharacter, PlayerController, PlayerState, and GameMode</strong> classes as the core framework for the prototype. Working across those classes gave me a place to connect player input, character behavior, ability state, and game-level setup.</p>
+    <ol class="input-flow" aria-label="Gameplay ability flow">
+        {["Input", "Ability System", "Gameplay Ability", "Gameplay Effect / Attribute"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 3 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+    </ol>
+    <p>I implemented Jump and Double Jump abilities, used gameplay tags to describe ability state, and applied stamina changes through Gameplay Effects. Runtime ability slots supported granting and removing abilities during play, which later became an important authority test when multiple clients were involved.</p>
+</section>
+<section class="case-section" aria-labelledby="mp-weapons">
+    <h2 id="mp-weapons">Weapon &amp; Combat Systems</h2>
+    <p>I separated initial weapon setup into <code>WeaponData</code> and existing/runtime weapon state into <code>WeaponInstance</code>. That distinction let the prototype represent a weapon’s starting definition separately from the state it carried during play.</p>
+    <p>I prototyped hitscan and projectile weapons and implemented fire/reload abilities with reserve-ammo attributes. Attribute listeners and events drove HUD updates, connecting displayed values to changes in the GAS attributes.</p>
+    <p>Target dummies provided health and status feedback for combat testing. SetByCaller damage supplied runtime damage values to the effect workflow, giving me a way to exercise the connection between an attack, another actor’s attributes, and the feedback shown to the player.</p>
+</section>
+<section class="case-section" aria-labelledby="mp-networking">
+    <h2 id="mp-networking">Multiplayer Replication &amp; Prediction</h2>
+    <p>The main technical work was revisiting gameplay after it had to function across multiple machines. I tested with multiple Play In Editor clients, approximately <strong>150 ms of simulated latency</strong>, and packet loss to expose assumptions that were easy to miss in local play.</p>
+    <dl class="problem-solution">
+        <div><dt>Problem</dt><dd>Some actions initially assumed local authority. Granting or removing an ability, spawning an actor, or modifying another actor’s attributes could not be treated as a local-only operation once server and client state were involved.</dd></div>
+        <div><dt>Refactor</dt><dd>I moved authoritative operations to the server, used server RPCs where requests needed to cross that boundary, and worked with GAS client-side prediction for responsive ability behavior.</dd></div>
+        <div><dt>Result</dt><dd>The gameplay architecture separated what the client could predict from what the server needed to execute and replicate. Multi-client testing became part of validating combat and runtime ability changes.</dd></div>
+    </dl>
+    <h3>Ability grants and removals</h3>
+    <p>Runtime slot changes were useful tests because they altered the abilities available to the player. I refactored those operations around server authority rather than assuming a client-side change was enough to update the shared game state.</p>
+    <h3>Actor spawning and damage</h3>
+    <p>Spawning actors and changing another actor’s attributes required the same attention to execution context. I used server-authoritative operations and RPCs to handle those requests, then checked the resulting behavior across clients instead of relying only on what the initiating player saw.</p>
+    <h3>Prediction under latency</h3>
+    <p>GAS prediction let me explore responsive local ability behavior alongside server execution. Simulated latency and packet loss made the distinction visible during testing: a client’s immediate response and the server’s authoritative result are related parts of the interaction, not interchangeable execution paths.</p>
+    <p>The result was a clearer multiplayer implementation and testing process. These were prototype tests, not a claim of production-scale networking validation.</p>
+</section>
+<section class="case-section" aria-labelledby="mp-tools">
+    <h2 id="mp-tools">Multiplayer Testing &amp; Tools</h2>
+    <p>I built a C++ target range with spawned target dummies to exercise weapons, damage, and status changes. Debug keys and logging supported runtime ability tests so I could grant, remove, and activate abilities while inspecting their behavior.</p>
+    <p>Beyond editor sessions, I created a listen-server build and a custom batch file for launching LAN clients. This provided a separate connection workflow for testing clients against the same host.</p>
+</section>
+<section class="case-section" aria-labelledby="mp-learnings">
+    <h2 id="mp-learnings">Learnings</h2>
+    <p>This prototype developed my ability to enter an existing C++ codebase, repair its migrated asset connections, and extend its gameplay framework. It also made authority and execution context concrete: client prediction, server operations, and replicated state each have a distinct role.</p>
+    <p>The strongest outcome was experience connecting GAS architecture, Unreal networking, and C++/Blueprint implementation in a working test environment. The project remained a prototype, with its case study focused on the systems I implemented and tested.</p>
+</section>
+<div class="case-section" aria-label="Multiplayer demonstration media">
+    {Object.entries(multiplayerMedia).map(([id, media]) => <CaseStudyMedia id={`mp-${id}`} media={media} />)}
+</div>

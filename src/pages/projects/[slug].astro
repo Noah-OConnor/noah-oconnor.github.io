@@ -10,6 +10,7 @@ import LutrCaseStudy from "../../components/LutrCaseStudy.astro";
 import RelictCaseStudy from "../../components/RelictCaseStudy.astro";
 import BloxelsCaseStudy from "../../components/BloxelsCaseStudy.astro";
 import KittyCasinoCaseStudy from "../../components/KittyCasinoCaseStudy.astro";
+import MultiplayerCaseStudy from "../../components/MultiplayerCaseStudy.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -21,7 +22,7 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const caseStudies = { lutr: LutrCaseStudy, relict: RelictCaseStudy, bloxels: BloxelsCaseStudy, "kitty-casino": KittyCasinoCaseStudy };
+const caseStudies = { lutr: LutrCaseStudy, relict: RelictCaseStudy, bloxels: BloxelsCaseStudy, "kitty-casino": KittyCasinoCaseStudy, "ue5-gas-multiplayer-shooter": MultiplayerCaseStudy };
 const CaseStudy = caseStudies[project.data.slug as keyof typeof caseStudies];
 const backdrop = project.data.backgroundImage || (project.data.slug === "crimson-knight"
     ? "/images/projects/crimson-knight/CrimsonKnightScreenshot1.jpg"

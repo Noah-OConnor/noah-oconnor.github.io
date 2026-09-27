@@ -10,6 +10,7 @@ interface Props {
 
 const { project } = Astro.props as Props;
 const isCrimsonKnight = project.data.slug === "crimson-knight";
+const isMultiplayerPrototype = project.data.slug === "ue5-gas-multiplayer-shooter";
 
 const fallbackMedia: ProjectMedia[] = project.data.coverImage ? [
     {
@@ -131,8 +132,9 @@ function getYouTubeApiSrc(src: string) {
             <dl class="project-showcase__facts">
                 <div>
                     <dt>Engine</dt>
-                    <dd>{isCrimsonKnight ? "Unreal Engine 5.5" : project.data.engine}{project.data.slug === "lutr" && ` · ${project.data.language}`}</dd>
+                    <dd>{isCrimsonKnight || isMultiplayerPrototype ? "Unreal Engine 5.5" : project.data.engine}{project.data.slug === "lutr" && ` · ${project.data.language}`}</dd>
                 </div>
+                {isMultiplayerPrototype && <div><dt>Language</dt><dd>C++ / Blueprint</dd></div>}
 
                 <div>
                     <dt>Role</dt>
