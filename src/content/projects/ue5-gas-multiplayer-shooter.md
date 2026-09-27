@@ -1,5 +1,6 @@
 ---
 slug: "ue5-gas-multiplayer-shooter"
+hidden: true
 title: "UE5 GAS Multiplayer Prototype"
 description: "Built a UE5 multiplayer shooter prototype focused on Gameplay Ability System integration, server authority, client prediction, replicated combat, and C++ gameplay systems."
 engine: "Unreal Engine"
