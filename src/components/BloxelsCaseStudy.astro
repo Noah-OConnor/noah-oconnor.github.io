@@ -1,0 +1,71 @@
+---
+import CaseStudyMedia from "./CaseStudyMedia.astro";
+import { bloxelsMedia } from "../data/bloxelsMedia";
+---
+<section class="case-section contribution-block" aria-labelledby="bloxels-contributions">
+    <h2 id="bloxels-contributions">Project Evolution &amp; My Contributions</h2>
+    <p>Bloxels is a solo project developed from March to September 2025, moving from a sandbox prototype into a deeper C++ systems and procedural-generation project. I repeatedly redesigned the voxel engine, world architecture, navigation, and tools as their requirements grew.</p>
+    <ul>
+        <li>Built voxel mesh generation, hidden-face removal, and greedy meshing, then consolidated the meshing algorithm into one axis-parameterized function.</li>
+        <li>Developed layered-noise world generation and extended it to a 3D chunk-coordinate system with surface and underground bands.</li>
+        <li>Reworked asynchronous chunks around pooling, processing queues, and controlled per-frame work.</li>
+        <li>Moved voxel definitions from enum-indexed DataTables to per-block DataAssets and a registry subsystem.</li>
+        <li>Implemented custom voxel A* navigation with on-demand neighbor evaluation and traversal rules.</li>
+        <li>Built debug commands, path visualization, voxel-region selection, and .blxl structure import/export tools.</li>
+    </ul>
+</section>
+<section class="case-section" aria-labelledby="bloxels-optimization">
+    <h2 id="bloxels-optimization">Voxel Engine &amp; Optimization</h2>
+    <p>I started by constructing voxel geometry with Unreal’s ProceduralMeshComponent, generating vertices, triangles, normals, and UVs for chunks organized into 16 × 16 × 16 voxel grids. This made the cost of representing a block world explicit: adjacent solid blocks do not need to render their internal faces.</p>
+    <div class="contribution-block"><p class="case-eyebrow">Hidden-face removal</p><h3>24,000+ → ~1,300 faces</h3><p>The recorded geometry reduction from removing unseen faces. This is a mesh-count result, not an FPS measurement.</p></div>
+    <p>After hidden-face removal, I added greedy meshing to combine compatible adjacent visible faces into larger surfaces. The implementation evolved from six directional checks to three generalized functions, then to <strong>one axis-parameterized function</strong>. That final refactor put the common meshing logic in one place instead of maintaining separate versions for each axis.</p>
+    <CaseStudyMedia id="bloxels-meshing" media={bloxelsMedia.meshing} />
+    <h3>Controlling the chunk lifecycle</h3>
+    <p>The next challenge was broader than generating chunks on background threads. I introduced chunk pooling and explicit processing queues, then controlled mesh, display, and unload work per frame. Player-distance prioritization put nearby work ahead of chunks that were less immediately relevant.</p>
+    <p>Later iterations moved chunk state into data-driven structs instead of Actor-based chunks. Together, these changes shifted the architecture from “make chunks asynchronously” to managing their full lifecycle: deciding what to generate, when to process it, when to display it, and when to unload or reuse it.</p>
+</section>
+<section class="case-section" aria-labelledby="bloxels-world">
+    <h2 id="bloxels-world">World Generation &amp; Chunk Streaming</h2>
+    <p>I used Fast Noise Generator and layered Perlin/Simplex noise to shape terrain elevation, rivers, and biome transitions based on temperature and height. The earlier horizontally expanding world became a <strong>3D chunk-coordinate system</strong>, with vertical generation bands separating surface and underground generation.</p>
+    <p>Underground generation uses overlapping 3D ridge-simplex cave noise. Extending the coordinates vertically allowed generation to describe volume below the surface rather than treating the world only as terrain height.</p>
+    <ol class="input-flow" aria-label="Chunk generation pipeline">
+        {["Voxel data", "Neighbor checks", "Mesh data", "Display"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 3 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+    </ol>
+    <p>I used C++ asynchronous tasks, including FNonAbandonableTask in the earlier implementation, to move generation work off the main thread. Voxel data and mesh-data preparation feed the main-thread mesh/display work, while neighbor checks keep hidden-face removal consistent at chunk boundaries. The later queues make that handoff part of an explicitly managed workload.</p>
+    <CaseStudyMedia id="bloxels-world" media={bloxelsMedia.world} />
+</section>
+<section class="case-section" aria-labelledby="bloxels-pathfinding">
+    <h2 id="bloxels-pathfinding">Custom Voxel A* Pathfinding</h2>
+    <p>I built a custom A* search whose navigation nodes come directly from the procedurally generated voxel world. Traversal evaluates the world’s blocks instead of depending on a separately authored navigation layout.</p>
+    <dl class="problem-solution">
+        <div><dt>Problem</dt><dd>Precomputing the navigation-node map added work during world generation and caused hitches.</dd></div>
+        <div><dt>Solution</dt><dd>I changed the search to evaluate neighbors on demand, checking traversal possibilities as A* explores the world rather than preparing the whole map up front.</dd></div>
+        <div><dt>Result</dt><dd>Navigation no longer required the full node-map preprocessing step during generation. The work moved into the path query, where only the neighbors considered by the search need evaluation.</dd></div>
+    </dl>
+    <h3>Traversal through a block world</h3>
+    <p>The neighbor rules support diagonal movement, jumping up, and stepping down. Movement costs represent the traversal choices, and a Euclidean heuristic guides the search toward its destination. This makes the path depend on both the generated geometry and the movement rules rather than treating every neighboring voxel as equally reachable.</p>
+    <p>Path start/end commands and debug visualization give me a way to inspect those decisions directly: choose endpoints, run a query, and examine the route through the voxel world.</p>
+    <CaseStudyMedia id="bloxels-pathfinding" media={bloxelsMedia.pathfinding} />
+</section>
+<section class="case-section" aria-labelledby="bloxels-data">
+    <h2 id="bloxels-data">Data-Driven Voxel Architecture</h2>
+    <p>The early voxel system used enum-indexed DataTables for block properties such as identity, material, transparency, and gameplay traits. As the definitions changed, instability around the enum/DataTable relationship became a reason to revisit how the engine identified and retrieved blocks.</p>
+    <p>I moved toward <strong>per-block DataAssets</strong>, a <strong>Voxel Registry subsystem</strong>, and <strong>FName-based identification</strong>. This gave block definitions a registry-based lookup rather than tying their identity to enum indexing, and put shared definition access behind a subsystem.</p>
+    <h3>Texture atlas &amp; master material</h3>
+    <p>I built a texture atlas and master material that shift UVs according to voxel data. Block types can share a material while using different textures on individual faces. The voxel definitions and generated mesh UVs connect block identity to its rendered appearance without requiring a separate material for every block type.</p>
+</section>
+<section class="case-section" aria-labelledby="bloxels-tools">
+    <h2 id="bloxels-tools">Tools &amp; Debugging</h2>
+    <p>I created a custom debug subsystem and Exec commands to test engine behavior without building a player-facing workflow for every experiment. Path endpoint commands and route visualization support navigation debugging, while a selection system lets me choose bounded voxel regions for structure work.</p>
+    <h3>Reusable structures with .blxl</h3>
+    <ol class="input-flow" aria-label="Structure export and import workflow">
+        {["Select bounds", "Choose origin", "Export .blxl", "Import elsewhere"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 3 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+    </ol>
+    <p>The custom .blxl structure format stores block coordinates relative to the chosen origin. I can select a region, export its relative layout, and import that structure at another location. This is development tooling for moving and reusing voxel structures, alongside the tools for inspecting generated worlds and navigation.</p>
+    <CaseStudyMedia id="bloxels-structures" media={bloxelsMedia.structures} />
+</section>
+<section class="case-section" aria-labelledby="bloxels-player">
+    <h2 id="bloxels-player">Player Interaction</h2>
+    <p>I implemented switching between first- and third-person cameras, plus hit detection for placing and breaking blocks. The interaction systems connect the player’s target to the voxel data and provide a way to exercise the world-editing side of the engine.</p>
+    <p>Later hotbar and inventory work began extending the prototype beyond voxel technology. Those systems remain secondary to the project’s main focus: iterating on world generation, chunk processing, navigation, and C++ development tools.</p>
+</section>

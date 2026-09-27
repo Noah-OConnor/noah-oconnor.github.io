@@ -18,6 +18,8 @@ const projects = defineCollection({
         team: z.string().optional(),
         timeline: z.string().optional(),
         sidebar: z.object({
+            engine: z.string().optional(),
+            language: z.string().optional(),
             role: z.string().optional(),
             technologies: z.array(z.string()).optional(),
             specialties: z.array(z.string()).optional(),

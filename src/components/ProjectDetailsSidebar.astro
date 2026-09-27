@@ -2,7 +2,9 @@
 import type { CollectionEntry } from "astro:content";
 interface Props { project: CollectionEntry<"projects">; }
 const { project } = Astro.props;
-const { engine, language, genre, perspective, status, links } = project.data;
+const { genre, perspective, status, links } = project.data;
+const engine = project.data.sidebar?.engine ?? project.data.engine;
+const language = project.data.sidebar?.language ?? project.data.language;
 const role = project.data.sidebar?.role ?? project.data.role;
 const technologies = project.data.sidebar?.technologies ?? project.data.technologies;
 const specialties = project.data.sidebar?.specialties ?? project.data.specialties;
