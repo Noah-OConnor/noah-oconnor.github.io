@@ -1,4 +1,66 @@
 <div class="case-study-layout">
     <div class="case-study-main"><slot /></div>
-    <slot name="sidebar" />
+    <div class="case-study-rail">
+        <slot name="sidebar" />
+        <nav class="case-navigation" aria-label="Case study sections" hidden>
+            <p class="case-navigation__title">Page Navigation</p>
+            <ul></ul>
+        </nav>
+    </div>
 </div>
+
+<script>
+    document.querySelectorAll<HTMLElement>(".case-study-layout").forEach((layout, layoutIndex) => {
+        const main = layout.querySelector<HTMLElement>(".case-study-main");
+        const navigation = layout.querySelector<HTMLElement>(".case-navigation");
+        const list = navigation?.querySelector("ul");
+        if (!main || !navigation || !list) return;
+        const headings = Array.from(main.querySelectorAll<HTMLElement>("h2"));
+        const links: HTMLAnchorElement[] = [];
+        headings.forEach((heading, index) => {
+            if (!heading.id) {
+                let id = `case-heading-${layoutIndex}-${index}`;
+                while (document.getElementById(id)) id += "-section";
+                heading.id = id;
+            }
+            const item = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = `#${heading.id}`;
+            link.textContent = heading.textContent;
+            item.append(link);
+            list.append(item);
+            links.push(link);
+        });
+        navigation.hidden = headings.length === 0;
+        let activeIndex = -1;
+        let scheduled = false;
+        const updateCurrentSection = () => {
+            scheduled = false;
+            const offset = (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0) + 24;
+            let current = 0;
+            headings.forEach((heading, index) => {
+                if (heading.getBoundingClientRect().top <= offset) current = index;
+            });
+            // A short final section may never reach the top of the viewport.
+            if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+                current = headings.length - 1;
+            }
+            if (current === activeIndex) return;
+            activeIndex = current;
+            links.forEach((link, index) => {
+                if (index === current) link.setAttribute("aria-current", "location");
+                else link.removeAttribute("aria-current");
+            });
+        };
+        const scheduleUpdate = () => {
+            if (scheduled) return;
+            scheduled = true;
+            requestAnimationFrame(updateCurrentSection);
+        };
+        window.addEventListener("scroll", scheduleUpdate, { passive: true });
+        window.addEventListener("resize", scheduleUpdate);
+        window.addEventListener("load", scheduleUpdate, { once: true });
+        new ResizeObserver(scheduleUpdate).observe(main);
+        updateCurrentSection();
+    });
+</script>
