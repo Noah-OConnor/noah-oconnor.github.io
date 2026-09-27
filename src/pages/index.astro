@@ -7,18 +7,18 @@ const allProjects = await getCollection("projects");
 const order = ["lutr", "crimson-knight", "relict", "bloxels", "ue5-gas-multiplayer-shooter", "kitty-casino"];
 const projects = order.flatMap(slug => allProjects.filter(project => project.data.slug === slug));
 const featuredProjects = projects.slice(0, 4);
-const projectTags = (data: (typeof projects)[number]["data"]) =>
-    [...new Set([...data.specialties, ...data.technologies, data.engine, data.language].filter((tag): tag is string => Boolean(tag)))];
-const availableTags = [...new Set(projects.flatMap(project => projectTags(project.data)))];
-const engines = new Set(projects.map(project => project.data.engine));
-const languages = new Set(projects.map(project => project.data.language));
-const production = new Set(["Perforce", "Git", "Jira", "Confluence"]);
-const filterGroups = [
-    { label: "Engine", tags: availableTags.filter(tag => engines.has(tag)) },
-    { label: "Language", tags: availableTags.filter(tag => languages.has(tag)) },
-    { label: "Skills", tags: availableTags.filter(tag => !engines.has(tag) && !languages.has(tag) && !production.has(tag)) },
-    { label: "Production", tags: availableTags.filter(tag => production.has(tag)) },
+// Recruiter-facing evidence categories are curated separately from implementation details.
+const filterTaxonomy = [
+    { label: "Engine", tags: ["Unreal Engine", "Unity"] },
+    { label: "Language", tags: ["C++", "C#"] },
+    { label: "Skills", tags: ["Gameplay Systems", "Combat", "Weapon Systems", "Game Feel", "Procedural Systems", "AI", "Multiplayer", "GAS", "Animation Systems", "Technical Leadership"] },
+    { label: "Production", tags: ["Perforce", "Git", "Jira", "Confluence"] },
 ];
+const supportedFilters = new Set(filterTaxonomy.flatMap(group => group.tags));
+const projectTags = (data: (typeof projects)[number]["data"]) =>
+    [...new Set([...data.specialties, ...data.technologies, data.engine, data.language].filter((tag): tag is string => Boolean(tag) && supportedFilters.has(tag!)))];
+const availableTags = [...new Set(projects.flatMap(project => projectTags(project.data)))];
+const filterGroups = filterTaxonomy.map(group => ({ ...group, tags: group.tags.filter(tag => availableTags.includes(tag)) }));
 // Keep small categories together rather than rendering a one-tag section.
 const singletons = filterGroups.filter(group => group.tags.length === 1);
 const groupedFilters = filterGroups.filter(group => group.tags.length > 1);
@@ -31,7 +31,7 @@ const filterForSkill = (tag: string) => tag === "Procedural Generation" ? "Proce
 const skills = [
     { label: "Languages", tags: ["C++", "C#"] },
     { label: "Engines", tags: ["Unreal Engine", "Unity"] },
-    { label: "Gameplay / Systems", tags: ["GAS", "Enhanced Input", "Procedural Generation", "AI", "Multiplayer", "Animation Systems"] },
+    { label: "Gameplay / Systems", tags: ["GAS", "Game Feel", "Procedural Generation", "AI", "Multiplayer", "Animation Systems"] },
     { label: "Production", tags: ["Perforce", "Git", "Jira", "Confluence"] },
 ];
 ---
@@ -42,7 +42,7 @@ const skills = [
             <h1 id="intro-heading">Gameplay Programmer <span>&amp; Technical Designer</span></h1>
             <p>I build responsive combat, modular gameplay systems, and tools that make iteration easier.</p>
             <div class="tags" aria-label="Core specialties">
-                {["C++", "C#", "Unreal Engine", "Unity", "Gameplay Systems", "Technical Design"].map(tag => <a href="#all-projects" data-filter-link={tag}>{tag}</a>)}
+                {["C++", "C#", "Unreal Engine", "Unity", "Gameplay Systems", "Game Feel"].map(tag => <a href="#all-projects" data-filter-link={tag}>{tag}</a>)}
             </div>
         </section>
 

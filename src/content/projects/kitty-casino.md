@@ -5,7 +5,8 @@ description: "Guided a seven-person team from concept to release, coordinated a 
 
 engine: "Unity"
 language: "C#"
-specialties: ["Technical Leadership", "Tools & Debugging"]
+specialties: ["Technical Leadership"]
+technologies: ["Git"]
 genre: "Casual Casino"
 role: "Producer / Programmer"
 status: "Complete"

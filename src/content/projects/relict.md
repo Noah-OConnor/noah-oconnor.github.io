@@ -5,7 +5,7 @@ description: "Led programming and built reusable enemy AI, player controls, and 
 engine: "Unity"
 language: "C#"
 technologies: ["Animation Systems", "Git"]
-specialties: ["Gameplay Systems", "AI", "Technical Leadership", "Technical Design", "Tools & Debugging"]
+specialties: ["Gameplay Systems", "AI", "Technical Leadership", "Technical Design", "Weapon Systems", "Game Feel", "Combat"]
 genre: "Roguelike Shooter"
 role: "Lead Programmer / System Administrator"
 status: "Complete"

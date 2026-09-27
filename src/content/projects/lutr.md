@@ -9,7 +9,7 @@ role: "Gameplay Programmer / Technical Designer"
 status: "Ongoing"
 team: "Solo"
 timeline: "May 2026 – Present"
-specialties: ["Gameplay Systems", "Procedural Systems", "Technical Design", "Combat & Character", "Weapon Systems", "Game Feel", "Tools & Debugging"]
+specialties: ["Gameplay Systems", "Procedural Systems", "Technical Design", "Combat", "Weapon Systems", "Game Feel"]
 coverImage: "/images/projects/lutr/Lutr16x9.jpg"
 backgroundImage: "/images/projects/lutr/Lutr16x9.jpg"
 ---

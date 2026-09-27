@@ -5,7 +5,7 @@ description: "Built a C++ voxel world with greedy meshing, asynchronous terrain 
 engine: "Unreal Engine"
 language: "C++"
 technologies: ["Git"]
-specialties: ["Procedural Systems", "AI", "Tools & Debugging", "Gameplay Systems"]
+specialties: ["Procedural Systems", "AI", "Gameplay Systems"]
 genre: "Voxel Sandbox"
 role: "Gameplay Programmer / Technical Designer"
 status: "Prototype"

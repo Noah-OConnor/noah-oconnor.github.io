@@ -4,8 +4,8 @@ title: "Crimson Knight"
 description: "Owned and implemented the Knight’s combat, character-control, animation, and responsiveness systems."
 engine: "Unreal Engine"
 language: "C++"
-technologies: ["GAS", "Enhanced Input", "Animation Systems", "Perforce", "Jira", "Confluence"]
-specialties: ["Combat & Character", "Gameplay Systems", "Technical Design", "GAS", "Animation Systems"]
+technologies: ["GAS", "Enhanced Input", "Animation Systems", "Game Feel", "Perforce", "Jira", "Confluence"]
+specialties: ["Combat", "Gameplay Systems", "Technical Design", "GAS", "Animation Systems", "AI"]
 genre: "Souls-Like"
 role: "Technical Designer — Character & Combat"
 status: "Complete"
