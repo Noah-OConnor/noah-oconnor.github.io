@@ -2,8 +2,11 @@
 import type { CollectionEntry } from "astro:content";
 interface Props { project: CollectionEntry<"projects">; }
 const { project } = Astro.props;
-const { role, engine, language, genre, perspective, status, technologies, specialties, links } = project.data;
-const facts = [["Role", role], ["Team", project.data.team], ["Timeline", project.data.timeline], ["Engine", engine], ["Languages", language], ["Genre", genre], ["Perspective", perspective], ["Status", status]];
+const { engine, language, genre, perspective, status, links } = project.data;
+const role = project.data.sidebar?.role ?? project.data.role;
+const technologies = project.data.sidebar?.technologies ?? project.data.technologies;
+const specialties = project.data.sidebar?.specialties ?? project.data.specialties;
+const facts = [["Role", role], ["Team Size", project.data.team], ["Timeline", project.data.timeline], ["Engine", engine], ["Languages", language], ["Genre", genre], ["Perspective", perspective], ["Status", status]];
 ---
 <aside class="case-sidebar" aria-label={`${project.data.title} project details`}>
     <section><h2>Project Details</h2><dl class="case-facts">

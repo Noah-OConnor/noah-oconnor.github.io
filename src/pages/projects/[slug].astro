@@ -7,6 +7,7 @@ import CrimsonKnightCaseStudy from "../../components/CrimsonKnightCaseStudy.astr
 import ProjectCaseStudyLayout from "../../components/ProjectCaseStudyLayout.astro";
 import ProjectDetailsSidebar from "../../components/ProjectDetailsSidebar.astro";
 import LutrCaseStudy from "../../components/LutrCaseStudy.astro";
+import RelictCaseStudy from "../../components/RelictCaseStudy.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -29,7 +30,7 @@ const backdrop = project.data.backgroundImage || (project.data.slug === "crimson
 
         {project.data.slug === "crimson-knight" ? <CrimsonKnightCaseStudy /> : (
             <ProjectCaseStudyLayout>
-                {project.data.slug === "lutr" ? <LutrCaseStudy /> : <ProjectContentSections sections={project.data.sections} />}
+                {project.data.slug === "lutr" ? <LutrCaseStudy /> : project.data.slug === "relict" ? <RelictCaseStudy /> : <ProjectContentSections sections={project.data.sections} />}
                 <ProjectDetailsSidebar slot="sidebar" project={project} />
             </ProjectCaseStudyLayout>
         )}

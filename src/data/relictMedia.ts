@@ -1,0 +1,8 @@
+// Fill src with a path from public (for example /images/projects/relict/grace-demo.mp4).
+// Use type "image" for images/GIFs or "video" for clips. Empty paths render sockets.
+export const relictMedia = {
+    grace: { type: "video", src: "", title: "Grace loadout and persistence", caption: "Major Arcana abilities and Minor Arcana upgrades feeding a persistent player build.", capture: "Show acquiring a Grace, assigning a Major Arcana ability to one of six slots, applying a Minor Arcana upgrade, using an ability with its cooldown, and retaining the loadout across a level transition." },
+    ai: { type: "video", src: "", title: "Shared AI behavior across enemy variants", caption: "Reusable state scripts supporting targeting, aiming, and enemy-specific behavior.", capture: "Compare multiple enemy variants, including objective targeting and aiming. Pair the clip with a small class/state diagram or code excerpt showing the shared parent and inherited states." },
+    controls: { type: "video", src: "", title: "Rebinding and controller workflow", caption: "Persistent input settings and consistent gameplay and menu controls.", capture: "Show keyboard/mouse and controller input, changing a binding and sensitivity, navigating menus, updated prompts, and the binding surviving a restart." },
+    production: { type: "image", src: "", title: "Review-to-build production evidence", caption: "The recurring review, revision, integration, and build workflow.", capture: "Add a representative code-review exchange, branch/merge view, and weekly build or task record. Remove private team information and show your contribution clearly." },
+} satisfies Record<string, { type: "image" | "video"; src: string; title: string; caption: string; capture: string }>;

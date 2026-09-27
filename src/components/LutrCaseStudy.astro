@@ -80,10 +80,3 @@ import { lutrMedia } from "../data/lutrMedia";
     <CaseStudyMedia id="tools" media={lutrMedia.tools} />
     <p>Lutr remains in development. The work connects system design, implementation, UI, and testing into one loop that I can keep expanding and refining myself.</p>
 </section>
-<section class="case-section" aria-labelledby="lutr-media-plan">
-    <h2 id="lutr-media-plan">Supporting Images &amp; Clips to Add</h2>
-    <p>Capture list for the media slots above. The Gunsmith walkthrough is the primary visual; the remaining captures support each system’s role in the loop.</p>
-    <ol class="media-capture-list">
-        {Object.entries(lutrMedia).map(([id, media]) => <li><a href={`#media-${id}`}>{media.title}</a><p>{media.capture}</p></li>)}
-    </ol>
-</section>

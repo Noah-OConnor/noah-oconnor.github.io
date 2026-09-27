@@ -1,0 +1,77 @@
+---
+import CaseStudyMedia from "./CaseStudyMedia.astro";
+import { relictMedia } from "../data/relictMedia";
+const base = "/images/projects/relict/";
+---
+<section class="case-section contribution-block" aria-labelledby="relict-contributions">
+    <h2 id="relict-contributions">My Role &amp; Contributions</h2>
+    <p>I served as <strong>Vision Holder, Code Lead, and System Administrator</strong> on a 15-person multidisciplinary capstone team. From September 2023 through May 2024, I combined hands-on gameplay programming with the reviews, coordination, and builds that kept the team moving through development.</p>
+    <ul>
+        <li>Designed the core Grace progression systems, connecting abilities, stat upgrades, and persistent inventory.</li>
+        <li>Built player/controller and input systems, including rebinding and controller support.</li>
+        <li>Created and refactored reusable FSM AI architecture and shared state logic.</li>
+        <li>Maintained code reviews, the Git branch/merge workflow, and the GitHub repository.</li>
+        <li>Led programming meetings, delegated tasks, and coordinated implementation across disciplines.</li>
+        <li>Created weekly builds, maintained documentation, and supported the team through technical issues.</li>
+    </ul>
+</section>
+<section class="case-section" aria-labelledby="relict-about">
+    <h2 id="relict-about">About This Game</h2>
+    <p>Relict is a third-person roguelike shooter built in Unity, with fast-paced combat and tarot-inspired powers. Our team developed it across nine agile sprints, taking the game from its initial pitch to a completed capstone build.</p>
+    <figure><img src={`${base}RelictMedia7.jpg`} alt="Relict gameplay" loading="lazy" /></figure>
+</section>
+<section class="case-section" aria-labelledby="relict-grace">
+    <h2 id="relict-grace">Grace System &amp; Progression</h2>
+    <p>I designed the Grace System around two complementary forms of progression: <strong>Major Arcana</strong> provide active abilities, while <strong>Minor Arcana</strong> provide stat upgrades. Inspired by the build choices in Hades and Risk of Rain 2, the system gives players ways to develop a loadout through tarot readings and enemy drops.</p>
+    <ol class="input-flow" aria-label="Grace progression flow">
+        {["Reading / drop", "Grace inventory", "Ability / stat upgrade", "Player build"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 3 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+    </ol>
+    <h3>Abilities, upgrades &amp; persistence</h3>
+    <p>I implemented six ability slots alongside stat tracking and inventory persistence across levels. Major Arcana choices feed the active loadout; Minor Arcana upgrades change the stats that support it. Cooldowns, buffs, and debuffs connect those choices to runtime gameplay rather than leaving them as inventory-only data.</p>
+    <figure><img src={`${base}RelictMedia2.jpg`} alt="Relict tarot progression interface" loading="lazy" /><figcaption>Tarot choices connect the progression UI to the player’s abilities and upgrades.</figcaption></figure>
+    <p>My work on the character’s weapon and its upgrades formed another part of that progression loop. The weapon, projectile abilities such as Silver Shot, and the player’s accumulated upgrades needed to work together as the build changed over a run.</p>
+<CaseStudyMedia id="relict-grace" media={relictMedia.grace} />
+</section>
+<section class="case-section" aria-labelledby="relict-ai">
+    <h2 id="relict-ai">AI Architecture &amp; Combat</h2>
+    <h3>Starting with a finite state machine</h3>
+    <p>I built the enemy framework around a finite state machine (FSM), with state scripts organizing behavior and transitions. Shared enemy responsibilities included health, knockback, and targeting, while individual enemies and bosses needed their own attacks and encounter behavior. This was an FSM/state-script architecture.</p>
+    <figure><img src={`${base}RelictMedia4.jpg`} alt="Relict enemy encounter" loading="lazy" /></figure>
+    <h3>Refactoring as the enemy roster grew</h3>
+    <dl class="problem-solution">
+        <div><dt>Problem</dt><dd>Duplicated AI and state logic made changes harder to apply consistently as the team added enemy variants.</dd></div>
+        <div><dt>Solution</dt><dd>I refactored shared behavior into parent AI classes and shared state inheritance, keeping variant-specific behavior in the appropriate derived implementations.</dd></div>
+        <div><dt>Result</dt><dd>Common fixes and behavior changes could be made in shared logic instead of repeated across enemies. The refactor supported objective targeting, aiming improvements, and additional enemy variants.</dd></div>
+    </dl>
+    <p>The architecture had to serve both ordinary enemies and more specialized encounters. Enemies such as Crystal Thralls, Ember Wolves, and the Ice Golem could reuse common responsibilities, while bosses such as Justice and The Tower retained their distinct attack patterns and hazards.</p>
+    <h3>Connecting AI to player combat</h3>
+    <p>I also implemented hit detection, knockback, and projectile abilities, working on the character’s weapon and upgrades alongside enemy behavior. Tuning visual and audio feedback helped communicate impacts during crowded encounters and connected the underlying systems to the feel of combat.</p>
+    <figure><img src={`${base}RelictMedia6.jpg`} alt="Relict combat gameplay" loading="lazy" /><figcaption>Player combat and enemy behavior share the same encounter space and need to remain readable together.</figcaption></figure>
+<CaseStudyMedia id="relict-ai" media={relictMedia.ai} />
+</section>
+<section class="case-section" aria-labelledby="relict-controls">
+    <h2 id="relict-controls">Player Controls &amp; Accessibility</h2>
+    <p>I built the input manager and rebinding workflow, with keyboard/mouse and controller support across gameplay and menus. My implementation work covered sensitivity controls, persistent rebinding, and dynamic UI/input feedback so the interface could reflect the player’s current controls.</p>
+    <p>Menu parity was part of that work: controller users needed to navigate the UI as well as control the character. I worked with our Accessibility Lead and the team’s accessibility guidelines, translating agreed requirements into input handling and interface behavior.</p>
+    <figure><img src={`${base}RelictMedia1.jpg`} alt="Relict player interface during gameplay" loading="lazy" /></figure>
+    <p>Keeping rebinding, saved settings, and input prompts connected meant testing the full interaction, from changing a control in a menu to using it in gameplay and retaining it in a later session.</p>
+<CaseStudyMedia id="relict-controls" media={relictMedia.controls} />
+</section>
+<section class="case-section" aria-labelledby="relict-leadership">
+    <h2 id="relict-leadership">Technical Leadership &amp; Production</h2>
+    <p>Programming leadership was a recurring responsibility throughout the capstone cycle. Alongside my own systems work, I maintained the code-review pipeline, branch/merge workflow, and GitHub repository so the team could integrate work and produce regular builds.</p>
+    <ol class="input-flow" aria-label="Programming review and build workflow">
+        {["Feature Branch", "Code review", "Revision", "Approval", "Dev branch", "Weekly build"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 5 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+    </ol>
+    <h3>Review, coordination &amp; documentation</h3>
+    <p>I reviewed contributions, followed up on revisions, and supported integration into the development branch. In programming meetings, I delegated tasks and coordinated dependencies with designers and other disciplines. ClickUp task tracking and documentation for designers and programmers helped make the next steps and system expectations explicit.</p>
+    <h3>A build the team could use</h3>
+    <p>I created weekly builds and provided technical support as new content and systems came together. That work connected planning and review to something the whole team could play and evaluate, then use to identify the next round of fixes and polish.</p>
+<CaseStudyMedia id="relict-production" media={relictMedia.production} />
+</section>
+<section class="case-section" aria-labelledby="relict-shipping">
+    <h2 id="relict-shipping">Iteration, Debugging &amp; Shipping</h2>
+    <p>Maintaining the project meant revisiting systems as content changed. AI bugs, performance, and navmesh problems needed attention alongside the expanding encounters. On the player side, controller/input issues and UI regressions could interrupt the path between a menu and gameplay, even when each system worked in isolation.</p>
+    <p>I supported those fixes alongside ability bugs and late-stage polish. The work was about keeping the integrated game usable through successive builds: checking navigation after level changes, controls after UI updates, and combat behavior as abilities and enemies evolved.</p>
+    <p>Relict brought together my gameplay programming and team responsibilities across a complete capstone cycle: designing core systems, refactoring shared architecture, and maintaining the technical workflow through the final build.</p>
+</section>
