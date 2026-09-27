@@ -17,6 +17,7 @@ sidebar:
   specialties: ["Technical Leadership", "Production", "Game Design", "QA / Testing"]
 
 coverImage: "/images/projects/kitty-casino/KittyCasino16x9.jpg"
+backgroundImage: "/images/projects/kitty-casino/KittyCasinoFloor.png"
 
 media:
   - type: "video"

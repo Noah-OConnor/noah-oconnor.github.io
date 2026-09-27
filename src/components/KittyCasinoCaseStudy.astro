@@ -3,19 +3,9 @@ import CaseStudyMedia from "./CaseStudyMedia.astro";
 import { kittyCasinoMedia } from "../data/kittyCasinoMedia";
 const base = "/images/projects/kitty-casino/";
 ---
-<section class="case-section" aria-labelledby="kitty-about">
-    <h2 id="kitty-about">About / My Role</h2>
-    <h3>About This Game</h3>
-    <p>Kitty Casino is a mobile casual casino game built around five mini-games, a casino hub, Story Mode unlocks, and cat cosmetics. Our seven-person team took it from concept to release and followed it with a Christmas-themed content update.</p>
-    <h3>My Role</h3>
+<section class="case-section contribution-block" aria-labelledby="kitty-contributions">
+    <h2 id="kitty-contributions">My Contributions</h2>
     <p>As <strong>Producer / Programmer</strong>, I stepped back from being the primary developer and focused on production and technical support. I coordinated the team, delegated tasks, organized meetings, supported presentations, and helped manage scope. I also supported bug testing and fixes as the team brought the features together for release.</p>
-    <figure><img src={`${base}KittyCasinoMedia1.png`} alt="Kitty Casino gameplay interface" loading="lazy" /></figure>
-</section>
-<section class="case-section contribution-block" aria-labelledby="kitty-production">
-    <h2 id="kitty-production">Production &amp; Team Coordination</h2>
-    <p>The central production challenge was keeping several parallel gameplay features moving toward one shipped product. Each mini-game needed its own development attention, but the team also had to deliver the hub, progression, cosmetics, and the transitions that connected them.</p>
-    <h3>Coordinating a seven-person team</h3>
-    <p>I organized meetings, delegated work, and tracked progress so the team could identify what was moving forward and what needed support. Presentations gave us another recurring point to communicate the state of the game and keep the project’s direction clear.</p>
     <ul>
         <li>Coordinated work across multiple mini-games and the shared game structure.</li>
         <li>Delegated tasks and followed progress through team meetings.</li>
@@ -23,6 +13,21 @@ const base = "/images/projects/kitty-casino/";
         <li>Supported presentations and communication of the project’s progress.</li>
         <li>Combined production responsibilities with testing and programming support.</li>
     </ul>
+</section>
+<section class="case-section" aria-labelledby="kitty-about">
+    <h2 id="kitty-about">About This Game</h2>
+
+    <p>Kitty Casino is a mobile casual casino game built around five mini-games, a casino hub, Story Mode unlocks, and cat cosmetics. Our seven-person team took it from concept to release and followed it with a Christmas-themed content update.</p>
+
+
+    <figure><img src={`${base}KittyCasinoMedia1.png`} alt="Kitty Casino gameplay interface" loading="lazy" /></figure>
+</section>
+<section class="case-section" aria-labelledby="kitty-production">
+    <h2 id="kitty-production">Production &amp; Team Coordination</h2>
+    <p>The central production challenge was keeping several parallel gameplay features moving toward one shipped product. Each mini-game needed its own development attention, but the team also had to deliver the hub, progression, cosmetics, and the transitions that connected them.</p>
+    <h3>Coordinating a seven-person team</h3>
+    <p>I organized meetings, delegated work, and tracked progress so the team could identify what was moving forward and what needed support. Presentations gave us another recurring point to communicate the state of the game and keep the project’s direction clear.</p>
+
     <h3>Managing scope through integration</h3>
     <p>I helped keep feature decisions grounded in what the team could complete and bring together. A mini-game was one part of the release: it also needed to fit the unlock flow, work with the rest of the experience, and be tested alongside shared systems.</p>
     <p>That integration focus continued beyond the original release. Coordinating the Christmas update meant returning to a shipped product, managing additional work across game areas, and helping the team maintain a consistent themed update.</p>

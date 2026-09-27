@@ -3,8 +3,8 @@ import CaseStudyMedia from "./CaseStudyMedia.astro";
 import { bloxelsMedia } from "../data/bloxelsMedia";
 ---
 <section class="case-section contribution-block" aria-labelledby="bloxels-contributions">
-    <h2 id="bloxels-contributions">Project Evolution &amp; My Contributions</h2>
-    <p>Bloxels is a solo project developed from March to September 2025, moving from a sandbox prototype into a deeper C++ systems and procedural-generation project. I repeatedly redesigned the voxel engine, world architecture, navigation, and tools as their requirements grew.</p>
+    <h2 id="bloxels-contributions">My Contributions</h2>
+    <p>As the solo Systems Programmer / Technical Designer, I designed and implemented Bloxels’ voxel engine, world architecture, navigation, and development tools, repeatedly refining them as the project’s requirements grew.</p>
     <ul>
         <li>Built voxel mesh generation, hidden-face removal, and greedy meshing, then consolidated the meshing algorithm into one axis-parameterized function.</li>
         <li>Developed layered-noise world generation and extended it to a 3D chunk-coordinate system with surface and underground bands.</li>
@@ -13,6 +13,10 @@ import { bloxelsMedia } from "../data/bloxelsMedia";
         <li>Implemented custom voxel A* navigation with on-demand neighbor evaluation and traversal rules.</li>
         <li>Built debug commands, path visualization, voxel-region selection, and .blxl structure import/export tools.</li>
     </ul>
+</section>
+<section class="case-section" aria-labelledby="bloxels-about">
+    <h2 id="bloxels-about">About This Project</h2>
+    <p>Bloxels is a C++ voxel-engine prototype built in Unreal Engine 5.6 from March to September 2025. It evolved from a sandbox prototype into a systems and procedural-generation project focused on optimized geometry, chunk streaming, custom navigation, and world-editing tools.</p>
 </section>
 <section class="case-section" aria-labelledby="bloxels-optimization">
     <h2 id="bloxels-optimization">Voxel Engine &amp; Optimization</h2>
