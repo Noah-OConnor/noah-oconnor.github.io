@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { project } = Astro.props as Props;
+const compact = project.data.slug === "crimson-knight";
 
 const fallbackMedia: ProjectMedia[] = [
     {
@@ -21,7 +22,7 @@ const fallbackMedia: ProjectMedia[] = [
 const media: ProjectMedia[] =
     project.data.media.length > 0 ? project.data.media : fallbackMedia;
 
-const tags = [
+const tags = compact ? project.data.specialties : [
     project.data.engine,
     project.data.language,
     project.data.perspective,
@@ -130,30 +131,30 @@ function getYouTubeApiSrc(src: string) {
             />
 
             <p class="project-showcase__description">
-                {project.data.description}
+                {compact ? "A third-person Souls-like built around a duel with The Absolute, focused on deliberate combat, precise movement, and readable player feedback." : project.data.description}
             </p>
 
             <dl class="project-showcase__facts">
                 <div>
                     <dt>Engine</dt>
-                    <dd>{project.data.engine}</dd>
+                    <dd>{compact ? "Unreal Engine 5.5" : project.data.engine}</dd>
                 </div>
 
-                {project.data.language && (
+                {!compact && project.data.language && (
                         <div>
                             <dt>Language</dt>
                             <dd>{project.data.language}</dd>
                         </div>
                 )}
 
-                {project.data.perspective && (
+                {!compact && project.data.perspective && (
                         <div>
                             <dt>Perspective</dt>
                             <dd>{project.data.perspective}</dd>
                         </div>
                 )}
 
-                {project.data.genre && (
+                {!compact && project.data.genre && (
                         <div>
                             <dt>Genre</dt>
                             <dd>{project.data.genre}</dd>

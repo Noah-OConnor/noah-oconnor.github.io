@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import Layout from "../../components/Layout.astro";
 import ProjectShowcaseCarousel from "../../components/ProjectShowcaseCarousel.astro";
 import ProjectContentSections from "../../components/ProjectContentSections.astro";
+import CrimsonKnightCaseStudy from "../../components/CrimsonKnightCaseStudy.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -18,9 +19,9 @@ const { Content } = await render(project);
 ---
 
 <Layout title={project.data.title}>
-    <main class="page project-page">
+    <main class:list={["page", "project-page", { "crimson-page": project.data.slug === "crimson-knight" }]} style={project.data.slug === "crimson-knight" ? "--project-backdrop: url('/images/projects/crimson-knight/CrimsonKnightScreenshot1.jpg')" : undefined}>
         {project.data.slug !== "ue5-gas-multiplayer-shooter" && <ProjectShowcaseCarousel project={project} />}
 
-        <ProjectContentSections sections={project.data.sections} />
+        {project.data.slug === "crimson-knight" ? <CrimsonKnightCaseStudy /> : <ProjectContentSections sections={project.data.sections} />}
     </main>
 </Layout>

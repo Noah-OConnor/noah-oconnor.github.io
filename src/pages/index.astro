@@ -70,7 +70,7 @@ const skills = [
                             <p class="project-role">{data.role}</p>
                             <p class="project-summary">{data.description}</p>
                             <p class="project-engine">{data.engine}<span aria-hidden="true"> · </span>{data.language}</p>
-                            <div class="tags">{data.specialties.slice(0, 4).map(tag => <span>{tag}</span>)}</div>
+                            <div class="tags">{data.specialties.slice(0, data.slug === "crimson-knight" ? 5 : 4).map(tag => <span>{tag}</span>)}</div>
                         </div>
                     </a>
                 ))}

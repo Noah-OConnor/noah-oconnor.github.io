@@ -1,0 +1,84 @@
+---
+const base = "/images/projects/crimson-knight/";
+const technologies = ["Gameplay Ability System", "Enhanced Input", "Niagara", "Animation Blueprints", "Perforce", "Jira / Confluence"];
+const specialties = ["Combat & Character", "Gameplay Systems", "Technical Design", "Animation Systems", "Game Feel / Responsiveness"];
+---
+<div class="case-study-layout">
+    <div class="case-study-main">
+        <section class="case-section contribution-block" aria-labelledby="ck-contributions">
+            <h2 id="ck-contributions">My Contributions</h2>
+            <ul>
+                <li>Owned the Knight’s character, controller, and combat systems.</li>
+                <li>Implemented player abilities with Unreal’s Gameplay Ability System (GAS).</li>
+                <li>Built C++ input buffering and animation-cancel logic.</li>
+                <li>Created and tuned attacks, dodge/roll, healing, lock-on, movement, and hit reactions.</li>
+                <li>Integrated animation montages, notifies, blend timing, and VFX.</li>
+                <li>Supported balancing, debugging, gameplay polish, and project finalization.</li>
+            </ul>
+        </section>
+        <section class="case-section" aria-labelledby="ck-about">
+            <h2 id="ck-about">About / Role Summary</h2>
+            <h3>About the Game</h3>
+            <p>Crimson Knight is a third-person Souls-like built around a repeated duel with one boss, The Absolute. Our 17-person core team focused on a small, polished combat experience where movement, timing, and readable feedback matter.</p>
+            <h3>My Role</h3>
+            <p>As Technical Designer for character, controller, and combat, I owned and implemented the Knight’s player-facing systems. I carried the work from early movement and attack prototypes through ability implementation, animation integration, responsiveness tuning, and final polish.</p>
+        </section>
+        <section class="case-section" aria-labelledby="ck-combat">
+            <h2 id="ck-combat">Responsive Combat</h2>
+            <p>The goal was deliberate, weighty combat that still responds to the player. I tuned light-attack combos for flow and heavy attacks for a slower, higher-damage commitment. A held charge attack added another timing decision, while dodge attacks let players transition from evasion into offense.</p>
+            <figure><video controls muted playsinline loop preload="metadata" aria-label="Crimson Knight light attack combo"><source src={`${base}CKLightCombo.mp4`} type="video/mp4" /></video><figcaption>Light-attack combo: balancing attack commitment with responsive transitions.</figcaption></figure>
+            <p>I implemented and iterated on dodge and roll behavior, healing, and lock-on alongside the attacks. Recovery, cancel windows, and movement transitions had to work together so that each action felt intentional without leaving the character unresponsive.</p>
+        </section>
+        <section class="case-section" aria-labelledby="ck-input">
+            <h2 id="ck-input">Input Buffering &amp; Enhanced Input</h2>
+            <p>An input arriving slightly before an allowed action window should not simply disappear. I built a C++ input buffering system to retain early inputs and let them register when the next action is permitted. The buffer works alongside ability eligibility and cancel rules; it does not remove the commitment of an attack.</p>
+            <ol class="input-flow" aria-label="Input buffering flow">
+                {["Input", "Buffer", "Ability Check", "GAS Activation", "Montage"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 4 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+            </ol>
+            <p>I also refactored input handling around Enhanced Input. Shared buttons and chorded actions could be expressed through input actions rather than an expanding set of Blueprint branches, making the control logic easier to tune and maintain.</p>
+        </section>
+        <section class="case-section" aria-labelledby="ck-animation">
+            <h2 id="ck-animation">Animation &amp; Movement</h2>
+            <p>I integrated the Knight’s animation montages, notifies, and blend timing, then refined locomotion transitions and hit-reaction blending. Cancel windows connected animation timing to gameplay rules, while sprint and lock-on behavior needed to allow movement without forcing the wrong facing or animation.</p>
+            <dl class="problem-solution">
+                <div><dt>Problem</dt><dd>Root-motion dodge animations imposed a fixed direction and cut movement at the end, making the return to locomotion abrupt.</dd></div>
+                <div><dt>Solution</dt><dd>I captured the movement input when the dodge began, calculated the dodge direction from that input, and used a curve to control the force applied over the animation.</dd></div>
+                <div><dt>Result</dt><dd>The dodge could follow the intended direction and transition into regular movement more smoothly, with its timing exposed for further tuning.</dd></div>
+            </dl>
+            <figure><video controls muted playsinline loop preload="metadata" aria-label="Crimson Knight dodge and animation cancellation"><source src={`${base}CKDodgeCancel.mp4`} type="video/mp4" /></video><figcaption>Dodge and cancel behavior, connecting combat timing to character movement.</figcaption></figure>
+            <p>Later passes addressed snapping between idle and sprint, hit reactions blending incorrectly over other actions, and sprinting while locked on. I adjusted the lock-on interaction so the Knight could turn when sprinting in another direction.</p>
+        </section>
+        <section class="case-section" aria-labelledby="ck-gas">
+            <h2 id="ck-gas">Gameplay Ability System</h2>
+            <p>I used GAS to implement the Knight’s attacks, charge attack, dodge/roll, healing, jump-related behavior, hit reactions, and death. Moving jump and dodge into abilities gave me a consistent place to coordinate cancel rules, animation timing, and effects. I also set up the Absolute’s stunned ability and animation when her poise breaks.</p>
+            <p>For attribute-driven UI, I connected maximum-health and maximum-stamina changes to bar scaling, then added debug commands to validate the behavior before the upgrade system was ready. I fixed a death-state health-bar update and added a shake effect when the player takes damage.</p>
+        </section>
+        <section class="case-section" aria-labelledby="ck-feedback">
+            <h2 id="ck-feedback">VFX &amp; Player Feedback</h2>
+            <p>I integrated sword-charge fire, sword trails, blood and hit effects, dodge dust, and death effects. Animation notifies coordinated effects with attacks; hit-stop and slow-motion feedback helped emphasize impacts and readable moments.</p>
+            <figure><video controls muted playsinline loop preload="metadata" aria-label="Crimson Knight charge attack and visual feedback"><source src={`${base}CKChargeAttack.mp4`} type="video/mp4" /></video><figcaption>Charge-attack gameplay, pairing attack timing with visual feedback.</figcaption></figure>
+            <div class="feedback-gallery">
+                <figure><img src={`${base}CrimsonKnightScreenshot5.jpg`} alt="Crimson Knight gameplay during the boss encounter" loading="lazy" /><figcaption>Combat feedback in the boss encounter.</figcaption></figure>
+                <figure><img src={`${base}CrimsonKnightScreenshot6.jpg`} alt="Crimson Knight and The Absolute in the cathedral arena" loading="lazy" /><figcaption>Player and boss readability in the arena.</figcaption></figure>
+            </div>
+        </section>
+        <section class="case-section" aria-labelledby="ck-polish">
+            <h2 id="ck-polish">Final Polish</h2>
+            <p>My work continued beyond prototyping. As content creation wound down, I helped balance the Knight and The Absolute, tune gameplay, and fix bugs across the character systems and UI. I also supported troubleshooting for builds, performance, level loading, and tutorialization as the team finalized the game.</p>
+            <p>This stage connected the individual mechanics into a complete encounter: refining timing, resolving transitions that broke the feel of combat, and checking that the systems held up in the final build.</p>
+        </section>
+    </div>
+    <aside class="case-sidebar" aria-label="Crimson Knight project details">
+        <section><h2>Project Details</h2><dl class="case-facts">
+            <div><dt>Role</dt><dd>Technical Designer — Character, Controller &amp; Combat</dd></div>
+            <div><dt>Team</dt><dd>17 core developers</dd></div>
+            <div><dt>Duration</dt><dd>Jan 2025 – Aug 2025</dd></div>
+            <div><dt>Engine</dt><dd>Unreal Engine 5.5</dd></div>
+            <div><dt>Languages</dt><dd>C++ / Blueprint</dd></div>
+            <div><dt>Status</dt><dd>Complete</dd></div>
+        </dl></section>
+        <section><h2>Core Technologies</h2><div class="tags">{technologies.map(tag => <span>{tag}</span>)}</div></section>
+        <section><h2>Specialties</h2><div class="tags">{specialties.map(tag => <span>{tag}</span>)}</div></section>
+        <section><h2>Links</h2><a class="store-button" href="https://store.steampowered.com/app/3871680/Crimson_Knight/" target="_blank" rel="noopener noreferrer">View on Steam <span aria-hidden="true">↗</span></a><a class="store-button" href="https://www.youtube.com/watch?v=RuBQoX2shuc" target="_blank" rel="noopener noreferrer">Watch the trailer <span aria-hidden="true">↗</span></a></section>
+    </aside>
+</div>
