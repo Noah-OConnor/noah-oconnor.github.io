@@ -16,7 +16,7 @@ const { sections = [] } = Astro.props as Props;
 <section class="project-content-sections" aria-label="Project details">
     {sections.map((section: ProjectSection) => (
             <article
-                    class="project-content-section"
+                    class="project-content-section case-section is-open"
                     data-project-content-section
             >
                 <div class="project-content-section__body" data-project-content-body>
@@ -61,39 +61,9 @@ const { sections = [] } = Astro.props as Props;
                             </>
                     ))}
                 </div>
-
-                <button
-                        class="project-content-section__toggle"
-                        type="button"
-                        data-project-content-toggle
-                        aria-expanded="false"
-                >
-                    <span class="project-content-section__toggle-text">
-                        Read More
-                    </span>
-                </button>
             </article>
     ))}
 </section>
 
-<script>
-    const sections = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-project-content-section]")
-    );
 
-    sections.forEach((section) => {
-        const toggle = section.querySelector<HTMLButtonElement>("[data-project-content-toggle]");
-        const toggleText = section.querySelector<HTMLElement>(".project-content-section__toggle-text");
-
-        toggle?.addEventListener("click", () => {
-            const isOpen = section.classList.toggle("is-open");
-
-            toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-
-            if (toggleText) {
-                toggleText.textContent = isOpen ? "Show Less" : "Read More";
-            }
-        });
-    });
-</script>
     )}

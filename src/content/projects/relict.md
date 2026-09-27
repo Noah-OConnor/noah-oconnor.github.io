@@ -10,6 +10,7 @@ genre: "Roguelike Shooter"
 role: "Lead Programmer / System Administrator"
 status: "Complete"
 coverImage: "/images/projects/relict/Relict16x9.jpg"
+backgroundImage: "/images/projects/relict/RelictMedia9.jpg"
 media:
   - type: "video"
     src: "https://www.youtube.com/embed/BEzC50Tub3I?si=XRSMKZORVnkMUpiv&enablejsapi=1&autoplay=1&mute=1&playsinline=1"
@@ -30,6 +31,8 @@ media:
     imgSrc: "/images/projects/relict/RelictMedia7.jpg"
   - type: "image"
     imgSrc: "/images/projects/relict/RelictMedia8.jpg"
+  - type: "image"
+    imgSrc: "/images/projects/relict/RelictMedia9.jpg"
 
 sections:
   - title: "About This Game"

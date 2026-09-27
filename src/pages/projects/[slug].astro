@@ -1,9 +1,11 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import Layout from "../../components/Layout.astro";
 import ProjectShowcaseCarousel from "../../components/ProjectShowcaseCarousel.astro";
 import ProjectContentSections from "../../components/ProjectContentSections.astro";
 import CrimsonKnightCaseStudy from "../../components/CrimsonKnightCaseStudy.astro";
+import ProjectCaseStudyLayout from "../../components/ProjectCaseStudyLayout.astro";
+import ProjectDetailsSidebar from "../../components/ProjectDetailsSidebar.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -15,13 +17,20 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { Content } = await render(project);
+const backdrop = project.data.backgroundImage || (project.data.slug === "crimson-knight"
+    ? "/images/projects/crimson-knight/CrimsonKnightScreenshot1.jpg"
+    : project.data.media.find(item => item.type === "image")?.imgSrc || project.data.coverImage);
 ---
 
 <Layout title={project.data.title}>
-    <main class:list={["page", "project-page", { "crimson-page": project.data.slug === "crimson-knight" }]} style={project.data.slug === "crimson-knight" ? "--project-backdrop: url('/images/projects/crimson-knight/CrimsonKnightScreenshot1.jpg')" : undefined}>
-        {project.data.slug !== "ue5-gas-multiplayer-shooter" && <ProjectShowcaseCarousel project={project} />}
+    <main class="page project-page" style={`--project-backdrop: ${backdrop ? `url('${backdrop}')` : "none"}`}>
+        <ProjectShowcaseCarousel project={project} />
 
-        {project.data.slug === "crimson-knight" ? <CrimsonKnightCaseStudy /> : <ProjectContentSections sections={project.data.sections} />}
+        {project.data.slug === "crimson-knight" ? <CrimsonKnightCaseStudy /> : (
+            <ProjectCaseStudyLayout>
+                <ProjectContentSections sections={project.data.sections} />
+                <ProjectDetailsSidebar slot="sidebar" project={project} />
+            </ProjectCaseStudyLayout>
+        )}
     </main>
 </Layout>

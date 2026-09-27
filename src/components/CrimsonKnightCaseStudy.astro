@@ -1,10 +1,11 @@
 ---
+import ProjectCaseStudyLayout from "./ProjectCaseStudyLayout.astro";
 const base = "/images/projects/crimson-knight/";
 const technologies = ["Gameplay Ability System", "Enhanced Input", "Niagara", "Animation Blueprints", "Perforce", "Jira / Confluence"];
 const specialties = ["Combat & Character", "Gameplay Systems", "Technical Design", "Animation Systems", "Game Feel / Responsiveness"];
 ---
-<div class="case-study-layout">
-    <div class="case-study-main">
+<ProjectCaseStudyLayout>
+
         <section class="case-section contribution-block" aria-labelledby="ck-contributions">
             <h2 id="ck-contributions">My Contributions</h2>
             <ul>
@@ -67,8 +68,7 @@ const specialties = ["Combat & Character", "Gameplay Systems", "Technical Design
             <p>My work continued beyond prototyping. As content creation wound down, I helped balance the Knight and The Absolute, tune gameplay, and fix bugs across the character systems and UI. I also supported troubleshooting for builds, performance, level loading, and tutorialization as the team finalized the game.</p>
             <p>This stage connected the individual mechanics into a complete encounter: refining timing, resolving transitions that broke the feel of combat, and checking that the systems held up in the final build.</p>
         </section>
-    </div>
-    <aside class="case-sidebar" aria-label="Crimson Knight project details">
+    <aside slot="sidebar" class="case-sidebar" aria-label="Crimson Knight project details">
         <section><h2>Project Details</h2><dl class="case-facts">
             <div><dt>Role</dt><dd>Technical Designer — Character, Controller &amp; Combat</dd></div>
             <div><dt>Team</dt><dd>17 core developers</dd></div>
@@ -81,4 +81,4 @@ const specialties = ["Combat & Character", "Gameplay Systems", "Technical Design
         <section><h2>Specialties</h2><div class="tags">{specialties.map(tag => <span>{tag}</span>)}</div></section>
         <section><h2>Links</h2><a class="store-button" href="https://store.steampowered.com/app/3871680/Crimson_Knight/" target="_blank" rel="noopener noreferrer">View on Steam <span aria-hidden="true">↗</span></a><a class="store-button" href="https://www.youtube.com/watch?v=RuBQoX2shuc" target="_blank" rel="noopener noreferrer">Watch the trailer <span aria-hidden="true">↗</span></a></section>
     </aside>
-</div>
+</ProjectCaseStudyLayout>

@@ -19,6 +19,7 @@ const projects = defineCollection({
         technologies: z.array(z.string()).default([]),
 
         coverImage: z.string(),
+        backgroundImage: z.string().optional(),
         
         media: z
             .array(

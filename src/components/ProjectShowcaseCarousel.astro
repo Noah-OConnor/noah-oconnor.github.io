@@ -9,26 +9,20 @@ interface Props {
 }
 
 const { project } = Astro.props as Props;
-const compact = project.data.slug === "crimson-knight";
+const isCrimsonKnight = project.data.slug === "crimson-knight";
 
-const fallbackMedia: ProjectMedia[] = [
+const fallbackMedia: ProjectMedia[] = project.data.coverImage ? [
     {
         type: "image",
         imgSrc: project.data.coverImage,
         alt: `${project.data.title} cover image`,
     },
-];
+] : [];
 
 const media: ProjectMedia[] =
     project.data.media.length > 0 ? project.data.media : fallbackMedia;
 
-const tags = compact ? project.data.specialties : [
-    project.data.engine,
-    project.data.language,
-    project.data.perspective,
-    project.data.genre,
-    project.data.role,
-].filter((tag): tag is string => Boolean(tag));
+const tags = project.data.specialties;
 
 function getYouTubeApiSrc(src: string) {
     const url = new URL(src);
@@ -124,42 +118,21 @@ function getYouTubeApiSrc(src: string) {
         </div>
 
         <aside class="project-showcase__info">
-            <img
+            {project.data.coverImage && <img
                     class="project-showcase__capsule"
                     src={project.data.coverImage}
                     alt={`${project.data.title} cover image`}
-            />
+            />}
 
             <p class="project-showcase__description">
-                {compact ? "A third-person Souls-like built around a duel with The Absolute, focused on deliberate combat, precise movement, and readable player feedback." : project.data.description}
+                {isCrimsonKnight ? "A third-person Souls-like built around a duel with The Absolute, focused on deliberate combat, precise movement, and readable player feedback." : project.data.description}
             </p>
 
             <dl class="project-showcase__facts">
                 <div>
                     <dt>Engine</dt>
-                    <dd>{compact ? "Unreal Engine 5.5" : project.data.engine}</dd>
+                    <dd>{isCrimsonKnight ? "Unreal Engine 5.5" : project.data.engine}</dd>
                 </div>
-
-                {!compact && project.data.language && (
-                        <div>
-                            <dt>Language</dt>
-                            <dd>{project.data.language}</dd>
-                        </div>
-                )}
-
-                {!compact && project.data.perspective && (
-                        <div>
-                            <dt>Perspective</dt>
-                            <dd>{project.data.perspective}</dd>
-                        </div>
-                )}
-
-                {!compact && project.data.genre && (
-                        <div>
-                            <dt>Genre</dt>
-                            <dd>{project.data.genre}</dd>
-                        </div>
-                )}
 
                 <div>
                     <dt>Role</dt>
