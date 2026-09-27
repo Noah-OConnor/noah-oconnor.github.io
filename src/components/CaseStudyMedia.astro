@@ -1,0 +1,19 @@
+---
+interface Props {
+    id: string;
+    media: { type: "image" | "video"; src: string; title: string; caption: string };
+}
+const { id, media } = Astro.props;
+---
+<figure id={`media-${id}`}>
+    {media.src ? (
+        media.type === "video" ? <video controls muted playsinline loop preload="metadata" aria-label={media.title} src={media.src} /> : <img src={media.src} alt={media.title} loading="lazy" />
+    ) : (
+        <div class="case-media-placeholder" role="img" aria-label={`${media.title} — media placeholder`}>
+            <span class="case-eyebrow">{media.type === "video" ? "Gameplay clip" : "Supporting image"} · Coming soon</span>
+            <strong>{media.title}</strong>
+            <span>Media slot {id}</span>
+        </div>
+    )}
+    <figcaption>{media.caption}</figcaption>
+</figure>

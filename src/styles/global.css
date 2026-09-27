@@ -1045,6 +1045,14 @@ button { font: inherit; }
 .project-page .project-showcase__slide img { object-fit: contain; }
 .case-study-layout { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 28px; align-items: start; margin-bottom: 64px; }
 .case-study-main { min-width: 0; }
+.case-media-placeholder { min-height: 220px; aspect-ratio: 16 / 9; padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; text-align: center; border: 1px dashed #42627a; background: linear-gradient(135deg, #192d40, #0e1926); color: #bdd3e3; }
+.case-media-placeholder strong { font-size: 1.1rem; font-weight: 500; }
+.case-media-placeholder > span:last-child { font-size: .72rem; color: #86a0b5; }
+.weapon-hierarchy { border-left: 2px solid #5286a8; padding: 16px 20px; margin: 20px 0; background: #122131; }
+.weapon-hierarchy > strong { display: block; margin-bottom: 14px; color: #d9eaf5; }
+.media-capture-list { padding-left: 22px; }
+.media-capture-list li { padding-left: 6px; margin-bottom: 20px; }
+.media-capture-list a { color: #79bce7; }
 .case-study-main .project-content-sections { width: 100%; margin: 0; }
 .case-study-main .project-content-section { margin: 0; background: none; }
 .case-study-main .project-content-section__body { padding-top: 0; }

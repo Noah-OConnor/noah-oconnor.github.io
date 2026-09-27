@@ -22,7 +22,7 @@ const fallbackMedia: ProjectMedia[] = project.data.coverImage ? [
 const media: ProjectMedia[] =
     project.data.media.length > 0 ? project.data.media : fallbackMedia;
 
-const tags = project.data.specialties;
+const tags = project.data.slug === "lutr" ? project.data.specialties.slice(0, 4) : project.data.specialties;
 
 function getYouTubeApiSrc(src: string) {
     const url = new URL(src);
@@ -131,7 +131,7 @@ function getYouTubeApiSrc(src: string) {
             <dl class="project-showcase__facts">
                 <div>
                     <dt>Engine</dt>
-                    <dd>{isCrimsonKnight ? "Unreal Engine 5.5" : project.data.engine}</dd>
+                    <dd>{isCrimsonKnight ? "Unreal Engine 5.5" : project.data.engine}{project.data.slug === "lutr" && ` · ${project.data.language}`}</dd>
                 </div>
 
                 <div>

@@ -1,0 +1,89 @@
+---
+import CaseStudyMedia from "./CaseStudyMedia.astro";
+import { lutrMedia } from "../data/lutrMedia";
+---
+<section class="case-section contribution-block" aria-labelledby="lutr-contributions">
+    <h2 id="lutr-contributions">My Contributions</h2>
+    <p>Lutr is my solo project: I design and implement the gameplay systems, build their UI and testing tools, and connect them into a playable loot-and-build loop. Development is ongoing in Unity and C#.</p>
+    <ul>
+        <li>Designed and implemented a modular weapon architecture built around compatible parts and sockets.</li>
+        <li>Built the Gunsmith system and UI, including live 3D inspection, part selection, and weapon details.</li>
+        <li>Connected the backpack, equipped loadout, and item inspection to the weapon-editing workflow.</li>
+        <li>Implemented and tuned FPS weapon motion, recoil recovery, aiming, and player feedback.</li>
+        <li>Built procedural rooms, connecting hallways, and room-based combat encounters.</li>
+        <li>Created firing-range, Admin-menu, and diagnostic tools to shorten testing and iteration.</li>
+    </ul>
+</section>
+<section class="case-section" aria-labelledby="lutr-about">
+    <h2 id="lutr-about">About Lutr</h2>
+    <p>Lutr is a solo-developed roguelike FPS centered on modular, procedurally varied weapons. Its direction draws on Borderlands for weapon variety, Destiny for gun feel, and Hades and Risk of Rain 2 for the ways a run can develop around a build. My focus is connecting those influences through systems that let players find, understand, modify, and test their weapons.</p>
+</section>
+<section class="case-section" aria-labelledby="lutr-gunsmith">
+    <h2 id="lutr-gunsmith">Gunsmith &amp; Modular Weapon System</h2>
+    <p>The weapon system is the center of Lutr. Rather than treating each gun as a separate finished asset, I assemble weapons from parts through compatible sockets. The architecture connects physical assembly, weapon statistics, and gameplay behavior so a part change can affect both how a gun looks and how it plays.</p>
+    <CaseStudyMedia id="gunsmith" media={lutrMedia.gunsmith} />
+    <h3>Part hierarchy &amp; compatibility</h3>
+    <p>The frame defines the weapon archetype and anchors the assembly. Its part hierarchy includes grip, magazine, sight, barrel, stock, muzzle, underbarrel, and charm. Socket compatibility determines where a part can attach; a collection of owned parts is not automatically a valid weapon.</p>
+    <div class="weapon-hierarchy" aria-label="Weapon part hierarchy">
+        <strong>Frame</strong>
+        <div class="tags">{["Grip", "Magazine", "Sight", "Barrel", "Stock", "Muzzle", "Underbarrel", "Charm"].map(part => <span>{part}</span>)}</div>
+    </div>
+    <h3>Required parts, optional choices</h3>
+    <p>Required parts provide the assembly needed for a usable weapon. Optional parts extend that base with additional customization. The distinction belongs to the weapon’s configuration: the Gunsmith needs to communicate which slots must be filled and which are opportunities to alter a build, rather than presenting every empty socket as the same problem.</p>
+    <p>Parts contribute statistics and gameplay behavior. I use ScriptableObjects to organize weapon-part data, with runtime systems handling assembly and the player-facing editing workflow. Keeping part definitions connected to the weapon’s behavior lets the same choices drive the build and its presentation in the UI.</p>
+    <h3>A live editing workflow</h3>
+    <p>I built the Gunsmith around a live 3D weapon preview with rotate, pan, and zoom controls. Part-slot visualization gives the player a way to inspect the assembly; selecting a slot filters the inventory to relevant parts. The weapon-stat and details panel supports comparing a change while the preview shows where it fits.</p>
+    <p>This UI is part of the weapon system itself. It turns socket and compatibility rules into a workflow the player can use: select a location, inspect available components, make a change, and evaluate the resulting weapon.</p>
+</section>
+<section class="case-section" aria-labelledby="lutr-builds">
+    <h2 id="lutr-builds">Weapon Design &amp; Build Variety</h2>
+    <p>Frames establish the current archetypes: Pistol, Machine Gun, Shotgun, and Sniper. They give a build its starting identity, while component families and charms provide room to change it. I design parts around their mechanical contribution and handling tradeoffs, not just their place in the assembly.</p>
+    <ol class="input-flow" aria-label="Weapon composition">
+        {["Frame", "Components", "Charm", "Final weapon"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 3 && <span class="flow-arrow" aria-hidden="true">{index === 2 ? "→" : "+"}</span>}</li>)}
+    </ol>
+    <p>The goal is for part families to produce meaningfully different weapons. A successful combination should change how a player uses the gun or approaches an encounter, rather than simply produce a different set of numbers. The firing range gives me a place to compare those choices as the system develops.</p>
+    <CaseStudyMedia id="builds" media={lutrMedia.builds} />
+</section>
+<section class="case-section" aria-labelledby="lutr-feel">
+    <h2 id="lutr-feel">FPS Game Feel</h2>
+    <p>Procedural variety still needs consistent, responsive handling. I build and tune the motion and feedback systems around the weapons so a newly assembled gun feels connected to the player’s movement and input.</p>
+    <ul>
+        <li><strong>Movement:</strong> weapon sway, velocity-based bob, weapon tilt, and jump/fall impulses communicate motion.</li>
+        <li><strong>Aiming:</strong> ADS sway and camera smoothing shape the transition into controlled aiming.</li>
+        <li><strong>Firing:</strong> recoil recovery and critical-hit feedback communicate the shot and the return to control.</li>
+    </ul>
+    <p>I tune these systems together. Weapon motion should give each gun presence while keeping aiming readable, and recoil recovery should support responsive follow-up shots across varied builds.</p>
+    <CaseStudyMedia id="feel" media={lutrMedia.feel} />
+</section>
+<section class="case-section" aria-labelledby="lutr-inventory">
+    <h2 id="lutr-inventory">Inventory &amp; Gunsmith Workflow</h2>
+    <p>The inventory supports weapon building from the moment loot is collected. I built a backpack and equipped loadout alongside selected-item details and context menus, with double-click shortcuts into Gunsmith. A rotatable character preview provides a way to inspect the equipped character alongside those decisions.</p>
+    <ol class="input-flow" aria-label="Loot and weapon building loop">
+        {["Find loot", "Inspect", "Equip / modify", "Test", "Continue run"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 4 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+    </ol>
+    <p>The intended loop keeps inspection and modification close together. The player can evaluate a drop, put it into a loadout or open it in Gunsmith, then return to play and test the result.</p>
+    <CaseStudyMedia id="inventory" media={lutrMedia.inventory} />
+</section>
+<section class="case-section" aria-labelledby="lutr-procedural">
+    <h2 id="lutr-procedural">Procedural Levels &amp; Encounters</h2>
+    <p>I built a procedural room system with variable-size rooms connected by generated hallways. Rooms organize the combat flow, while enemy drops feed new parts and weapons back into the player’s build decisions.</p>
+    <ol class="input-flow" aria-label="Room encounter flow">
+        {["Enter room", "Lock", "Spawn enemies", "Clear", "Unlock"].map((step, index) => <li><span class="flow-step">{step}</span>{index < 4 && <span class="flow-arrow" aria-hidden="true">→</span>}</li>)}
+    </ol>
+    <p>These encounters give the weapon systems a gameplay context: fight with the current build, earn loot, decide what to change, and take that choice into the next room.</p>
+    <CaseStudyMedia id="encounters" media={lutrMedia.encounters} />
+</section>
+<section class="case-section" aria-labelledby="lutr-tools">
+    <h2 id="lutr-tools">Tools &amp; Iteration</h2>
+    <p>As the solo developer, I also build the tools that make repeated testing practical. A firing-range level isolates weapon testing, and the Admin menu lets me grant components, heal or refill ammo, and spawn or clear dummies without replaying the loot loop for every adjustment.</p>
+    <p>The debug overlay tracks FPS, the run seed, timers, CPU/GPU frame times, and level information. Together, these tools reduce setup time and provide context when I compare builds, tune handling, or investigate a generated level.</p>
+    <CaseStudyMedia id="tools" media={lutrMedia.tools} />
+    <p>Lutr remains in development. The work connects system design, implementation, UI, and testing into one loop that I can keep expanding and refining myself.</p>
+</section>
+<section class="case-section" aria-labelledby="lutr-media-plan">
+    <h2 id="lutr-media-plan">Supporting Images &amp; Clips to Add</h2>
+    <p>Capture list for the media slots above. The Gunsmith walkthrough is the primary visual; the remaining captures support each system’s role in the loop.</p>
+    <ol class="media-capture-list">
+        {Object.entries(lutrMedia).map(([id, media]) => <li><a href={`#media-${id}`}>{media.title}</a><p>{media.capture}</p></li>)}
+    </ol>
+</section>

@@ -15,6 +15,8 @@ const projects = defineCollection({
         genre: z.string().optional(),
         role: z.string(),
         status: z.string(),
+        team: z.string().optional(),
+        timeline: z.string().optional(),
         specialties: z.array(z.string()).default([]),
         technologies: z.array(z.string()).default([]),
 
