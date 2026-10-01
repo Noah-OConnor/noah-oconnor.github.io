@@ -20,3 +20,32 @@ const { title = "Noah O'Connor's Portfolio" } = Astro.props;
 <slot />
 </body>
 </html>
+
+<script>
+    document.querySelectorAll<HTMLVideoElement>("video").forEach((video) => {
+        video.controls = false;
+        video.tabIndex = 0;
+        let hovered = false;
+        let focused = false;
+        const updateControls = () => { video.controls = hovered || focused; };
+        video.addEventListener("pointerenter", (event) => {
+            if (event.pointerType === "mouse" || event.pointerType === "pen") hovered = true;
+            updateControls();
+        });
+        video.addEventListener("pointerleave", () => {
+            hovered = false;
+            updateControls();
+        });
+        video.addEventListener("focus", () => {
+            focused = true;
+            updateControls();
+        });
+        video.addEventListener("blur", () => {
+            focused = false;
+            updateControls();
+        });
+        video.addEventListener("pointerdown", (event) => {
+            if (event.pointerType === "touch") video.focus();
+        });
+    });
+</script>

@@ -2,12 +2,14 @@
 interface Props {
     id: string;
     media: { type: "image" | "video"; src: string; title: string; caption: string };
+    autoplayOnVisible?: boolean;
+    playbackRate?: number;
 }
-const { id, media } = Astro.props;
+const { id, media, autoplayOnVisible = false, playbackRate = 1 } = Astro.props;
 ---
 <figure id={`media-${id}`}>
     {media.src ? (
-        media.type === "video" ? <video controls muted playsinline loop preload="metadata" aria-label={media.title} src={media.src} /> : <img src={media.src} alt={media.title} loading="lazy" />
+        media.type === "video" ? <video muted playsinline loop preload="metadata" aria-label={media.title} src={media.src} data-case-autoplay={autoplayOnVisible ? playbackRate : undefined} /> : <img src={media.src} alt={media.title} loading="lazy" />
     ) : (
         <div class="case-media-placeholder" role="img" aria-label={`${media.title} — media placeholder`}>
             <span class="case-eyebrow">{media.type === "video" ? "Gameplay clip" : "Supporting image"} · Coming soon</span>
@@ -17,3 +19,22 @@ const { id, media } = Astro.props;
     )}
     <figcaption>{media.caption}</figcaption>
 </figure>
+
+<script>
+    document.querySelectorAll<HTMLVideoElement>("video[data-case-autoplay]").forEach(video => {
+        video.muted = true;
+        video.defaultPlaybackRate = Number(video.dataset.caseAutoplay) || 1;
+        video.playbackRate = video.defaultPlaybackRate;
+        let inView = false;
+        const updatePlayback = () => {
+            if (inView && !document.hidden) void video.play().catch(() => { /* Playback controls remain available. */ });
+            else video.pause();
+        };
+        const observer = new IntersectionObserver(([entry]) => {
+            inView = entry.isIntersecting;
+            updatePlayback();
+        });
+        observer.observe(video);
+        document.addEventListener("visibilitychange", updatePlayback);
+    });
+</script>

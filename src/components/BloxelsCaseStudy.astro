@@ -38,6 +38,10 @@ import BloxelsMeshComparison from "./BloxelsMeshComparison.astro";
     </ol>
     <p>I used C++ asynchronous tasks, including FNonAbandonableTask in the earlier implementation, to move generation work off the main thread. Voxel data and mesh-data preparation feed the main-thread mesh/display work, while neighbor checks keep hidden-face removal consistent at chunk boundaries. The later queues make that handoff part of an explicitly managed workload.</p>
     <CaseStudyMedia id="bloxels-world" media={bloxelsMedia.world} />
+    <h3>Column sampling</h3>
+    <p>Previously, world generation repeatedly sampled several values for every block in a chunk. I moved those samples to a per-column pass so the blocks in each column can reuse them. For a chunk 16 blocks tall, this means <strong>16× fewer evaluations of those samples per chunk</strong>.</p>
+    <p>This reduces repeated sampling work; it does not imply a 16× speedup for chunk generation as a whole, which still includes other generation and mesh-processing work.</p>
+    <CaseStudyMedia id="bloxels-sampling" media={bloxelsMedia.sampling} autoplayOnVisible playbackRate={0.5} />
 </section>
 <section class="case-section" aria-labelledby="bloxels-pathfinding">
     <h2 id="bloxels-pathfinding">Custom Voxel A* Pathfinding</h2>
@@ -50,7 +54,10 @@ import BloxelsMeshComparison from "./BloxelsMeshComparison.astro";
     <h3>Traversal through a block world</h3>
     <p>The neighbor rules support diagonal movement, jumping up, and stepping down. Movement costs represent the traversal choices, and a Euclidean heuristic guides the search toward its destination. This makes the path depend on both the generated geometry and the movement rules rather than treating every neighboring voxel as equally reachable.</p>
     <p>Path start/end commands and debug visualization give me a way to inspect those decisions directly: choose endpoints, run a query, and examine the route through the voxel world.</p>
-    <CaseStudyMedia id="bloxels-pathfinding" media={bloxelsMedia.pathfinding} />
+    <div class="bloxels-path-comparison">
+        <CaseStudyMedia id="bloxels-maze" media={bloxelsMedia.maze} autoplayOnVisible playbackRate={0.5} />
+        <CaseStudyMedia id="bloxels-step" media={bloxelsMedia.step} autoplayOnVisible playbackRate={0.5} />
+    </div>
 </section>
 <section class="case-section" aria-labelledby="bloxels-data">
     <h2 id="bloxels-data">Data-Driven Voxel Architecture</h2>

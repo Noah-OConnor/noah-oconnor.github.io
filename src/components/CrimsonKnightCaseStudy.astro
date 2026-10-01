@@ -28,7 +28,7 @@ const specialties = ["Combat", "Gameplay Systems", "Technical Design", "Animatio
         <section class="case-section" aria-labelledby="ck-combat">
             <h2 id="ck-combat">Responsive Combat</h2>
             <p>The goal was deliberate, weighty combat that still responds to the player. I tuned light-attack combos for flow and heavy attacks for a slower, higher-damage commitment. A held charge attack added another timing decision, while dodge attacks let players transition from evasion into offense.</p>
-            <figure><video controls muted playsinline loop preload="metadata" aria-label="Crimson Knight light attack combo"><source src={`${base}CKLightCombo.mp4`} type="video/mp4" /></video><figcaption>Light-attack combo: balancing attack commitment with responsive transitions.</figcaption></figure>
+            <figure><video muted playsinline loop preload="metadata" aria-label="Crimson Knight light attack combo"><source src={`${base}CKLightCombo.mp4`} type="video/mp4" /></video><figcaption>Light-attack combo: balancing attack commitment with responsive transitions.</figcaption></figure>
             <p>I implemented and iterated on dodge and roll behavior, healing, and lock-on alongside the attacks. Recovery, cancel windows, and movement transitions had to work together so that each action felt intentional without leaving the character unresponsive.</p>
         </section>
         <section class="case-section" aria-labelledby="ck-input">
@@ -47,7 +47,7 @@ const specialties = ["Combat", "Gameplay Systems", "Technical Design", "Animatio
                 <div><dt>Solution</dt><dd>I captured the movement input when the dodge began, calculated the dodge direction from that input, and used a curve to control the force applied over the animation.</dd></div>
                 <div><dt>Result</dt><dd>The dodge could follow the intended direction and transition into regular movement more smoothly, with its timing exposed for further tuning.</dd></div>
             </dl>
-            <figure><video controls muted playsinline loop preload="metadata" aria-label="Crimson Knight dodge and animation cancellation"><source src={`${base}CKDodgeCancel.mp4`} type="video/mp4" /></video><figcaption>Dodge and cancel behavior, connecting combat timing to character movement.</figcaption></figure>
+            <figure><video muted playsinline loop preload="metadata" aria-label="Crimson Knight dodge and animation cancellation"><source src={`${base}CKDodgeCancel.mp4`} type="video/mp4" /></video><figcaption>Dodge and cancel behavior, connecting combat timing to character movement.</figcaption></figure>
             <p>Later passes addressed snapping between idle and sprint, hit reactions blending incorrectly over other actions, and sprinting while locked on. I adjusted the lock-on interaction so the Knight could turn when sprinting in another direction.</p>
         </section>
         <section class="case-section" aria-labelledby="ck-gas">
@@ -58,7 +58,7 @@ const specialties = ["Combat", "Gameplay Systems", "Technical Design", "Animatio
         <section class="case-section" aria-labelledby="ck-feedback">
             <h2 id="ck-feedback">VFX &amp; Player Feedback</h2>
             <p>I integrated sword-charge fire, sword trails, blood and hit effects, dodge dust, and death effects. Animation notifies coordinated effects with attacks; hit-stop and slow-motion feedback helped emphasize impacts and readable moments.</p>
-            <figure><video controls muted playsinline loop preload="metadata" aria-label="Crimson Knight charge attack and visual feedback"><source src={`${base}CKChargeAttack.mp4`} type="video/mp4" /></video><figcaption>Charge-attack gameplay, pairing attack timing with visual feedback.</figcaption></figure>
+            <figure><video muted playsinline loop preload="metadata" aria-label="Crimson Knight charge attack and visual feedback"><source src={`${base}CKChargeAttack.mp4`} type="video/mp4" /></video><figcaption>Charge-attack gameplay, pairing attack timing with visual feedback.</figcaption></figure>
         </section>
         <section class="case-section" aria-labelledby="ck-polish">
             <h2 id="ck-polish">Final Polish</h2>

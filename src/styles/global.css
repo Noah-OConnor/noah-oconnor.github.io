@@ -1046,19 +1046,24 @@ button { font: inherit; }
 .case-study-layout { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); gap: 28px; align-items: start; margin-bottom: 64px; }
 .case-study-main { min-width: 0; }
 .mesh-comparison { margin: 24px 0; padding: 16px; border: 1px solid #375773; background: #101c29; }
-.mesh-comparison__stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.mesh-comparison__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.mesh-comparison__grid > div { min-width: 0; }
+.mesh-comparison__metric { min-height: 130px; background: #192c3e; border: 1px solid #38536a; }
+.bloxels-path-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
+.case-section .bloxels-path-comparison figure { margin: 0; min-width: 0; }
+@media (max-width: 600px) { .mesh-comparison__grid, .bloxels-path-comparison { grid-template-columns: minmax(0, 1fr); } .mesh-comparison__metric { min-height: 0; } }
 .mesh-comparison button { font: inherit; cursor: pointer; border: 1px solid #38536a; background: #192c3e; color: #b9cddd; }
 .mesh-comparison button:hover { background: #24445c; }
 .mesh-comparison button[aria-pressed="true"] { border-color: #66c0f4; background: #214763; color: #fff; }
-.mesh-comparison__stages button { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 12px; text-align: left; font-size: .75rem; }
-.mesh-comparison__stages strong { font-size: 1.55rem; font-weight: 600; line-height: 1.2; }
-.mesh-comparison__stages em { font-style: normal; color: #83c9ed; font-size: .72rem; }
+.mesh-comparison__metric { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 12px; text-align: left; font-size: .75rem; }
+.mesh-comparison__metric strong { font-size: 1.55rem; font-weight: 600; line-height: 1.2; }
+.mesh-comparison__metric em { font-style: normal; color: #83c9ed; font-size: .72rem; }
 .mesh-comparison__toolbar { margin-top: 16px; display: flex; justify-content: space-between; align-items: center; gap: 8px; color: #93aec2; font-size: .75rem; }
 .mesh-comparison__toolbar button { padding: 7px 10px; }
 .case-section .mesh-comparison figure { margin: 12px 0; }
 .case-section .mesh-comparison video { width: 100%; height: auto; object-fit: contain; }
 .case-section .mesh-comparison__note { font-size: .75rem; color: #8fa7bb; margin: 12px 0 0; }
-@media (max-width: 480px) { .mesh-comparison { padding: 10px; } .mesh-comparison__stages button { padding: 8px; font-size: .65rem; } .mesh-comparison__stages strong { font-size: 1.2rem; } }
+@media (max-width: 480px) { .mesh-comparison { padding: 10px; } .mesh-comparison__metric { padding: 8px; font-size: .65rem; } .mesh-comparison__metric strong { font-size: 1.2rem; } }
 .case-study-rail { align-self: stretch; min-width: 0; }
 .case-navigation { position: sticky; top: 112px; margin-top: 24px; padding: 20px; background: linear-gradient(135deg, #182536, #101923); border-top: 1px solid #375773; max-height: calc(100dvh - 136px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 .case-navigation__title { margin: 0 0 12px; color: #dbe9f3; font-size: .9rem; }
