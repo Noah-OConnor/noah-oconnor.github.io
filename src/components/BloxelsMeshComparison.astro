@@ -16,15 +16,15 @@ const stages = [
     <div class="mesh-comparison__toolbar">
         <span>360° orbit</span>
         <div role="group" aria-label="Mesh display mode">
-            <button type="button" data-mesh-mode="surface" aria-pressed="false">Surface</button>
-            <button type="button" data-mesh-mode="wire" aria-pressed="true">Wireframe</button>
+            <button type="button" data-mesh-mode="surface" aria-pressed="true">Surface</button>
+            <button type="button" data-mesh-mode="wire" aria-pressed="false">Wireframe</button>
         </div>
     </div>
     <div id="mesh-comparison-view">
         {stages.map((stage, index) => <div data-mesh-panel={stage.id} hidden={index !== 0}>
             <figure>
-                <video data-mesh-video="wire" controls muted playsinline loop preload="metadata" aria-label={`${stage.title} — wireframe orbit`} src={`${base}${stage.wire}`} />
-                <video data-mesh-video="surface" controls muted playsinline loop preload="metadata" hidden aria-label={`${stage.title} — surface orbit`} src={`${base}${stage.surface}`} />
+                <video data-mesh-video="wire" controls muted playsinline loop preload="metadata" hidden aria-label={`${stage.title} — wireframe orbit`} src={`${base}${stage.wire}`} />
+                <video data-mesh-video="surface" controls muted playsinline loop preload="metadata" aria-label={`${stage.title} — surface orbit`} src={`${base}${stage.surface}`} />
                 <figcaption data-mesh-caption>{stage.description}</figcaption>
             </figure>
         </div>)}
@@ -38,7 +38,24 @@ const stages = [
         const panels = Array.from(comparison.querySelectorAll<HTMLElement>("[data-mesh-panel]"));
         const videos = Array.from(comparison.querySelectorAll<HTMLVideoElement>("video"));
         let stage = "naive";
-        let mode = "wire";
+        let mode = "surface";
+        const syncPlayback = () => {
+            videos.forEach(video => {
+                const bounds = video.getBoundingClientRect();
+                const visible = !document.hidden && !video.hidden && bounds.width > 0
+                    && bounds.bottom > 0 && bounds.top < window.innerHeight;
+                if (visible) void video.play().catch(() => { /* Native controls remain available if autoplay is blocked. */ });
+                else video.pause();
+            });
+        };
+        videos.forEach(video => {
+            video.muted = true;
+            video.defaultPlaybackRate = 0.5;
+            video.playbackRate = 0.5;
+        });
+        const visibilityObserver = new IntersectionObserver(syncPlayback, { threshold: 0 });
+        videos.forEach(video => visibilityObserver.observe(video));
+        document.addEventListener("visibilitychange", syncPlayback);
         const update = () => {
             videos.forEach(video => { video.pause(); video.hidden = true; });
             stages.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.meshStage === stage)));
@@ -51,6 +68,7 @@ const stages = [
             if (stage === "hidden") caption.textContent = mode === "surface"
                 ? "The visible surface is unchanged. This reuses the naïve surface orbit; the hidden-face mesh itself is shown in Wireframe."
                 : "Only exposed faces remain. Interior faces are removed while the visible surface stays the same.";
+            syncPlayback();
         };
         stages.forEach(button => button.addEventListener("click", () => {
             stage = button.dataset.meshStage!;
@@ -60,5 +78,6 @@ const stages = [
             mode = button.dataset.meshMode!;
             update();
         }));
+        syncPlayback();
     });
 </script>
