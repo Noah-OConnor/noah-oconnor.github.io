@@ -1,0 +1,64 @@
+---
+const base = "/images/projects/bloxels/";
+const stages = [
+    { id: "naive", title: "Naïve", triangles: "22,656", reduction: "Baseline", description: "Six quads per occupied voxel, including faces inside the mesh.", surface: "NaiveOrbit.mp4", wire: "NaiveOrbitWire.mp4" },
+    { id: "hidden", title: "Hidden-face removal", triangles: "2,840", reduction: "87.5% fewer", description: "Only exposed faces remain. Interior faces are removed while the visible surface stays the same.", surface: "NaiveOrbit.mp4", wire: "HiddenFaceWireOrbit.mp4" },
+    { id: "greedy", title: "Greedy meshing", triangles: "294", reduction: "98.7% fewer", description: "Hidden-face removal plus merging compatible faces into larger quads.", surface: "GreedyOrbit.mp4", wire: "GreedyOrbitWire.mp4" },
+];
+---
+<div class="mesh-comparison" data-mesh-comparison>
+    <p class="case-eyebrow">Same test chunk · Three mesh stages</p>
+    <div class="mesh-comparison__stages" role="group" aria-label="Mesh optimization stage">
+        {stages.map((stage, index) => <button type="button" data-mesh-stage={stage.id} aria-pressed={index === 0 ? "true" : "false"} aria-controls="mesh-comparison-view">
+            <span>{stage.title}</span><strong>{stage.triangles}</strong><span>triangles</span><em>{stage.reduction}</em>
+        </button>)}
+    </div>
+    <div class="mesh-comparison__toolbar">
+        <span>360° orbit</span>
+        <div role="group" aria-label="Mesh display mode">
+            <button type="button" data-mesh-mode="surface" aria-pressed="false">Surface</button>
+            <button type="button" data-mesh-mode="wire" aria-pressed="true">Wireframe</button>
+        </div>
+    </div>
+    <div id="mesh-comparison-view">
+        {stages.map((stage, index) => <div data-mesh-panel={stage.id} hidden={index !== 0}>
+            <figure>
+                <video data-mesh-video="wire" controls muted playsinline loop preload="metadata" aria-label={`${stage.title} — wireframe orbit`} src={`${base}${stage.wire}`} />
+                <video data-mesh-video="surface" controls muted playsinline loop preload="metadata" hidden aria-label={`${stage.title} — surface orbit`} src={`${base}${stage.surface}`} />
+                <figcaption data-mesh-caption>{stage.description}</figcaption>
+            </figure>
+        </div>)}
+    </div>
+    <p class="mesh-comparison__note">Triangle counts are measured on this test chunk; reductions are relative to the naïve mesh. Switch to wireframe to inspect the geometry beneath the surface.</p>
+</div>
+<script>
+    document.querySelectorAll<HTMLElement>("[data-mesh-comparison]").forEach(comparison => {
+        const stages = Array.from(comparison.querySelectorAll<HTMLButtonElement>("[data-mesh-stage]"));
+        const modes = Array.from(comparison.querySelectorAll<HTMLButtonElement>("[data-mesh-mode]"));
+        const panels = Array.from(comparison.querySelectorAll<HTMLElement>("[data-mesh-panel]"));
+        const videos = Array.from(comparison.querySelectorAll<HTMLVideoElement>("video"));
+        let stage = "naive";
+        let mode = "wire";
+        const update = () => {
+            videos.forEach(video => { video.pause(); video.hidden = true; });
+            stages.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.meshStage === stage)));
+            modes.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.meshMode === mode)));
+            panels.forEach(panel => panel.hidden = panel.dataset.meshPanel !== stage);
+            const activePanel = panels.find(panel => panel.dataset.meshPanel === stage)!;
+            const video = activePanel.querySelector<HTMLVideoElement>(`[data-mesh-video="${mode}"]`)!;
+            video.hidden = false;
+            const caption = activePanel.querySelector<HTMLElement>("[data-mesh-caption]")!;
+            if (stage === "hidden") caption.textContent = mode === "surface"
+                ? "The visible surface is unchanged. This reuses the naïve surface orbit; the hidden-face mesh itself is shown in Wireframe."
+                : "Only exposed faces remain. Interior faces are removed while the visible surface stays the same.";
+        };
+        stages.forEach(button => button.addEventListener("click", () => {
+            stage = button.dataset.meshStage!;
+            update();
+        }));
+        modes.forEach(button => button.addEventListener("click", () => {
+            mode = button.dataset.meshMode!;
+            update();
+        }));
+    });
+</script>

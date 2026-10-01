@@ -1,6 +1,7 @@
 ---
 import CaseStudyMedia from "./CaseStudyMedia.astro";
 import { bloxelsMedia } from "../data/bloxelsMedia";
+import BloxelsMeshComparison from "./BloxelsMeshComparison.astro";
 ---
 <section class="case-section contribution-block" aria-labelledby="bloxels-contributions">
     <h2 id="bloxels-contributions">My Contributions</h2>
@@ -21,9 +22,9 @@ import { bloxelsMedia } from "../data/bloxelsMedia";
 <section class="case-section" aria-labelledby="bloxels-optimization">
     <h2 id="bloxels-optimization">Voxel Engine &amp; Optimization</h2>
     <p>I started by constructing voxel geometry with Unreal’s ProceduralMeshComponent, generating vertices, triangles, normals, and UVs for chunks organized into 16 × 16 × 16 voxel grids. This made the cost of representing a block world explicit: adjacent solid blocks do not need to render their internal faces.</p>
-    <div class="contribution-block"><p class="case-eyebrow">Hidden-face removal</p><h3>24,000+ → ~1,300 faces</h3><p>The recorded geometry reduction from removing unseen faces. This is a mesh-count result, not an FPS measurement.</p></div>
+    <p>On the test chunk below, hidden-face removal reduced the mesh from <strong>22,656 to 2,840 triangles</strong> (87.5% fewer). Adding greedy meshing reduced it further to <strong>294 triangles</strong> (98.7% fewer than the naïve mesh).</p>
     <p>After hidden-face removal, I added greedy meshing to combine compatible adjacent visible faces into larger surfaces. The implementation evolved from six directional checks to three generalized functions, then to <strong>one axis-parameterized function</strong>. That final refactor put the common meshing logic in one place instead of maintaining separate versions for each axis.</p>
-    <CaseStudyMedia id="bloxels-meshing" media={bloxelsMedia.meshing} />
+    <BloxelsMeshComparison />
     <h3>Controlling the chunk lifecycle</h3>
     <p>The next challenge was broader than generating chunks on background threads. I introduced chunk pooling and explicit processing queues, then controlled mesh, display, and unload work per frame. Player-distance prioritization put nearby work ahead of chunks that were less immediately relevant.</p>
     <p>Later iterations moved chunk state into data-driven structs instead of Actor-based chunks. Together, these changes shifted the architecture from “make chunks asynchronously” to managing their full lifecycle: deciding what to generate, when to process it, when to display it, and when to unload or reuse it.</p>
