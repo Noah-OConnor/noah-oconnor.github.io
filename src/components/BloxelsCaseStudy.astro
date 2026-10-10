@@ -30,9 +30,19 @@ const biomes = [
 <section class="case-section" aria-labelledby="bloxels-world">
     <h2 id="bloxels-world">Procedural World Generation</h2>
     <p>The design challenge was to create recognizable regions and varied content while keeping generation deterministic across chunk boundaries. Project-owned seeded 2D/3D noise drives broad climate and classification fields separately from detailed terrain elevation. Configurable biome profiles blend terrain heights; coherent palette transitions carry ground, soil, and rock materials across borders without numerically blending block identities.</p>
-    <dl class="problem-solution">
-        {biomes.map(([name, description]) => <div><dt>{name}</dt><dd>{description}</dd></div>)}
-    </dl>
+    <figure>
+        <iframe class="bloxels-world-video" src="https://www.youtube.com/embed/Y6qKaFuA_zU?playsinline=1" title="Bloxels landscape flyover" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen />
+        <figcaption>A downward-looking flyover of the textured voxel landscape.</figcaption>
+    </figure>
+    <div class="bloxels-biome-gallery" aria-label="Five biome examples">
+        {biomes.map(([name, description]) => {
+            const src = `/images/projects/bloxels/${name.replaceAll(" ", "")}.png`;
+            return <figure>
+                <a href={src} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} screenshot at full size`}><img src={src} alt={`${name} biome in the generated voxel world`} loading="lazy" /></a>
+                <figcaption><strong>{name}</strong><br />{description}</figcaption>
+            </figure>;
+        })}
+    </div>
     <figure class="case-media">
         <a href="/images/projects/bloxels/Seed1337_Preview.png" target="_blank" rel="noopener noreferrer" aria-label="Open the full-size seed 1337 world-generation survey"><img src="/images/projects/bloxels/Seed1337_Preview.png" alt="Seed 1337 survey comparing the five dominant biome regions, surface height, and climate fields." loading="lazy" /></a>
         <figcaption>Seed 1337: dominant biome, surface height, and climate sampled from −4,096 to +4,096 blocks at 64-block intervals. Open the image for the full-size survey.</figcaption>
@@ -40,10 +50,21 @@ const biomes = [
     <h3>Seeded features &amp; underground structure</h3>
     <p>Shared recipes place vegetation, natural formations, mineral deposits, attached crystals, and rare technological ruins. Stable feature identities and bounded neighbor queries keep placement independent of chunk loading order. Crystals and ruins are generated voxel content; they do not imply magical abilities, active machinery, loot, or progression systems.</p>
     <p>Fine cave noise combines with a regional underground plan for larger seeded cavern shapes and connections. Chunk generation and synchronous voxel queries use the same composition rules, so both agree on terrain, caves, and features at a given coordinate.</p>
+    <figure>
+        <iframe class="bloxels-world-video" src="https://www.youtube.com/embed/iklw2nn71pc?playsinline=1" title="Bloxels world generation preview" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen />
+        <figcaption>World-generation presentation preview. This illustrates the generated world; runtime streaming is a separate system.</figcaption>
+    </figure>
     <h3>Reducing repeated column sampling</h3>
     <p>The demonstration below reduces repeated surface-height and biome sampling from <strong>4,096 block evaluations to 256 column evaluations</strong> in a 16³ chunk. Reusing each column’s samples means 16× fewer evaluations for this work, rather than a 16× speedup for the entire generator.</p>
     <CaseStudyMedia id="bloxels-sampling" media={bloxelsMedia.sampling} autoplayOnVisible playbackRate={0.5} />
 </section>
+<style>
+    .bloxels-world-video { display: block; width: 100%; aspect-ratio: 16 / 9; border: 1px solid #263b50; background: #080e16; }
+    .bloxels-biome-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 14px; margin: 24px 0; }
+    .bloxels-biome-gallery figure { min-width: 0; margin: 0; }
+    .bloxels-biome-gallery figcaption strong { color: #d9e8f3; }
+    @media (max-width: 600px) { .bloxels-biome-gallery { grid-template-columns: minmax(0, 1fr); } }
+</style>
 <section class="case-section" aria-labelledby="bloxels-optimization">
     <h2 id="bloxels-optimization">Voxel Meshing</h2>
     <p>Hidden-face removal eliminates internal faces between occupied voxels. Greedy meshing then combines compatible exposed faces into larger quads. A shared axis-parameterized mesher handles the directional passes without maintaining separate implementations for each axis.</p>
