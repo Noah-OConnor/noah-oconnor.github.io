@@ -1,13 +1,13 @@
 ---
 const base = "/images/projects/bloxels/";
 const stages = [
-    { id: "naive", title: "Naïve", triangles: "22,656", reduction: "Baseline", description: "Six quads per occupied voxel, including faces inside the mesh.", surface: "NaiveOrbit.mp4", wire: "NaiveOrbitWire.mp4" },
-    { id: "hidden", title: "Hidden-face removal", triangles: "2,840", reduction: "87.5% fewer", description: "Only exposed faces remain. Interior faces are removed while the visible surface stays the same.", surface: "NaiveOrbit.mp4", wire: "HiddenFaceWireOrbit.mp4" },
-    { id: "greedy", title: "Greedy meshing", triangles: "294", reduction: "98.7% fewer", description: "Hidden-face removal plus merging compatible faces into larger quads.", surface: "GreedyOrbit.mp4", wire: "GreedyOrbitWire.mp4" },
+    { id: "naive", title: "Naïve", triangles: "22,656", quads: "11,328", reduction: "Baseline", description: "Six quads per occupied voxel, including faces inside the mesh.", surface: "NaiveOrbit.mp4", wire: "NaiveOrbitWire.mp4" },
+    { id: "hidden", title: "Hidden-face removal", triangles: "2,840", quads: "1,420", reduction: "87.5% fewer", description: "Only exposed faces remain. Interior faces are removed while the visible surface stays the same.", surface: "NaiveOrbit.mp4", wire: "HiddenFaceWireOrbit.mp4" },
+    { id: "greedy", title: "Greedy meshing", triangles: "294", quads: "147", reduction: "98.7% fewer", description: "Hidden-face removal plus merging compatible faces into larger quads.", surface: "GreedyOrbit.mp4", wire: "GreedyOrbitWire.mp4" },
 ];
 ---
 <div class="mesh-comparison" data-mesh-comparison>
-    <p class="case-eyebrow">Same test chunk · Three mesh stages</p>
+    <p class="case-eyebrow">Isolated 16³ terrain fixture · Three mesh stages</p>
     <div class="mesh-comparison__toolbar">
         <span>360° orbit</span>
         <div role="group" aria-label="Mesh display mode">
@@ -18,7 +18,7 @@ const stages = [
     <div id="mesh-comparison-view" class="mesh-comparison__grid">
         {stages.map(stage => <div data-mesh-panel={stage.id}>
             <div class="mesh-comparison__metric">
-                <span>{stage.title}</span><strong>{stage.triangles}</strong><span>triangles</span><em>{stage.reduction}</em>
+                <span>{stage.title}</span><strong>{stage.triangles}</strong><span>triangles · {stage.quads} quads</span><em>{stage.reduction}</em>
             </div>
             <figure>
                 <video data-mesh-video="wire" muted playsinline loop preload="metadata" hidden aria-label={`${stage.title} — wireframe orbit`} src={`${base}${stage.wire}`} />
@@ -27,7 +27,7 @@ const stages = [
             </figure>
         </div>)}
     </div>
-    <p class="mesh-comparison__note">Triangle counts are measured on this test chunk; reductions are relative to the naïve mesh. Switch to wireframe to inspect the geometry beneath the surface.</p>
+    <p class="mesh-comparison__note">On the same isolated 16³ terrain fixture, hidden-face removal reduces triangles by 87.5%; greedy merging brings the total reduction to 98.7%. Switch to wireframe to inspect the geometry.</p>
 </div>
 <script>
     document.querySelectorAll<HTMLElement>("[data-mesh-comparison]").forEach(comparison => {
